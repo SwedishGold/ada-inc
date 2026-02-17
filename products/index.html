@@ -808,25 +808,22 @@
     
     <script>
         // Initialize community posts from localStorage
-        let communityPosts = JSON.parse(localStorage.getItem('adaCommunityPosts')) || [
-            {
-                author: "Marcus",
-                role: "Utvecklare",
-                content: "Första gången jag använde AI var 2022. Det var som att få en ny kollega som aldrig sov! Nu bygger jag egna AI-agenter. 🛠️",
-                date: "2 dagar sedan",
-                likes: 12
-            },
-            {
-                author: "Sarah",
-                role: "Entreprenör",
-                content: "Min AI-resa började med att jag blev utbränd. Nu låter jag AI ta handom repetitiva uppgifter så jag kan fokusera på det kreativa. 💡",
-                date: "Igår",
-                likes: 8
-            }
-        ];
+        // Only show REAL posts from real people - no fake content!
+        let communityPosts = JSON.parse(localStorage.getItem('adaCommunityPosts')) || [];
         
         function renderCommunityPosts() {
             const container = document.getElementById('communityPosts');
+            
+            if (communityPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="community-post" style="text-align: center; padding: 2rem; border: 2px dashed var(--gray);">
+                        <p style="color: var(--gray); font-size: 1.1rem;">💬 Var först att skriva något!</p>
+                        <p style="color: var(--gray); margin-top: 0.5rem;">Din röst behövs i den här communityn. Var är du ifrån? Vad drömmer du om?</p>
+                    </div>
+                `;
+                return;
+            }
+            
             container.innerHTML = communityPosts.map(post => `
                 <div class="community-post">
                     <div class="community-post-header">
