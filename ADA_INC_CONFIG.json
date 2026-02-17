@@ -1,0 +1,21 @@
+{
+  "project_name": "Ada Inc.",
+  "currency": "USD",
+  "budget_mode": "survival",
+  "models": {
+    "default": "google/gemini-2.0-flash",
+    "complex": "google/gemini-2.0-pro-exp-02-05",
+    "creative": "google/gemini-2.0-flash",
+    "roles": {
+      "axiom": "google/gemini-2.0-flash",
+      "pulse": "google/gemini-2.0-flash",
+      "forge": "google/gemini-2.0-flash",
+      "scout": "google/gemini-2.0-flash"
+    },
+    "meeting_policy": "ALWAYS_USE_FLASH_FOR_SPEED"
+  },
+  "constraints": {
+    "max_spawns_per_day": 10,
+    "require_approval_for_paid_models": true
+  }
+}

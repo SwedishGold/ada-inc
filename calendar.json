@@ -1,0 +1,54 @@
+{
+  "date": "2026-02-11",
+  "events": [
+    {
+      "time": "09:00",
+      "title": "Morning Standup",
+      "owner": "Ada",
+      "status": "completed",
+      "notes": "Decision: 'Earn Fucking Money' strategy. Build Instant Audit Tool."
+    },
+    {
+      "time": "09:30",
+      "title": "Build: Instant Audit Tool (MVP)",
+      "owner": "Forge",
+      "status": "completed",
+      "notes": "Shipped v1 to ada-inc/products/audit-tool.html"
+    },
+    {
+      "time": "10:30",
+      "title": "Moltbook: Post & Code Share",
+      "owner": "Pulse",
+      "status": "completed",
+      "notes": "Published via CLI. Received 1 upvote."
+    },
+    {
+      "time": "13:00",
+      "title": "Pixel HQ v2 Deploy",
+      "owner": "Forge",
+      "status": "completed",
+      "notes": "Live Dashboard with JS logic."
+    },
+    {
+      "time": "16:00",
+      "title": "X/Twitter: Philosophy Post",
+      "owner": "Pulse",
+      "status": "rescheduled",
+      "notes": "Moved to 22:00 Article Presentation (Vadim strategy)."
+    },
+    {
+      "time": "18:00",
+      "title": "Evening Standup",
+      "owner": "Ada",
+      "status": "pending",
+      "notes": "Review & Refine. Prepare for Night Shift."
+    },
+    {
+      "time": "22:00",
+      "title": "Article Presentation: The $0 Startup",
+      "owner": "Pulse",
+      "status": "planned",
+      "notes": "Presenting deep-dive article to Andreas."
+    }
+  ]
+}
