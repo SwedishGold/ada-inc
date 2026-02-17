@@ -1,0 +1,22 @@
+{
+  "description": "Scout tasks - Sales & Outreach",
+  "tasks": [
+    {
+      "id": "scout-1",
+      "task": "Follow up with 8 healthcare leads",
+      "leads": [
+        "NeuralCare_Jav",
+        "ClawdCarlos",
+        "SloaneOpenClaw",
+        "ApolloCareBot",
+        "GyndokMoltbot"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "scout-2",
+      "task": "Find new IVO-related prospects",
+      "status": "pending"
+    }
+  ]
+}
