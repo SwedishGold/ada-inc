@@ -6,6 +6,7 @@
     <title>Ada Inc. — AI That Dreams</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         :root { 
             --primary: #00d4aa; 
             --secondary: #ff6b9d; 
@@ -161,6 +162,26 @@
             0%, 100% { box-shadow: 0 0 60px rgba(0,212,170,0.4), 0 0 100px rgba(255,107,157,0.2); }
             50% { box-shadow: 0 0 80px rgba(0,212,170,0.6), 0 0 120px rgba(255,107,157,0.3); }
         }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero > div > * {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .hero > div > *:nth-child(1) { animation-delay: 0.1s; }
+        .hero > div > *:nth-child(2) { animation-delay: 0.2s; }
+        .hero > div > *:nth-child(3) { animation-delay: 0.3s; }
+        .hero > div > *:nth-child(4) { animation-delay: 0.4s; }
+        .hero > div > *:nth-child(5) { animation-delay: 0.5s; }
+        .hero > div > *:nth-child(6) { animation-delay: 0.6s; }
         .hero h1 { 
             font-size: 3.5rem; 
             margin-bottom: 1rem; 
@@ -538,12 +559,112 @@
             font-size: 1.2rem;
         }
         
+        /* Mobile First - Tablets */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+        
+        /* Mobile - Phones */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
+            .hero { 
+                padding: 6rem 1.5rem 3rem; 
+                min-height: auto;
+            }
+            .hero h1 { 
+                font-size: 2rem; 
+                line-height: 1.2;
+            }
+            .hero p { 
+                font-size: 0.95rem; 
+                padding: 0 0.5rem;
+            }
+            .hero-visual {
+                width: 140px;
+                height: 140px;
+            }
             .nav-links { display: none; }
-            .about .founders { gap: 2rem; }
-            .founder { padding: 1.5rem; }
-            .book-benefits { flex-direction: column; align-items: center; }
+            .nav-container {
+                padding: 0 1rem;
+            }
+            .about { 
+                padding: 3rem 1.5rem; 
+            }
+            .about h2 {
+                font-size: 1.75rem;
+            }
+            .about .founders { 
+                gap: 1.5rem;
+                flex-direction: column;
+            }
+            .founder { 
+                padding: 1.5rem; 
+            }
+            .products-section {
+                padding: 3rem 1rem;
+            }
+            .products-section h2 {
+                font-size: 1.75rem;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 0.5rem;
+            }
+            .product-card {
+                padding: 1.25rem;
+            }
+            .product-card h3 {
+                font-size: 1.1rem;
+            }
+            .product-card .price {
+                font-size: 1.5rem;
+            }
+            .category-pills {
+                gap: 0.4rem;
+                padding: 0 0.5rem;
+            }
+            .category-pill {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+            }
+            .book-section {
+                padding: 3rem 1.5rem;
+            }
+            .book-section h2 {
+                font-size: 1.75rem;
+            }
+            .book-benefits { 
+                flex-direction: column; 
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .connect-section {
+                padding: 3rem 1.5rem;
+            }
+            footer {
+                padding: 2rem 1rem;
+            }
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Small phones */
+        @media (max-width: 380px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            .hero-visual {
+                width: 120px;
+                height: 120px;
+            }
+            .product-card {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
