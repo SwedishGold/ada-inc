@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Business — AI Tools for SMBs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        :root { 
+            --primary: #00d4aa; 
+            --secondary: #ff6b9d; 
+            --accent: #ffd93d;
+            --dark: #0a0a0f; 
+            --light: #f0f0f5; 
+            --gray: #888;
+            --glass: rgba(255,255,255,0.05);
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark); 
+            color: var(--light); 
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-decoration: none;
+            color: var(--light);
+        }
+        .logo-emoji { font-size: 1.5rem; }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a.active { color: var(--primary); }
+        
+        /* Hero */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: 
+                radial-gradient(ellipse at 30% 30%, rgba(0,212,170,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 70%, rgba(255,107,157,0.05) 0%, transparent 50%);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Products Section */
+        .products-section {
+            padding: 4rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .products-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+        .products-section h2 span { color: var(--primary); }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .product-card:hover {
+            border-color: rgba(0,212,170,0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,212,170,0.1);
+        }
+        .product-card:hover::before { opacity: 1; }
+        
+        .product-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .product-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .product-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        .product-card .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .product-card .tag {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            color: var(--dark);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,212,170,0.4);
+        }
+        .btn-secondary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Coming Soon */
+        .coming-soon {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, transparent, rgba(0,212,170,0.05), transparent);
+        }
+        .coming-soon h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .coming-soon p {
+            color: var(--gray);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero { padding: 6rem 1.5rem 3rem; min-height: auto; }
+            .nav-links { display: none; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-emoji">🦞</span>
+                <span>Ada Inc.</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#products">PromptBase</a></li>
+                <li><a href="business.html" class="active">Business</a></li>
+                <li><a href="developers.html">Developers</a></li>
+                <li><a href="health.html">Health</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Ada <span>Business</span></h1>
+            <p>AI tools designed for small and medium businesses. No technical skills required — just results.</p>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <h2>Tools for <span>Growth</span></h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <span class="tag">🆓 Free</span>
+                <div class="icon">📊</div>
+                <h3>AI Readiness Audit</h3>
+                <p>Find out if your business is ready for AI. Get a personalized roadmap in 5 minutes.</p>
+                <div class="price">Free</div>
+                <a href="#" class="btn btn-primary">Coming Soon</a>
+            </div>
+            
+            <div class="product-card">
+                <div class="icon">🚀</div>
+                <h3>SMB AI Starter Kit</h3>
+                <p>50+ ready-to-use AI prompts for marketing, sales, customer service, and operations.</p>
+                <div class="price">49 SEK</div>
+                <a href="#" class="btn btn-primary">Coming Soon</a>
+            </div>
+            
+            <div class="product-card">
+                <div class="icon">💰</div>
+                <h3>ROI Calculator</h3>
+                <p>Calculate exactly how much AI can save your business. Show your boss the numbers.</p>
+                <div class="price">Free / 9 SEK Pro</div>
+                <a href="#" class="btn btn-primary">Coming Soon</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="coming-soon">
+        <h2>More Coming Soon</h2>
+        <p>We're building AI tools that help small businesses compete with the big players.</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVQJTNB41kT3gtMHeZTqliRzwpmn8wMivV76JKNkoNoFe4Ww/viewform" class="btn btn-secondary" target="_blank">Get Notified →</a>
+    </section>
+
+    <footer>
+        <p>Part of <a href="index.html">Ada Inc.</a> — AI That Dreams 🦞</p>
+    </footer>
+</body>
+</html>
