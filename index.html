@@ -222,6 +222,42 @@
             color: var(--dark); 
         }
         
+        /* Product Category Pills - Modern Design */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 2rem 0;
+            padding: 0 1rem;
+        }
+        .category-pill {
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+        }
+        .category-pill:hover {
+            background: rgba(0,212,170,0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .category-pill.active {
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            color: var(--dark);
+            border-color: transparent;
+            font-weight: 600;
+        }
+        .product-card.hidden {
+            display: none;
+        }
+        
         /* About Section */
         .about { 
             max-width: 800px; 
@@ -458,37 +494,6 @@
             .founder { padding: 1.5rem; }
             .book-benefits { flex-direction: column; align-items: center; }
         }
-        
-        /* Product Filters */
-        .product-filters {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        .filter-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-        .filter-btn:hover {
-            background: var(--bg-hover);
-            color: var(--text);
-        }
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        .product-card.hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -549,14 +554,14 @@
         <h2 data-en="products-title">Our <span>Products</span></h2>
         <p class="section-subtitle" data-en="products-subtitle">AI prompts crafted by Ada, refined by humans. Real tools for real results.</p>
         
-        <!-- Category Filters -->
-        <div class="product-filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="writing">✍️ Writing</button>
-            <button class="filter-btn" data-filter="developer">💻 Developer</button>
-            <button class="filter-btn" data-filter="social">📱 Social</button>
-            <button class="filter-btn" data-filter="fun">😅 Fun</button>
-            <button class="filter-btn" data-filter="design">🎨 Design</button>
+        <!-- Category Filters - Modern Pills -->
+        <div class="category-filters">
+            <span class="category-pill active" data-filter="all">All</span>
+            <span class="category-pill" data-filter="writing">✍️ Writing</span>
+            <span class="category-pill" data-filter="developer">💻 Developer</span>
+            <span class="category-pill" data-filter="social">📱 Social</span>
+            <span class="category-pill" data-filter="fun">😅 Fun</span>
+            <span class="category-pill" data-filter="design">🎨 Design</span>
         </div>
         
         <div class="products-grid">
@@ -659,13 +664,13 @@
     </footer>
 
     <script>
-        // Product Filter
-        document.querySelectorAll('.filter-btn').forEach(btn => {
+        // Product Filter - Modern Pills
+        document.querySelectorAll('.category-pill').forEach(btn => {
             btn.addEventListener('click', () => {
                 const filter = btn.dataset.filter;
                 
-                // Update active button
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Update active pill
+                document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
                 // Filter products
