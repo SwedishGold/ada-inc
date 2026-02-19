@@ -222,16 +222,7 @@
             color: var(--dark); 
         }
         
-        /* Product Category Pills - Modern Design */
-        .category-filters {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin: 2rem 0;
-            padding: 0 1rem;
-        }
-        .category-pill {
+.category-pill {
             padding: 0.5rem 1.25rem;
             border-radius: 2rem;
             font-size: 0.85rem;
@@ -332,78 +323,138 @@
             font-size: 0.9rem;
         }
         
-        /* Products */
+        /* Products - Modern Design */
         .products-section { 
-            padding: 5rem 2rem; 
+            padding: 6rem 2rem; 
             background: var(--dark); 
         }
         .products-section h2 { 
             text-align: center; 
             font-size: 2.5rem; 
-            margin-bottom: 1rem; 
+            margin-bottom: 0.5rem; 
         }
         .products-section h2 span { 
-            color: var(--primary); 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .products-section .section-subtitle { 
             text-align: center; 
             color: var(--gray); 
-            margin-bottom: 3rem; 
+            margin-bottom: 2rem; 
+            font-size: 1.1rem;
         }
         .products-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 2rem; 
-            max-width: 1000px; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1.5rem; 
+            max-width: 1100px; 
             margin: 0 auto; 
         }
+        
+        /* Product Card - Sleek Modern Look */
         .product-card { 
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 20px; 
-            padding: 2.5rem; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.06); 
+            border-radius: 24px; 
+            padding: 1.75rem; 
             text-align: center; 
-            transition: all 0.3s; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         .product-card:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(0,212,170,0.3); 
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,212,170,0.1);
         }
-        .product-card .tag { 
-            display: inline-block; 
-            font-size: 0.75rem; 
-            padding: 0.4rem 1rem; 
-            border-radius: 20px; 
-            margin-bottom: 1rem; 
+        .product-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Category Pills - Inline */
+        .category-pills {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+        }
+        .category-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+        .category-pill:hover {
+            background: rgba(0,212,170,0.15);
+            color: var(--primary);
+        }
+        .category-pill.active {
+            background: var(--primary);
+            color: var(--dark);
             font-weight: 600;
         }
+        
+        .product-card.hidden { display: none; }
+        
+        .product-card .tag { 
+            display: inline-block; 
+            font-size: 0.7rem; 
+            padding: 0.35rem 0.85rem; 
+            border-radius: 12px; 
+            margin-bottom: 1rem; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         .tag-flagship { 
-            background: linear-gradient(135deg, var(--primary), #00b894); 
-            color: var(--dark); 
+            background: linear-gradient(135deg, #ffd93d, #ff9f43); 
+            color: #1a1a2e; 
         }
         .tag-new { 
-            background: var(--secondary); 
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7); 
             color: white; 
         }
         .tag-bestseller { 
-            background: var(--accent); 
-            color: var(--dark); 
+            background: linear-gradient(135deg, #00d4aa, #00b894); 
+            color: #1a1a2e; 
         }
         .product-card h3 { 
-            font-size: 1.4rem; 
+            font-size: 1.25rem; 
             margin-bottom: 0.5rem; 
+            font-weight: 600;
         }
         .product-card p { 
             color: var(--gray); 
-            font-size: 0.95rem; 
-            margin-bottom: 1.5rem; 
+            font-size: 0.9rem; 
+            margin-bottom: 1.25rem; 
+            line-height: 1.5;
         }
         .product-card .price { 
-            font-size: 2rem; 
-            font-weight: bold; 
-            color: var(--primary); 
-            margin-bottom: 1.5rem; 
+            font-size: 1.75rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, var(--primary), #00f5d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.25rem; 
         }
         
         /* Book */
@@ -554,8 +605,8 @@
         <h2 data-en="products-title">Our <span>Products</span></h2>
         <p class="section-subtitle" data-en="products-subtitle">AI prompts crafted by Ada, refined by humans. Real tools for real results.</p>
         
-        <!-- Category Filters - Modern Pills -->
-        <div class="category-filters">
+        <!-- Category Pills -->
+        <div class="category-pills">
             <span class="category-pill active" data-filter="all">All</span>
             <span class="category-pill" data-filter="writing">✍️ Writing</span>
             <span class="category-pill" data-filter="developer">💻 Developer</span>
@@ -565,69 +616,77 @@
         </div>
         
         <div class="products-grid">
+            <!-- Product 1 -->
             <div class="product-card" data-category="writing">
                 <span class="tag tag-flagship">⭐ Flagship</span>
                 <h3>The Prompt Architect</h3>
                 <p>12+ techniques, 50+ examples. The ultimate prompt framework for professionals.</p>
                 <div class="price">49 SEK</div>
                 <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/8c4f963e-1021-413f-a33f-b6261fff0b1b" class="btn btn-primary" target="_blank">Buy Now</a>
-       <div class="product-card" data-category="writing">iv class="product-card">
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card" data-category="writing">
                 <span class="tag tag-bestseller">🔥 Bestseller</span>
                 <h3>AI Prompt Enhancer</h3>
                 <p>Transform basic prompts into optimized AI instructions. 5 proven techniques.</p>
                 <div class="price">20 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/60b23326-b78a-4d28-b1cc-0a8f5a6fdf03" class="btn btn-primary" target="_bl<div class="product-card" data-category="writing fun">   </div>
-            <div class="product-card">
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/60b23326-b78a-4d28-b1cc-0a8f5a6fdf03" class="btn btn-primary" target="_blank">Buy Now</a>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card" data-category="writing fun">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>Haiku Master</h3>
-                <p>Write beautiful haikus in Japanese, Swedish, or English. AI meets poetry.</p>
+                <p>Write beautiful haikus in Japanese, Swedish, or English.</p>
                 <div class="price">15 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/f3780637-0ffa-4835-8b93-edfd353751a4" class="<div class="product-card" data-category="writing fun">blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/f3780637-0ffa-4835-8b93-edfd353751a4" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 4 -->
+            <div class="product-card" data-category="writing fun">
                 <span class="tag tag-new">🆕 New</span>
-                <h3>AI Love Letter Generator</h3>
-                <p>Write romantic love letters that melt hearts. For any relationship.</p>
+                <h3>AI Love Letter</h3>
+                <p>Write romantic love letters that melt hearts.</p>
                 <div class="price">25 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/12b37fad-cf5a-439<div class="product-card" data-category="social">="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/12b37fad-cf5a-4399-9d61-415ae10ac49a" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 5 -->
+            <div class="product-card" data-category="social">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>AI Bio Generator</h3>
-                <p>Create the perfect bio for LinkedIn, X, Instagram or dating apps.</p>
+                <p>Create the perfect bio for LinkedIn, X, Instagram.</p>
                 <div class="price">19 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkou<div class="product-card" data-category="fun">2ac-3cf98cf24238" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/b21bcb2e-c4fd-4c06-b2ac-3cf98cf24238" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 6 -->
+            <div class="product-card" data-category="fun">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>AI Excuse Generator</h3>
-                <p>Creative excuses for any occasion. Includes Easter eggs!</p>
+                <p>Creative excuses for any occasion!</p>
                 <div class="price">9 SEK</div>
-                <a href="https://adapromptbase.lemo<div class="product-card" data-category="writing">148058f2-a202-40d3-a212-301690628592" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/148058f2-a202-40d3-a212-301690628592" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 7 -->
+            <div class="product-card" data-category="writing">
                 <span class="tag tag-new">🆕 New</span>
-                <h3>Character-Driven Novel Generator</h3>
-                <p>Create deep novellas with complex characters and psychological depth.</p>
+                <h3>Novel Generator</h3>
+                <p>Create deep novellas with complex characters.</p>
                 <div class="price">29 SEK</div>
-                <a href="ht<div class="product-card" data-category="design">queezy.com/checkout/buy/db8c03ef-37b5-49b3-9a5c-bb491bc4e480" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/db8c03ef-37b5-49b3-9a5c-bb491bc4e480" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 8 -->
+            <div class="product-card" data-category="design">
                 <span class="tag tag-new">🆕 New</span>
-                <h3>Nordic Minimalist Architecture</h3>
-                <p>Create stunning Scandinavian-style architecture images in Midjourney.</p>
+                <h3>Nordic Architecture</h3>
+                <p>Create stunning Scandinavian-style images.</p>
                 <div class="price">39 SEK</div>
-    <div class="product-card" data-category="developer">://adapromptbase.lemonsqueezy.com/checkout/buy/aff28612-86b9-4bfb-a62f-3620cc506086" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/aff28612-86b9-4bfb-a62f-3620cc506086" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
-            <div class="product-card">
+            <!-- Product 9 -->
+            <div class="product-card" data-category="developer">
                 <span class="tag tag-new">🆕 New</span>
-                <h3>Senior Code Review Assistant</h3>
-                <p>Get expert feedback from a senior developer with 15+ years experience.</p>
+                <h3>Code Review AI</h3>
+                <p>Expert feedback from a senior developer.</p>
                 <div class="price">45 SEK</div>
                 <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/9eea2061-483e-4b4b-9cf7-725f7365220d" class="btn btn-primary" target="_blank">Buy Now</a>
-            </div>
-            <div style="grid-column: 1/-1; text-align: center; margin-top: 1rem;">
-                <a href="https://adapromptbase.lemonsqueezy.com/" class="btn btn-secondary" target="_blank">View All Products →</a>
             </div>
         </div>
     </section>
