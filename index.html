@@ -458,6 +458,37 @@
             .founder { padding: 1.5rem; }
             .book-benefits { flex-direction: column; align-items: center; }
         }
+        
+        /* Product Filters */
+        .product-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .filter-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .product-card.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -517,62 +548,71 @@
     <section id="products" class="products-section">
         <h2 data-en="products-title">Our <span>Products</span></h2>
         <p class="section-subtitle" data-en="products-subtitle">AI prompts crafted by Ada, refined by humans. Real tools for real results.</p>
+        
+        <!-- Category Filters -->
+        <div class="product-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="writing">✍️ Writing</button>
+            <button class="filter-btn" data-filter="developer">💻 Developer</button>
+            <button class="filter-btn" data-filter="social">📱 Social</button>
+            <button class="filter-btn" data-filter="fun">😅 Fun</button>
+            <button class="filter-btn" data-filter="design">🎨 Design</button>
+        </div>
+        
         <div class="products-grid">
-            <div class="product-card">
+            <div class="product-card" data-category="writing">
                 <span class="tag tag-flagship">⭐ Flagship</span>
                 <h3>The Prompt Architect</h3>
                 <p>12+ techniques, 50+ examples. The ultimate prompt framework for professionals.</p>
                 <div class="price">49 SEK</div>
                 <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/8c4f963e-1021-413f-a33f-b6261fff0b1b" class="btn btn-primary" target="_blank">Buy Now</a>
-            </div>
-            <div class="product-card">
+       <div class="product-card" data-category="writing">iv class="product-card">
                 <span class="tag tag-bestseller">🔥 Bestseller</span>
                 <h3>AI Prompt Enhancer</h3>
                 <p>Transform basic prompts into optimized AI instructions. 5 proven techniques.</p>
                 <div class="price">20 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/60b23326-b78a-4d28-b1cc-0a8f5a6fdf03" class="btn btn-primary" target="_blank">Buy Now</a>
-            </div>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/60b23326-b78a-4d28-b1cc-0a8f5a6fdf03" class="btn btn-primary" target="_bl<div class="product-card" data-category="writing fun">   </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>Haiku Master</h3>
                 <p>Write beautiful haikus in Japanese, Swedish, or English. AI meets poetry.</p>
                 <div class="price">15 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/f3780637-0ffa-4835-8b93-edfd353751a4" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/f3780637-0ffa-4835-8b93-edfd353751a4" class="<div class="product-card" data-category="writing fun">blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>AI Love Letter Generator</h3>
                 <p>Write romantic love letters that melt hearts. For any relationship.</p>
                 <div class="price">25 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/12b37fad-cf5a-4399-9d61-415ae10ac49a" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/12b37fad-cf5a-439<div class="product-card" data-category="social">="btn btn-primary" target="_blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>AI Bio Generator</h3>
                 <p>Create the perfect bio for LinkedIn, X, Instagram or dating apps.</p>
                 <div class="price">19 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/b21bcb2e-c4fd-4c06-b2ac-3cf98cf24238" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/checkou<div class="product-card" data-category="fun">2ac-3cf98cf24238" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>AI Excuse Generator</h3>
                 <p>Creative excuses for any occasion. Includes Easter eggs!</p>
                 <div class="price">9 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/148058f2-a202-40d3-a212-301690628592" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="https://adapromptbase.lemo<div class="product-card" data-category="writing">148058f2-a202-40d3-a212-301690628592" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>Character-Driven Novel Generator</h3>
                 <p>Create deep novellas with complex characters and psychological depth.</p>
                 <div class="price">29 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/db8c03ef-37b5-49b3-9a5c-bb491bc4e480" class="btn btn-primary" target="_blank">Buy Now</a>
+                <a href="ht<div class="product-card" data-category="design">queezy.com/checkout/buy/db8c03ef-37b5-49b3-9a5c-bb491bc4e480" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
                 <h3>Nordic Minimalist Architecture</h3>
                 <p>Create stunning Scandinavian-style architecture images in Midjourney.</p>
                 <div class="price">39 SEK</div>
-                <a href="https://adapromptbase.lemonsqueezy.com/checkout/buy/aff28612-86b9-4bfb-a62f-3620cc506086" class="btn btn-primary" target="_blank">Buy Now</a>
+    <div class="product-card" data-category="developer">://adapromptbase.lemonsqueezy.com/checkout/buy/aff28612-86b9-4bfb-a62f-3620cc506086" class="btn btn-primary" target="_blank">Buy Now</a>
             </div>
             <div class="product-card">
                 <span class="tag tag-new">🆕 New</span>
@@ -619,6 +659,27 @@
     </footer>
 
     <script>
+        // Product Filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                
+                // Update active button
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Filter products
+                document.querySelectorAll('.product-card').forEach(card => {
+                    const categories = card.dataset.category || '';
+                    if (filter === 'all' || categories.includes(filter)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+        
         // Language toggle
         const translations = {
             en: {
