@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Code Review - Free AI Code Review</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { 
+            text-align: center; 
+            padding: 40px 0; 
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+        }
+        h1 { 
+            font-size: 2.5em; 
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #58a6ff, #7ee787);
+           : text;
+            -webkit-background-clip -webkit-text-fill-color: transparent;
+        }
+        .tagline { color: #8b949e; font-size: 1.1em; }
+        
+        .demo-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .language-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background: #388bfd;
+            color: white;
+            border-color: #388bfd;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 250px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #c9d1d9;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            padding: 15px;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #388bfd;
+        }
+        
+        .review-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #238636, #2ea043);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .review-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(46, 160, 67, 0.3);
+        }
+        
+        .review-btn:disabled {
+            background: #30363d;
+            cursor: not-allowed;
+        }
+        
+        #result {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .review-result {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .review-header {
+            background: #21262d;
+            padding: 15px 20px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .score.good { color: #7ee787; }
+        .score.warning { color: #d29922; }
+        .score.bad { color: #f85149; }
+        
+        .review-body {
+            padding: 20px;
+        }
+        
+        .issue {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .issue.error {
+            background: rgba(248, 81, 73, 0.1);
+            border-color: #f85149;
+        }
+        
+        .issue.warning {
+            background: rgba(210, 153, 34, 0.1);
+            border-color: #d29922;
+ }
+        
+        .issue.info {
+            background: rgba(56, 139, 253, 0.1);
+            border-color: #388bfd;
+        }
+        
+        .issue-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .issue-line {
+            color: #8b949e;
+            font-size: 0.9em;
+        }
+        
+        .tldr {
+            background: rgba(126, 231, 135, 0.1);
+            border: 1px solid #7ee787;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .plan {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .plan.featured {
+            border-color: #388bfd;
+            position: relative;
+        }
+        
+        .plan.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #388bfd;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .plan-price {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .plan-price span {
+            font-size: 0.4em;
+            color: #8b949e;
+        }
+        
+        .plan-features {
+            list-style: none;
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .plan-features li {
+            padding: 8px 0;
+            color: #8b949e;
+        }
+        
+        .plan-features li::before {
+            content: "✓ ";
+            color: #7ee787;
+        }
+        
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #238636;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #8b949e;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #30363d;
+            border-top-color: #388bfd;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦞 Ada Code Review</h1>
+            <p class="tagline">AI-powered code review in seconds. Find bugs before they find you.</p>
+        </header>
+        
+        <div class="demo-box">
+            <h3>🔍 Try it free</h3>
+            <div class="language-select">
+                <button class="lang-btn active" data-lang="python">Python</button>
+                <button class="lang-btn" data-lang="javascript">JavaScript</button>
+                <button class="lang-btn" data-lang="typescript">TypeScript</button>
+                <button class="lang-btn" data-lang="go">Go</button>
+                <button class="lang-btn" data-lang="rust">Rust</button>
+                <button class="lang-btn" data-lang="java">Java</button>
+            </div>
+            <textarea id="codeInput" placeholder="Paste your code here...
+
+Example:
+def calculate_sum(a, b):
+    return a + b"></textarea>
+            <button class="review-btn" onclick="runReview()">Review My Code →</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing your code...</p>
+        </div>
+        
+        <div id="result">
+            <div class="review-result">
+                <div class="review-header">
+                    <div>
+                        <h3>Review Summary</h3>
+                        <span id="langDisplay" style="color: #8b949e;"></span>
+                    </div>
+                    <div class="score" id="scoreDisplay">A</div>
+                </div>
+                <div class="review-body">
+                    <div class="tldr" id="tldr"></div>
+                    <div id="issuesList"></div>
+                </div>
+            </div>
+            
+            <div class="pricing">
+                <div class="plan">
+                    <h3>Free</h3>
+                    <div class="plan-price">$0</div>
+                    <ul class="plan-features">
+                        <li>5 repositories</li>
+                        <li>Basic analysis</li>
+                        <li>Python, JS, TS</li>
+                    </ul>
+                    <button class="buy-btn" style="background: #30363d;">Sign Up Free</button>
+                </div>
+                <div class="plan featured">
+                    <h3>Pro</h3>
+                    <div class="plan-price">$10<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li>Unlimited repos</li>
+                        <li>All languages</li>
+                        <li>Priority analysis</li>
+                        <li>1-click fixes</li>
+                    </ul>
+                    <button class="buy-btn">Get Pro</button>
+                </div>
+                <div class="plan">
+                    <h3>Pro Lifetime</h3>
+                    <div class="plan-price">$49<span>one-time</span></div>
+                    <ul class="plan-features">
+                        <li>Everything in Pro</li>
+                        <li>Pay once, own forever</li>
+                        <li>Early access</li>
+                    </ul>
+                    <button class="buy-btn">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🦞 Built by Ada Inc. | <a href="https://swedishgold.github.io/ada-inc/" style="color: #58a6ff;">View all products</a></p>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'python';
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+            });
+        });
+        
+        function runReview() {
+            const code = document.getElementById('codeInput').value.trim();
+            if (!code) {
+                alert('Please enter some code to review');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            // Simulate review (in production, this would call the API)
+            setTimeout(() => {
+                analyzeCode(code, currentLang);
+            }, 2000);
+        }
+        
+        function analyzeCode(code, lang) {
+            // Simple heuristic-based analysis
+            const issues = [];
+            let score = 100;
+            
+            // Check for common issues
+            const lines = code.split('\n');
+            
+            lines.forEach((line, i) => {
+                const lineNum = i + 1;
+                
+                // Check for console.log / print without context
+                if (line.match(/console\.(log|debug|info)/) && !line.match(/\/\/.*TODO/)) {
+                    issues.push({
+                        type: 'warning',
+                        title: 'Console statement found',
+                        line: lineNum,
+                        desc: 'Consider removing console statements before production.'
+                    });
+                    score -= 5;
+                }
+                
+                // Check for TODO/FIXME
+                if (line.match(/\/\/.*(TODO|FIXME|HACK)/)) {
+                    issues.push({
+                        type: 'info',
+                        title: 'TODO comment found',
+                        line: lineNum,
+                        desc: 'This task should be addressed before merging.'
+                    });
+                    score -= 2;
+                }
+                
+                // Check for hardcoded secrets (basic)
+                if (line.match(/password\s*=\s*["'][^"']+["']/i) || 
+                    line.match(/api[_-]?key\s*=\s*["'][^"']+["']/i)) {
+                    issues.push({
+                        type: 'error',
+                        title: 'Potential hardcoded secret',
+                        line: lineNum,
+                        desc: 'Use environment variables instead of hardcoding secrets.'
+                    });
+                    score -= 15;
+                }
+                
+                // Check for empty catch blocks
+                if (line.match(/catch.*\{\s*\}/)) {
+                    issues.push({
+                        type: 'warning',
+                        title: 'Empty catch block',
+                        line: lineNum,
+                        desc: 'Empty catch blocks silently swallow errors.'
+                    });
+                    score -= 10;
+                }
+                
+                // Python-specific
+                if (lang === 'python') {
+                    if (line.match(/except\s*:/)) {
+                        issues.push({
+                            type: 'warning',
+                            title: 'Bare except clause',
+                            line: lineNum,
+                            desc: 'Use except SpecificException instead of bare except.'
+                        });
+                        score -= 8;
+                    }
+                    if (line.match(/from\s+\w+\s+import\s+\*/)) {
+                        issues.push({
+                            type: 'warning',
+                            title: 'Wildcard import',
+                            line: lineNum,
+                            desc: 'Avoid wildcard imports. Import specific names instead.'
+                        });
+                        score -= 5;
+                    }
+                }
+            });
+            
+            // Check function length
+            if (lines.length > 50) {
+                issues.push({
+                    type: 'info',
+                    title: 'Long function',
+                    line: 1,
+                    desc: `This file has ${lines.length} lines. Consider splitting into smaller functions.`
+                });
+                score -= 5;
+            }
+            
+            // Generate TL;DR
+            let tldr = '';
+            const errorCount = issues.filter(i => i.type === 'error').length;
+            const warnCount = issues.filter(i => i.type === 'warning').length;
+            const infoCount = issues.filter(i => i.type === 'info').length;
+            
+            if (score >= 90) {
+                tldr = `✨ Great code! ${errorCount === 0 && warnCount === 0 ? 'No issues found.' : 'Just a few minor suggestions.'}`;
+            } else if (score >= 70) {
+                tldr = `👍 Good work! Found ${warnCount} warnings and ${infoCount} suggestions to improve.`;
+            } else {
+                tldr = `⚠️ ${errorCount} critical issue(s) found. Please address these before merging.`;
+            }
+            
+            // Display results
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            
+            let scoreClass = 'good';
+            if (score < 90) scoreClass = 'warning';
+            if (score < 70) scoreClass = 'bad';
+            
+            document.getElementById('scoreDisplay').className = 'score ' + scoreClass;
+            document.getElementById('scoreDisplay').textContent = score >= 90 ? 'A' : score >= 70 ? 'B' : 'C';
+            document.getElementById('langDisplay').textContent = lang.charAt(0).toUpperCase() + lang.slice(1);
+            document.getElementById('tldr').textContent = tldr;
+            
+            const issuesList = document.getElementById('issuesList');
+            if (issues.length === 0) {
+                issuesList.innerHTML = '<p style="color: #7ee787; text-align: center; padding: 20px;">🎉 No issues detected! Your code looks clean.</p>';
+            } else {
+                issuesList.innerHTML = issues.map(issue => `
+                    <div class="issue ${issue.type}">
+                        <div class="issue-title">${issue.title}</div>
+                        <div class="issue-line">Line ${issue.line}</div>
+                        <div>${issue.desc}</div>
+                    </div>
+                `).join('');
+            }
+        }
+    </script>
+</body>
+</html>
