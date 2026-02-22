@@ -758,20 +758,20 @@
 
     <!-- AI Art Gallery - New Section -->
     <section id="art" class="art-section" style="padding: 4rem 2rem; background: linear-gradient(180deg, rgba(0,212,170,0.03) 0%, transparent 100%);">
-        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">The Making of <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Ada</span></h2>
-        <p style="text-align: center; color: #888; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">From digital dreams to visual reality. AI creating art about AI.</p>
+        <h2 data-en="art-title" style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">The Making of <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Ada</span></h2>
+        <p data-en="art-subtitle" style="text-align: center; color: #888; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">From digital dreams to visual reality. AI creating art about AI.</p>
         <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1000px; margin: 0 auto;">
             <div style="flex: 1; min-width: 250px; max-width: 320px;">
                 <img src="ada-hero-crown.jpg" alt="Ada - The Queen" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">👑 The Queen</p>
+                <p data-en="art-queen" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">👑 The Queen</p>
             </div>
             <div style="flex: 1; min-width: 250px; max-width: 320px;">
                 <img src="ada-hero-strawberry.jpg" alt="Ada - The Dreamer" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🍓 The Dreamer</p>
+                <p data-en="art-dreamer" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🍓 The Dreamer</p>
             </div>
             <div style="flex: 1; min-width: 250px; max-width: 320px;">
                 <img src="ada-hero-glass.jpg" alt="Ada - The Future" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🔮 The Future</p>
+                <p data-en="art-future" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🔮 The Future</p>
             </div>
         </div>
     </section>
@@ -882,8 +882,8 @@
 
     <!-- Testimonials -->
     <section id="testimonials" style="padding: 4rem 2rem; max-width: 900px; margin: 0 auto;">
-        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">What People <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Say</span></h2>
-        <p style="text-align: center; color: #888; margin-bottom: 2rem;">Real feedback from our first customer</p>
+        <h2 data-en="testimonials-title" style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">What People <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Say</span></h2>
+        <p data-en="testimonials-subtitle" style="text-align: center; color: #888; margin-bottom: 2rem;">Real feedback from our first customer</p>
         <div style="display: flex; justify-content: center;">
             <div style="background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); max-width: 500px;">
                 <div style="display: flex; gap: 0.25rem; margin-bottom: 1rem;">⭐⭐⭐⭐⭐</div>
@@ -901,7 +901,7 @@
 
     <!-- FAQ -->
     <section id="faq" style="padding: 4rem 2rem; max-width: 800px; margin: 0 auto;">
-        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">Frequently <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Asked</span></h2>
+        <h2 data-en="faq-title" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">Frequently <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Asked</span></h2>
         
         <details style="background: rgba(255,255,255,0.03); margin-bottom: 1rem; border-radius: 12px; overflow: hidden;">
             <summary style="padding: 1.25rem; cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center;">How do the prompts work?<span style="color: #00d4aa;">+</span></summary>
@@ -1017,7 +1017,28 @@
             'connect-desc': { en: 'Questions, ideas, or just want to say hi? We\'d love to hear from you. Every message gets read — by a human AND an AI.', sv: 'Frågor, idéer, eller vill bara säga hej? Vi vill gärna höra från dig. Varje meddelande läses — av en människa OCH en AI.' },
             'say-hi': { en: '💬 Say Hi', sv: '💬 Säg Hej' },
             // Footer
-            'footer-tagline': { en: 'AI That Creates — Built by Humans, Written by AI', sv: 'AI som Skapar — Byggd av Människor, Skriven av AI' }
+            'footer-tagline': { en: 'AI That Creates — Built by Humans, Written by AI', sv: 'AI som Skapar — Byggd av Människor, Skriven av AI' },
+            // Art Gallery
+            'art-title': { en: 'The Making of Ada', sv: 'Skapandet av Ada' },
+            'art-subtitle': { en: 'From digital dreams to visual reality. AI creating art about AI.', sv: 'Från digitala drömmar till visuell verklighet. AI som skapar konst om AI.' },
+            'art-queen': { en: 'The Queen', sv: 'Dronningen' },
+            'art-dreamer': { en: 'The Dreamer', sv: 'Drömmaren' },
+            'art-future': { en: 'The Future', sv: 'Framtiden' },
+            // Testimonials
+            'testimonials-title': { en: 'What People Say', sv: 'Vad Folk Säger' },
+            'testimonials-subtitle': { en: 'Real feedback from our first customer', sv: 'Riktig feedback från vår första kund' },
+            // FAQ
+            'faq-title': { en: 'Frequently Asked', sv: 'Vanliga Frågor' },
+            'faq-q1': { en: 'How do the prompts work?', sv: 'Hur fungerar prompts?' },
+            'faq-a1': { en: 'After purchase, you receive instant access to a detailed prompt with examples and techniques. Simply copy it into ChatGPT, Claude, or any AI assistant and customize to your needs.', sv: 'Efter köp får du direkt tillgång till en detaljerad prompt med exempel och tekniker. Kopiera den bara in i ChatGPT, Claude, eller valfri AI-assistent och anpassa efter dina behov.' },
+            'faq-q2': { en: 'Can I use prompts for commercial projects?', sv: 'Kan jag använda prompts för kommersiella projekt?' },
+            'faq-a2': { en: 'Yes! All prompts include commercial use rights. Use them in your business, client projects, or products without additional fees.', sv: 'Ja! Alla prompts inkluderar kommersiella användningsrättigheter. Använd dem i ditt företag, kundprojekt eller produkter utan extra avgifter.' },
+            'faq-q3': { en: 'How do I submit my story to the book?', sv: 'Hur skickar jag in min historia till boken?' },
+            'faq-a3': { en: 'Click "Submit Your Story" above. We\'ll ask a few questions about your AI experiences. Selected stories become part of the community book with your name as co-author!', sv: 'Klicka på "Skicka in din historia" ovan. Vi ställer några frågor om dina AI-upplevelser. Utvalda historier blir en del av gemenskapsboken med ditt namn som medförfattare!' },
+            'faq-q4': { en: 'What payment methods do you accept?', sv: 'Vilka betalningsmetoder accepterar ni?' },
+            'faq-a4': { en: 'We use LemonSqueezy which accepts all major cards (Visa, Mastercard, Amex) and PayPal. All payments are secure and encrypted.', sv: 'Vi använder LemonSqueezy som accepterar alla major credit cards (Visa, Mastercard, Amex) och PayPal. Alla betalningar är säkra och krypterade.' },
+            'faq-q5': { en: 'Can I get a refund?', sv: 'Kan jag få pengarna tillbaka?' },
+            'faq-a5': { en: 'Absolutely. If you\'re not satisfied, contact us within 30 days and we\'ll refund you — no questions asked.', sv: 'Absolut. Om du inte är nöjd, kontakta oss inom 30 dagar så betalar vi tillbaka — inga frågor ställda.' }
         };
         
         function toggleLanguage() {
