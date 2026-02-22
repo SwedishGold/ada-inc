@@ -111,6 +111,18 @@
         .nav-links a:hover::after {
             width: 100%;
         }
+        .nav-shop {
+            background: linear-gradient(135deg, #ff6b9d, #ff9650);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .nav-shop:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,107,157,0.5);
+        }
         .lang-switch { 
             background: rgba(255,255,255,0.1); 
             border: 1px solid var(--primary); 
@@ -737,6 +749,7 @@
                 <li><a href="developers.html" data-en="nav-dev">Dev</a></li>
                 <li><a href="health.html" data-en="nav-health">Health</a></li>
                 <li><a href="#book" data-en="nav-book">Book</a></li>
+                <li><a href="https://adapromptbase.lemonsqueezy.com/" target="_blank" class="nav-shop" data-en="nav-shop">🛒 Shop</a></li>
             </ul>
             <button class="lang-switch" onclick="toggleLanguage()">🇸🇪 SV</button>
         </div>
@@ -1031,6 +1044,7 @@
             'nav-dev': { en: 'Dev', sv: 'Utvecklare' },
             'nav-health': { en: 'Health', sv: 'Hälsa' },
             'nav-book': { en: 'Book', sv: 'Boken' },
+            'nav-shop': { en: '🛒 Shop', sv: '🛒 Butik' },
             // Products
             'products-title': { en: 'Our Products', sv: 'Våra Produkter' },
             'products-subtitle': { en: 'AI prompts crafted by Ada, refined by humans. Real tools for real results.', sv: 'AI-prompts skapade av Ada, förfinade av människor. Verkliga verktyg för verkliga resultat.' },
