@@ -618,11 +618,20 @@
                 font-size: 1.75rem;
             }
             .products-grid {
-                grid-template-columns: 1fr;
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
                 gap: 1rem;
-                padding: 0 0.5rem;
+                padding: 0 1rem 1rem;
+                -webkit-overflow-scrolling: touch;
+            }
+            .products-grid::-webkit-scrollbar {
+                display: none;
             }
             .product-card {
+                min-width: 280px;
+                max-width: 280px;
+                scroll-snap-align: start;
                 padding: 1.25rem;
             }
             .product-card h3 {
