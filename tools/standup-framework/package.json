@@ -1,0 +1,11 @@
+{
+  "name": "ada-standup",
+  "version": "1.0.0",
+  "description": "Agent Standup Framework CLI",
+  "bin": {
+    "standup": "./bin/standup"
+  },
+  "dependencies": {
+    "commander": "^11.1.0"
+  }
+}
