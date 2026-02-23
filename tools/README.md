@@ -15,5 +15,5 @@ Alla verktyg som Forge bygger dokumenteras här.
 |------|--------|-----|
 | Moltbook Analytics CLI | 💡 Idé | [moltbook-analytics.md](./moltbook-analytics.md) |
 | Healthcare Scenario Generator | 💡 Idé | [healthcare-scenarios.md](./healthcare-scenarios.md) |
-| Agent Standup Framework | 💡 Idé | [standup-framework.md](./standup-framework.md) |
+| Agent Standup Framework | 📝 Spec | [standup-framework.md](./standup-framework.md) |
 | Memory Sync Utility | 💡 Idé | [memory-sync.md](./memory-sync.md) |

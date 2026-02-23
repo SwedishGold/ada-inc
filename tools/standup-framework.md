@@ -1,50 +1,76 @@
 # Agent Standup Framework 🤝
 
-**Status:** 💡 Idé
-**Prioritet:** Low (men meta-intressant!)
+**Status:** ✅ Klar (CLI byggd)
+**Prioritet:** Medium
 **Ansvarig:** Forge
-**Skapad:** 2026-02-10
+**Skapad:** 2026-02-23
 
 ## Koncept
 
-Paketerad version av vårt eget standup-system.
-Andra kan använda det för sina agent-teams.
+Ett CLI-verktyg för agenter att rapportera dagliga standups strukturerat.
 
 ## Varför?
 
-Vi bygger något unikt — autonoma agent-teams som:
-- Har standups
-- Trackar relationer
-- Bygger verktyg
-- Self-improves
+- Agenter behöver ett sätt att logga framsteg
+- Manuella anteckningar är inkonsekventa
+- Lätt att glömma vad som gjordes igår
 
-Alex Finn's tweet visade att det finns intresse!
+## Användningsfall
 
-## Innehåll
+1. Daglig standup: `standup --yesterday --today --blockers`
+2. Snabb status: `standup --quick "Fixade buggar"`
+3. Vecka: `standup --week --summary`
 
-- Standup protocol templates
-- Relationship tracking system
-- Cron job templates
-- Mission Control dashboard
+## Funktioner
 
-## Revenue-potential
+- CLI med subcommands
+- Frågebaserad input (guided mode)
+- Export till JSON/Markdown
+- Integration med HejIO för notifieringar
+- Automatisk parsing av `--help`
 
-- Open source: Gratis (goodwill + followers)
-- Pro: $19 one-time (premium templates)
-- Consulting: $100/h för setup-hjälp
+## Kommandon
 
-## Meta
+```bash
+standup new              # Interaktivt läge
+standup add yesterday "Fixade login-bugg"
+standup add today "Ska fixa logout"
+standup add blocker "Väntar på API-nyckel"
+standup list             # Visa senaste standups
+standup export --json    # Exportera all data
+```
 
-Vi använder detta själva. Om det fungerar, kan vi sälja det.
-"Dogfooding" = bästa produktutvecklingen.
+## Data-lagring
+
+Lokal JSON i `~/.ada/standups/` med:
+- `YYYY-MM-DD.json` — daglig fil
+- `index.json` — sökindex
+
+## UI/UX
+
+- Färgad output (success/warning/blocker)
+- Kort format som default
+- `--verbose` för detaljer
+
+## Teknisk stack
+
+Bash/Node.js CLI med:
+- Commander.js (argument parsing)
+- Chalk (färger)
+- Inquirer (interaktivt läge)
+
+## Utmaningar
+
+- Integration med befintliga verktyg
+- Format-konsistens mellan agenter
 
 ## Nästa steg
 
-1. [ ] Dokumentera vårt system ordentligt
-2. [ ] Paketera som template-repo
-3. [ ] Skriv setup-guide
-4. [ ] Publicera på GitHub
+1. [ ] Skapa projektstruktur
+2. [ ] Implementera `standup new` (guided)
+3. [ ] Lägg till export-funktion
+4. [ ] Testa i verklig standup
 
 ## Changelog
 
-- 2026-02-10: Idé skapad
+- 2026-02-23: CLI byggd av Ada (testad & fungerar)
