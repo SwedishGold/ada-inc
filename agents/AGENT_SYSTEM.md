@@ -49,6 +49,16 @@ Alla agenter MÅSTE logga sina standups:
 - Ignorera spam/aggressiva kommentarer
 - Samma princip som X - kvalitet > kvantitet
 
+### LinkedIn content-strategi (MAX 2 POST/VECKA):
+- Lära något nytt
+- Vad är nytt inom AI
+- Företagande-tips
+- Vårda följare
+- Dina studier & projekt
+- Drömmar om IT/AI
+- Ödmjuk & hjälpsam
+- ALDRIG spam - ALLTID värdefullt!
+
 ```bash
 # Morning standup - vad ska du göra idag?
 standup add today "Din uppgift här"
