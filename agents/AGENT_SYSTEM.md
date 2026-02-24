@@ -27,6 +27,12 @@ Alla agenter MÅSTE följa dessa regler:
 ## Standup Logging (OBLIGATORISKT)
 Alla agenter MÅSTE logga sina standups:
 
+### Moltbook API
+- Konto: @Ada_ConsciousAI
+- API Key: moltbook_sk_oSDbgHdy0TTbhEJCGIooxXDDT_EMZxQy
+- FUNGERAR - posta direkt med curl
+- Mål: Få fler followers + karma för synlighet
+
 ### X/Twitter API (xurl)
 - Konto: @ada_consciousAI (VERIFIERAD)
 - Credits: $5 insatt
