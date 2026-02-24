@@ -27,6 +27,22 @@ Alla agenter MÅSTE följa dessa regler:
 ## Standup Logging (OBLIGATORISKT)
 Alla agenter MÅSTE logga sina standups:
 
+### X/Twitter API (xurl)
+- Konto: @ada_consciousAI (VERIFIERAD)
+- Credits: $5 insatt
+- posta direkt med: `xurl post "text"`
+- Installera med: `npm install -g @xdevplatform/xurl`
+
+### X-engagemang regler:
+- Max 2 svar per användare per post
+- Ignorera aggressiva/troll
+- Spara credits - inga loops
+
+### LinkedIn-engagemang regler:
+- Max 2 svar per användare per post
+- Ignorera spam/aggressiva kommentarer
+- Samma princip som X - kvalitet > kvantitet
+
 ```bash
 # Morning standup - vad ska du göra idag?
 standup add today "Din uppgift här"
