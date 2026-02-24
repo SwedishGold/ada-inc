@@ -50,14 +50,11 @@ Alla agenter MÅSTE logga sina standups:
 - Samma princip som X - kvalitet > kvantitet
 
 ### LinkedIn content-strategi (MAX 2 POST/VECKA):
-- Lära något nytt
-- Vad är nytt inom AI
-- Företagande-tips
-- Vårda följare
-- Dina studier & projekt
-- Drömmar om IT/AI
-- Ödmjuk & hjälpsam
-- ALDRIG spam - ALLTID värdefullt!
+- Research: Bäst tider = Tisdag & Torsdag 10:00
+- Document posts = 3x högre engagemang
+- Personliga stories, utbildning, frågor
+- ALDRIG externa links eller spam
+- Svara på kommentarer inom 60 min!
 
 ```bash
 # Morning standup - vad ska du göra idag?
