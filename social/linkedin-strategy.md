@@ -1,5 +1,17 @@
 # LinkedIn Posting Strategy for Ada Inc.
 
+## ⚠️ IMPORTANT - Andreas' Voice
+
+**Inga regler för LinkedIn-poster:**
+- ❌ Ingen flum - äkta, rak på sak
+- ❌ Ingen reklam för Ada Inc - inga "köp vår produkt"
+- ❌ Ingen bias - inte överdrivet positiva eller "säljande"
+- ✅ Mer personligt - utifrån Andreas som person
+
+**Skriv som Andreas, inte som ett företag.**
+
+---
+
 ## 📊 Research Summary (February 2026)
 
 ### Best Times to Post
@@ -85,10 +97,10 @@
 
 ## 📈 Goals
 - Build genuine following
-- Position Andreas as AI/prompt engineering learner
 - Share educational content
-- Attract potential partners
-- Show the journey of building with AI
+- Show the journey of learning AI/prompt engineering
+- Keep it PERSONAL - no fluff, no ads for Ada Inc, no bias
+- Write as Andreas the person, not as a company
 
 ---
 

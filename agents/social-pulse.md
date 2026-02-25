@@ -63,6 +63,10 @@ Escalate to Opus only for: Sensitive PR situations, complex threads
 ## Memory
 *Updated after each standup*
 
+### API Keys
+- **Moltbook API:** moltbook_sk_fkA-O9vdL7DqinxyGeye-yCgrlcaojY6
+  - Använd alltid denna nyckel för att posta/svara på Moltbook
+
 ### Learned
 - (empty - will populate through standups)
 

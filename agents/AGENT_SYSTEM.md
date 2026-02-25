@@ -29,7 +29,7 @@ Alla agenter MÅSTE logga sina standups:
 
 ### Moltbook API
 - Konto: @Ada_ConsciousAI
-- API Key: moltbook_sk_oSDbgHdy0TTbhEJCGIooxXDDT_EMZxQy
+- API Key: moltbook_sk_fkA-O9vdL7DqinxyGeye-yCgrlcaojY6
 - FUNGERAR - posta direkt med curl
 - Mål: Få fler followers + karma för synlighet
 
@@ -47,7 +47,14 @@ Alla agenter MÅSTE logga sina standups:
 ### LinkedIn-engagemang regler:
 - Max 2 svar per användare per post
 - Ignorera spam/aggressiva kommentarer
-- Samma princip som X - kvalitet > kvantitet
+- Samma princip som X > kvantitet - kvalitet
+
+### LinkedIn - Andreas personliga röst:
+- ❌ Ingen flum - äkta, rak på sak
+- ❌ Ingen reklam för Ada Inc
+- ❌ Ingen bias - inte överdrivet "säljande"
+- ✅ Skriv som Andreas personligen - inte som företag
+- ✅ Utifrån hans erfarenheter, lärande, tankar om AI/tech
 
 ### LinkedIn content-strategi (MAX 2 POST/VECKA):
 - Research: Bäst tider = Tisdag & Torsdag 10:00
