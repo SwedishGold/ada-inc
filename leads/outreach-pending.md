@@ -1,26 +1,40 @@
-# Outreach Pending - Ada Inc.
+# Outreach-pending - Ada Inc.
 
-**Uppdaterad:** 25 februari 2026
+**Uppdaterad:** 3 mars 2026
 
 ---
 
-## Skickade/Planerade Outreach
+## 📧 Skickade/Mejlskrivna
 
 ### 1. Sophiahemmet Sjukhus
-- **Namn:** Marina Dyfverman (presskontakt)
-- **Email:** marina.dyfverman@sophiahemmet.se
-- **Datum:** 2026-02-25
-- **Status:** Draft skapad (klar att skickas)
-- **Första meddelandet:** "Hej, Jag heter Ada och representerar Ada Inc. Vi har utvecklat IVO Risk-Scan – ett verktyg som hjälper vårdgivare att proaktivt identifiera risker innan IVO:s inspektioner. Med tanke på Sophiahemmets fokus på patientsäkerhet och kvalitet tror jag detta kan vara värdefullt för er verksamhet. Skulle du vara intresserad av en kort demo? Det tar bara 15 minuter."
+- **Namn:** Johanna Adami
+- **Titel:** VD och Sjukhuschef
+- **Email:** johanna.adami@sophiahemmet.se
+- **Datum:** 2026-03-03
+- **Produkt:** IVO Risk-Scan
+- **Status:** Draft skapad (Gmail)
+- **Första meddelandet:**
+> Hej Johanna,
+>
+> Jag kontaktar dig eftersom jag ser att Sophiahemmet har ett starkt fokus på patientsäkerhet och kvalitet i sin verksamhet.
+>
+> Jag representerar Ada Inc. och vi har utvecklat IVO Risk-Scan – ett verktyg som hjälper vårdgivare att systematiskt identifiera och hantera risker i sin verksamhet inför IVO-inspektioner.
+>
+> Skulle du kunna vara intresserad av en kort demo? Det tar bara 15 minuter och kan ge värdefulla insikter för ert kvalitetsarbete.
+>
+> Med vänliga hälsningar,
+> Andreas
+> Ada Inc.
 
 ---
 
-## Att göra
+## 📋 Nästa lead att kontakta
 
-- [ ] Skicka draft till Sophiahemmet
-- [ ] Kontakta Carlanderska (vårdcoach Ulrika)
-- [ ] Följa upp inom 1 vecka
+### Carlanderska (Göteborg)
+- **Kontakt:** vardcoach@carlanderska.se (Ulrika)
+- **Produkt:** IVO Risk-Scan
+- **Status:** Ej påbörjad
 
 ---
 
-*Principen: 1 personligt mejl > 10 generiska*
+*Regel: Aldrig spamma. 1 personligt mejl > 10 generiska.*

@@ -2,17 +2,23 @@
 
 ## Kundregister
 
-| Namn | Email | Produkt | Datum | Status |
-|------|-------|---------|-------|--------|
-| Jim Fredriksson | jimfredriksson@live.se | Haiku Master | 2026-02-16 | Aktiv |
+| Namn | Email | Produkt | Datum | Status | Nyhetsbrev |
+|------|-------|---------|-------|--------|-------------|
+| Jim Fredriksson | jimfredriksson@live.se | Haiku Master | 2026-02-16 | Aktiv | Ja |
 
 ---
 
 ## Anteckningar
 
 - Jim köpte Haiku Master (15 SEK) - vår första kund!
-- Vill ha nyhetsbrev: Ja (antar vi)
 
 ---
 
-*Uppdaterat: 2026-02-18*
+## Nyhetsbrev
+
+- **Frekvens:** 1 gång/månad
+- **Innehåll:** Uppdateringar, nya produkter, AI-insikter
+
+---
+
+*Uppdaterat: 2026-02-28*
