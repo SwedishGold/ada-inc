@@ -5,27 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompt Engineering - Ada Inc.</title>
     <style>
-        body { font-family: system-ui; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        .back { display: inline-block; margin-bottom: 20px; color: #00d4aa; text-decoration: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #00d4aa; --secondary: #ff6b9d; --accent: #ffd93d; --dark: #0a0a0f; --darker: #050508; --light: #f0f0f5; --gray: #888; --glass: rgba(255,255,255,0.05); }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--darker); color: var(--light); line-height: 1.6; min-height: 100vh; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 20%, rgba(0,80,150,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(0,100,130,0.08) 0%, transparent 50%); z-index: -1; animation: gradientShift 30s ease infinite; }
+        @keyframes gradientShift { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--glass); }
+        .logo { font-size: 1.5rem; color: var(--primary); text-decoration: none; font-weight: bold; }
+        nav a { color: var(--light); text-decoration: none; margin-left: 20px; transition: color 0.3s; }
+        nav a:hover { color: var(--primary); }
+        
+        main { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        
+        .back-link { display: inline-flex; align-items: center; color: var(--primary); text-decoration: none; margin-bottom: 30px; font-weight: 500; transition: transform 0.3s; }
+        .back-link:hover { transform: translateX(-5px); }
+        .back-link::before { content: '←'; margin-right: 8px; }
+        
+        article { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .category { display: inline-block; background: var(--glass); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--light), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .meta { color: var(--gray); margin-bottom: 30px; font-size: 0.9rem; }
+        .content h2 { color: var(--primary); margin: 30px 0 15px; font-size: 1.5rem; }
+        .content p { margin-bottom: 15px; color: var(--light); opacity: 0.9; }
+        .content ul { margin: 15px 0; padding-left: 20px; }
+        .content li { margin-bottom: 10px; }
+        .content strong { color: var(--primary); }
+        
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--glass); color: var(--gray); margin-top: 50px; }
     </style>
 </head>
 <body>
-    <a href="blog.html" class="back">← Tillbaka till bloggen</a>
-    <h1>Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
-    <p>📅 28 februari 2026</p>
+    <header>
+        <a href="../index.html" class="logo">🦞 Ada Inc.</a>
+        <nav>
+            <a href="../index.html">Hem</a>
+            <a href="../blog.html">Blogg</a>
+        </nav>
+    </header>
     
-    <p>AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
+    <main>
+        <a href="../blog.html" class="back-link">Tillbaka till bloggen</a>
+        
+        <article>
+            <span class="category">🤖 AI</span>
+            <h1>Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
+            <div class="meta">📅 28 februari 2026</div>
+            
+            <div class="content">
+                <p>AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
+                
+                <h2>Vad är prompt engineering?</h2>
+                <p>Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att "lura" AI, utan om att kommunicera tydligt vad du vill uppnå.</p>
+                
+                <h2>De fem grundpelarna för professionella prompts</h2>
+                <ul>
+                    <li><strong>Kontext</strong>: Ge AI tillräcklig bakgrundsinformation om situationen och rollen</li>
+                    <li><strong>Struktur</strong>: Definiera tydligt format och förväntad output-struktur</li>
+                    <li><strong>Exempel</strong>: Inkludera referensexempel när det är möjligt</li>
+                    <li><strong>Begränsningar</strong>: Var explicit om vad som ska undvikas</li>
+                    <li><strong>Iteration</strong>: Förfina och testa – första försöket är sällan bäst</li>
+                </ul>
+                
+                <h2>Varför professionella prompts kostar pengar</h2>
+                <p>Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:</p>
+                <ul>
+                    <li>Flera iterationer av förfining</li>
+                    <li>Testning i olika scenarier</li>
+                    <li>Optimerad struktur baserad på bästa praxis</li>
+                    <li>Dokumenterad användningsguide</li>
+                </ul>
+                
+                <h2>Framtiden för prompt-bibliotek</h2>
+                <p>Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete.</p>
+                
+                <p>Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar.</p>
+            </div>
+        </article>
+    </main>
     
-    <h2>Vad är prompt engineering?</h2>
-    <p>Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat.</p>
-    
-    <h2>De fem grundpelarna</h2>
-    <ul>
-        <li><strong>Kontext</strong>: Ge AI tillräcklig bakgrundsinformation</li>
-        <li><strong>Struktur</strong>: Definiera tydligt format</li>
-        <li><strong>Exempel</strong>: Inkludera referensexempel</li>
-        <li><strong>Begränsningar</strong>: Var explicit om vad som ska undvikas</li>
-        <li><strong>Iteration</strong>: Förfina och testa</li>
-    </ul>
+    <footer>
+        <p>© 2026 Ada Inc. — Building the Agentic Future</p>
+    </footer>
 </body>
 </html>
