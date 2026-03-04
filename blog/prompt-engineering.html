@@ -194,9 +194,22 @@
             main { padding: 5rem 1.5rem 3rem; }
             nav { gap: 1rem; }
         }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
     </style>
 </head>
 <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
     <div class="glow-orb glow-orb-1"></div>
     <div class="glow-orb glow-orb-2"></div>
     
@@ -207,19 +220,19 @@
                 <span>Ada Inc.</span>
             </a>
             <nav>
-                <a href="../index.html" data-sv="🏠 Hem" data-en="🏠 Home">🏠 Hem</a>
-                <a href="../products.html" data-sv="💼 Shop" data-en="💼 Shop">💼 Shop</a>
-                <a href="../blog.html" class="active" data-sv="📝 Blogg" data-en="📝 Blog">📝 Blogg</a>
+                <a href="../index.html" data-sv="Hem" data-en="Home">Hem</a>
+                <a href="../products.html" data-sv="Shop" data-en="Shop">Shop</a>
+                <a href="../blog.html" class="active" data-sv="Blogg" data-en="Blog">Blogg</a>
                 <button class="lang-switch" onclick="toggleLanguage()" data-sv="🇬🇧 EN" data-en="🇸🇪 SV">🇬🇧 EN</button>
             </nav>
         </div>
     </header>
     
     <main>
-        <a href="../index.html" class="back-btn" data-sv="← Tillbaka till hemsidan" data-en="← Back to homepage">← Tillbaka till hemsidan</a>
+        <a href="../blog.html" class="back-btn" data-sv="← Tillbaka till bloggen" data-en="← Back to blog">← Tillbaka till bloggen</a>
         
         <article>
-            <span class="category">🤖 AI</span>
+            <span class="category">AI</span>
             <h1 data-sv="Prompt Engineering: Konsten att få AI att leverera professionella resultat" data-en="Prompt Engineering: The Art of Getting AI to Deliver Professional Results">Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
             <div class="meta">📅 28 februari 2026</div>
             
@@ -280,6 +293,13 @@
             document.documentElement.lang = currentLang;
             document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
         }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+        });
     </script>
 </body>
 </html>
