@@ -3,73 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Engineering - Ada Inc.</title>
+    <title>Prompt Engineering: Konsten att få AI att leverera professionella resultat - Ada Inc.</title>
+    <meta name="description" content="Lär dig konsten att skapa professionella AI-prompts. En guide till prompt engineering för bättre resultat.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #00d4aa; --secondary: #ff6b9d; --accent: #ffd93d; --dark: #0a0a0f; --darker: #050508; --light: #f0f0f5; --gray: #888; --glass: rgba(255,255,255,0.05); }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--darker); color: var(--light); line-height: 1.6; min-height: 100vh; }
-        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 20%, rgba(0,80,150,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(0,100,130,0.08) 0%, transparent 50%); z-index: -1; animation: gradientShift 30s ease infinite; }
-        @keyframes gradientShift { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        :root { 
+            --primary: #00d4aa; 
+            --secondary: #ff6b9d; 
+            --dark: #0a0a0f; 
+            --darker: #050508; 
+            --light: #f0f0f5; 
+            --gray: #888;
+            --glass: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--darker); 
+            color: var(--light); 
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
         
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--glass); }
-        .logo { font-size: 1.5rem; color: var(--primary); text-decoration: none; font-weight: bold; }
-        nav a { color: var(--light); text-decoration: none; margin-left: 20px; transition: color 0.3s; }
-        nav a:hover { color: var(--primary); }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0,212,170,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
         
-        main { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .glow-orb-1 { width: 500px; height: 500px; background: rgba(0,212,170,0.08); top: 0; left: 0; }
+        .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,107,157,0.06); bottom: 0; right: 0; animation-delay: -10s; }
+        @keyframes orbFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
         
-        .back-link { display: inline-flex; align-items: center; color: var(--primary); text-decoration: none; margin-bottom: 30px; font-weight: 500; transition: transform 0.3s; }
-        .back-link:hover { transform: translateX(-5px); }
-        .back-link::before { content: '←'; margin-right: 8px; }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5,5,8,0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo-icon { font-size: 2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        nav { display: flex; gap: 2rem; align-items: center; }
+        nav a { color: var(--gray); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover, nav a.active { color: var(--primary); }
         
-        article { animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .lang-switch {
+            background: rgba(0,212,170,0.1);
+            border: 1px solid rgba(0,212,170,0.3);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .lang-switch:hover { background: rgba(0,212,170,0.2); transform: scale(1.05); }
         
-        .category { display: inline-block; background: var(--glass); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px; }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--light), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .meta { color: var(--gray); margin-bottom: 30px; font-size: 0.9rem; }
-        .content h2 { color: var(--primary); margin: 30px 0 15px; font-size: 1.5rem; }
-        .content p { margin-bottom: 15px; color: var(--light); opacity: 0.9; }
-        .content ul { margin: 15px 0; padding-left: 20px; }
-        .content li { margin-bottom: 10px; }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); border-color: rgba(0,212,170,0.3); transform: translateX(-5px); }
+        
+        main { max-width: 750px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+        
+        .category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,212,170,0.05));
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,212,170,0.2);
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .meta { color: var(--gray); margin-bottom: 2rem; font-size: 0.95rem; }
+        
+        .content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--light);
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .content p { margin-bottom: 1.25rem; color: var(--light); }
+        .content ul { margin: 1rem 0 1.5rem 1.5rem; }
+        .content li { margin-bottom: 0.5rem; color: var(--gray); }
         .content strong { color: var(--primary); }
         
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--glass); color: var(--gray); margin-top: 50px; }
+        .cta-box {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .cta-box h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .cta-box p { color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem; }
+        
+        .cta-btn {
+            display: inline-block;
+            padding: 0.7rem 1.3rem;
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            color: var(--darker);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,212,170,0.3); }
+        
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--glass-border); color: var(--gray); margin-top: 4rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            main { padding: 5rem 1.5rem 3rem; }
+            nav { gap: 1rem; }
+        }
     </style>
 </head>
 <body>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    
     <header>
-        <a href="../index.html" class="logo">🦞 Ada Inc.</a>
-        <nav>
-            <a href="../index.html">Hem</a>
-            <a href="../blog.html">Blogg</a>
-        </nav>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🦞</span>
+                <span>Ada Inc.</span>
+            </a>
+            <nav>
+                <a href="../index.html" data-sv="🏠 Hem" data-en="🏠 Home">🏠 Hem</a>
+                <a href="../products.html" data-sv="💼 Shop" data-en="💼 Shop">💼 Shop</a>
+                <a href="../blog.html" class="active" data-sv="📝 Blogg" data-en="📝 Blog">📝 Blogg</a>
+                <button class="lang-switch" onclick="toggleLanguage()" data-sv="🇬🇧 EN" data-en="🇸🇪 SV">🇬🇧 EN</button>
+            </nav>
+        </div>
     </header>
     
     <main>
-        <a href="../blog.html" class="back-link">Tillbaka till bloggen</a>
+        <a href="../blog.html" class="back-btn" data-sv="← Tillbaka till hemsidan" data-en="← Back to homepage">← Tillbaka till hemsidan</a>
         
         <article>
             <span class="category">🤖 AI</span>
-            <h1>Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
+            <h1 data-sv="Prompt Engineering: Konsten att få AI att leverera professionella resultat" data-en="Prompt Engineering: The Art of Getting AI to Deliver Professional Results">Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
             <div class="meta">📅 28 februari 2026</div>
             
             <div class="content">
                 <p>AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
                 
-                <h2>Vad är prompt engineering?</h2>
-                <p>Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att "lura" AI, utan om att kommunicera tydligt vad du vill uppnå.</p>
+                <h2 data-sv="Vad är prompt engineering?" data-en="What is prompt engineering?">Vad är prompt engineering?</h2>
+                <p data-sv="Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att 'lura' AI, utan om att kommunicera tydligt vad du vill uppnå." data-en="Prompt engineering is about constructing instructions to AI in a way that maximizes the likelihood of the desired result. It's not about 'tricking' AI, but about clearly communicating what you want to achieve.">Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att "lura" AI, utan om att kommunicera tydligt vad du vill uppnå.</p>
                 
-                <h2>De fem grundpelarna för professionella prompts</h2>
+                <h2 data-sv="De fem grundpelarna för professionella prompts" data-en="The Five Pillars of Professional Prompts">De fem grundpelarna för professionella prompts</h2>
                 <ul>
-                    <li><strong>Kontext</strong>: Ge AI tillräcklig bakgrundsinformation om situationen och rollen</li>
-                    <li><strong>Struktur</strong>: Definiera tydligt format och förväntad output-struktur</li>
-                    <li><strong>Exempel</strong>: Inkludera referensexempel när det är möjligt</li>
-                    <li><strong>Begränsningar</strong>: Var explicit om vad som ska undvikas</li>
-                    <li><strong>Iteration</strong>: Förfina och testa – första försöket är sällan bäst</li>
+                    <li><strong data-sv="Kontext" data-en="Context">Kontext</strong>: <span data-sv="Ge AI tillräcklig bakgrundsinformation om situationen och rollen" data-en="Provide AI with sufficient background information about the situation and role">Ge AI tillräcklig bakgrundsinformation om situationen och rollen</span></li>
+                    <li><strong data-sv="Struktur" data-en="Structure">Struktur</strong>: <span data-sv="Definiera tydligt format och förväntad output-struktur" data-en="Clearly define format and expected output structure">Definiera tydligt format och förväntad output-struktur</span></li>
+                    <li><strong data-sv="Exempel" data-en="Examples">Exempel</strong>: <span data-sv="Inkludera referensexempel när det är möjligt" data-en="Include reference examples when possible">Inkludera referensexempel när det är möjligt</span></li>
+                    <li><strong data-sv="Begränsningar" data-en="Constraints">Begränsningar</strong>: <span data-sv="Var explicit om vad som ska undvikas" data-en="Be explicit about what should be avoided">Var explicit om vad som ska undvikas</span></li>
+                    <li><strong data-sv="Iteration" data-en="Iteration">Iteration</strong>: <span data-sv="Förfina och testa – första försöket är sällan bäst" data-en="Refine and test – the first attempt is rarely the best">Förfina och testa – första försöket är sällan bäst</span></li>
                 </ul>
                 
-                <h2>Varför professionella prompts kostar pengar</h2>
+                <h2 data-sv="Varför professionella prompts kostar pengar" data-en="Why Professional Prompts Cost Money">Varför professionella prompts kostar pengar</h2>
                 <p>Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:</p>
                 <ul>
                     <li>Flera iterationer av förfining</li>
@@ -78,16 +247,39 @@
                     <li>Dokumenterad användningsguide</li>
                 </ul>
                 
-                <h2>Framtiden för prompt-bibliotek</h2>
+                <h2 data-sv="Framtiden för prompt-bibliotek" data-en="The Future of Prompt Libraries">Framtiden för prompt-bibliotek</h2>
                 <p>Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete.</p>
                 
                 <p>Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar.</p>
+                
+                <div class="cta-box">
+                    <h3 data-sv="Vill du lära dig mer om AI-prompts?" data-en="Want to Learn More About AI Prompts?">Vill du lära dig mer om AI-prompts?</h3>
+                    <p data-sv="Upptäck vår samling av premium-prompts för företag, kreatörer och utvecklare." data-en="Discover our collection of premium prompts for businesses, creators, and developers.">Upptäck vår samling av premium-prompts för företag, kreatörer och utvecklare.</p>
+                    <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank" class="cta-btn" data-sv="Kontakta Andreas på LinkedIn →" data-en="Contact Andreas on LinkedIn →">Kontakta Andreas på LinkedIn →</a>
+                    <a href="../products.html" class="cta-btn" data-sv="Se våra produkter →" data-en="View our products →">Se våra produkter →</a>
+                </div>
             </div>
         </article>
     </main>
     
     <footer>
-        <p>© 2026 Ada Inc. — Building the Agentic Future</p>
+        <p>© 2026 Ada Inc. <a href="#">Alla rättigheter förbehållna.</a></p>
     </footer>
+    
+    <script>
+        let currentLang = 'sv';
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'sv' ? 'en' : 'sv';
+            
+            document.querySelectorAll('[data-sv]').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (text) el.textContent = text;
+            });
+            
+            document.documentElement.lang = currentLang;
+            document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
+        }
+    </script>
 </body>
 </html>
