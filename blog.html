@@ -666,7 +666,7 @@
                 <p data-sv="Hur du kan använda välkonstruerade prompts för att skapa högkvalitativt innehåll." data-en="How to use well-crafted prompts to create high-quality content.">Hur du kan använda välkonstruerade prompts för att skapa högkvalitativt innehåll.</p>
                 <div class="meta">
                     <span>📅 28 feb 2026</span>
-                    <a href="blog/prompt-engineering.html" class="read-more">Läs mer →</a>
+                    <a href="blog/prompt-engineering.html" class="read-more" data-sv="Läs mer" data-en="Read more">Läs mer</a>
                 </div>
             </article>
             
@@ -677,7 +677,7 @@
                 <p data-sv="Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction." data-en="We are at a historic turning point. AI agents are no longer science fiction.">Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction.</p>
                 <div class="meta">
                     <span>📅 3 mar 2026</span>
-                    <a href="blog/the-agentic-future.html" class="read-more">Läs mer →</a>
+                    <a href="blog/the-agentic-future.html" class="read-more" data-sv="Läs mer" data-en="Read more">Läs mer</a>
                 </div>
             </article>
         </div>
@@ -723,17 +723,14 @@
         function toggleLanguage() {
             currentLang = currentLang === 'sv' ? 'en' : 'sv';
             
-            // Update all elements with data-en attribute
-            document.querySelectorAll('[data-en]').forEach(el => {
-                const enText = el.getAttribute('data-en');
-                const svText = el.getAttribute('data-sv');
-                if (enText) {
-                    el.textContent = currentLang === 'en' ? enText : (svText || enText);
-                }
+            // Update all elements with data-sv attribute
+            document.querySelectorAll('[data-sv]').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (text) el.textContent = text;
             });
             
-            // Update button text
-            document.querySelector('.lang-switch').textContent = currentLang === 'en' ? '🇸🇪 SV' : '🇬🇧 EN';
+            document.documentElement.lang = currentLang;
+            document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
         }
     </script>
 </body>
