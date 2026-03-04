@@ -234,10 +234,10 @@
         <article>
             <span class="category">AI</span>
             <h1 data-sv="Prompt Engineering: Konsten att få AI att leverera professionella resultat" data-en="Prompt Engineering: The Art of Getting AI to Deliver Professional Results">Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
-            <div class="meta">📅 28 februari 2026</div>
+            <div class="meta">📅 <span data-sv="28 februari 2026" data-en="February 28, 2026">28 februari 2026</span></div>
             
             <div class="content">
-                <p>AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
+                <p data-sv="AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt." data-en="AI tools like ChatGPT and Claude have revolutionized how we work with text and content. Many find the results mediocre or unreliable. The truth is that <strong>output quality directly correlates with input quality</strong> — meaning your prompt.">AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
                 
                 <h2 data-sv="Vad är prompt engineering?" data-en="What is prompt engineering?">Vad är prompt engineering?</h2>
                 <p data-sv="Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att 'lura' AI, utan om att kommunicera tydligt vad du vill uppnå." data-en="Prompt engineering is about constructing instructions to AI in a way that maximizes the likelihood of the desired result. It's not about 'tricking' AI, but about clearly communicating what you want to achieve.">Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att "lura" AI, utan om att kommunicera tydligt vad du vill uppnå.</p>
@@ -252,18 +252,18 @@
                 </ul>
                 
                 <h2 data-sv="Varför professionella prompts kostar pengar" data-en="Why Professional Prompts Cost Money">Varför professionella prompts kostar pengar</h2>
-                <p>Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:</p>
+                <p data-sv="Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:" data-en="You might wonder why anyone would pay for a prompt when they can write one for free. The answer lies in <strong>time and quality</strong>. A professionally developed prompt has gone through:">Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:</p>
                 <ul>
-                    <li>Flera iterationer av förfining</li>
-                    <li>Testning i olika scenarier</li>
-                    <li>Optimerad struktur baserad på bästa praxis</li>
-                    <li>Dokumenterad användningsguide</li>
+                    <li data-sv="Flera iterationer av förfining" data-en="Multiple iterations of refinement">Flera iterationer av förfining</li>
+                    <li data-sv="Testning i olika scenarier" data-en="Testing in various scenarios">Testning i olika scenarier</li>
+                    <li data-sv="Optimerad struktur baserad på bästa praxis" data-en="Optimized structure based on best practices">Optimerad struktur baserad på bästa praxis</li>
+                    <li data-sv="Dokumenterad användningsguide" data-en="Documented usage guide">Dokumenterad användningsguide</li>
                 </ul>
                 
                 <h2 data-sv="Framtiden för prompt-bibliotek" data-en="The Future of Prompt Libraries">Framtiden för prompt-bibliotek</h2>
-                <p>Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete.</p>
+                <p data-sv="Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete." data-en="We see a clear trend where companies and creators are starting to build their own libraries of validated prompts. Just as code libraries revolutionized software development, prompt libraries will become standard for AI-driven work.">Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete.</p>
                 
-                <p>Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar.</p>
+                <p data-sv="Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar." data-en="Ada Inc.'s collection of prompts is built precisely for this purpose — to give you a solid foundation to stand on, so you can focus on creating value instead of tinkering with prompt formulations.">Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar.</p>
                 
                 <div class="cta-box">
                     <h3 data-sv="Vill du lära dig mer om AI-prompts?" data-en="Want to Learn More About AI Prompts?">Vill du lära dig mer om AI-prompts?</h3>
@@ -287,7 +287,13 @@
             
             document.querySelectorAll('[data-sv]').forEach(el => {
                 const text = el.getAttribute('data-' + currentLang);
-                if (text) el.textContent = text;
+                if (!text) return;
+                // Use innerHTML for elements that may contain HTML tags (e.g. <strong>)
+                if (text.includes('<')) {
+                    el.innerHTML = text;
+                } else {
+                    el.textContent = text;
+                }
             });
             
             document.documentElement.lang = currentLang;
