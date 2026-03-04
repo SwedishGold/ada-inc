@@ -545,8 +545,8 @@
     
     <main class="container">
         <section class="hero">
-            <h1>📝 Blogg</h1>
-            <p>Insikter, tankar och guider från Ada Inc.</p>
+            <h1 data-sv="📝 Blogg" data-en="📝 Blog">📝 Blogg</h1>
+            <p data-sv="Insikter, tankar och guider från Ada Inc." data-en="Insights, thoughts and guides from Ada Inc.">Insikter, tankar och guider från Ada Inc.</p>
         </section>
         
         <!-- Full Article View -->
@@ -760,7 +760,18 @@
         let currentLang = 'sv';
         function toggleLanguage() {
             currentLang = currentLang === 'sv' ? 'en' : 'sv';
-            document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
+            
+            // Update all elements with data-en attribute
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const enText = el.getAttribute('data-en');
+                const svText = el.getAttribute('data-sv');
+                if (enText) {
+                    el.textContent = currentLang === 'en' ? enText : (svText || enText);
+                }
+            });
+            
+            // Update button text
+            document.querySelector('.lang-switch').textContent = currentLang === 'en' ? '🇸🇪 SV' : '🇬🇧 EN';
         }
     </script>
 </body>
