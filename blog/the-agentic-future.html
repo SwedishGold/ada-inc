@@ -3,42 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Agentic Future: När AI blir din kollega - Ada Inc.</title>
-    <meta name="description" content="En grundlig guide om AI-agenter och hur de förändrar framtidens arbete. Läs om varför agentisk AI är den största tech-trenden just nu.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>The Agentic Future: När AI Blir Din Kollega - Ada Inc.</title>
+    <meta name="description" content="Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de arbetar, skapar och lär.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { 
-            --primary: #00d4aa; 
-            --secondary: #ff6b9d; 
-            --accent: #ffd93d;
-            --dark: #0a0a0f; 
-            --darker: #050508; 
-            --light: #f0f0f5; 
+        :root {
+            --primary: #00d4aa;
+            --secondary: #ff6b9d;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #f0f0f5;
             --gray: #888;
             --glass: rgba(255,255,255,0.03);
             --glass-border: rgba(255,255,255,0.08);
         }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--darker); 
-            color: var(--light); 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
             line-height: 1.7;
             overflow-x: hidden;
         }
-        
-        /* Animated background */
+
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 20%, rgba(0,212,170,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(0,150,130,0.05) 0%, transparent 60%);
+                radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.06) 0%, transparent 50%);
             z-index: -1;
         }
-        
+
         .glow-orb {
             position: fixed;
             border-radius: 50%;
@@ -49,11 +46,8 @@
         }
         .glow-orb-1 { width: 500px; height: 500px; background: rgba(0,212,170,0.08); top: 0; left: 0; }
         .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,107,157,0.06); bottom: 0; right: 0; animation-delay: -10s; }
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, -30px); }
-        }
-        
+        @keyframes orbFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+
         header {
             position: fixed;
             top: 0;
@@ -84,10 +78,28 @@
         }
         .logo-icon { font-size: 2rem; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
         nav { display: flex; gap: 2rem; align-items: center; }
-        nav a { color: var(--gray); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
         nav a:hover, nav a.active { color: var(--primary); }
-        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        nav a:hover::after, nav a.active::after { width: 100%; }
+
         .lang-switch {
             background: rgba(0,212,170,0.1);
             border: 1px solid rgba(0,212,170,0.3);
@@ -99,8 +111,7 @@
             transition: all 0.3s;
         }
         .lang-switch:hover { background: rgba(0,212,170,0.2); transform: scale(1.05); }
-        
-        /* Back button */
+
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -115,20 +126,10 @@
             transition: all 0.3s;
         }
         .back-btn:hover { color: var(--primary); border-color: rgba(0,212,170,0.3); transform: translateX(-5px); }
-        
-        /* Article */
-        .article {
-            max-width: 750px;
-            margin: 0 auto;
-            padding: 4rem 2rem 4rem;
-        }
-        
-        .article-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .article-category {
+
+        main { max-width: 750px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+
+        .category {
             display: inline-block;
             padding: 0.4rem 1rem;
             background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,212,170,0.05));
@@ -136,36 +137,32 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             border: 1px solid rgba(0,212,170,0.2);
         }
-        
-        .article h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--light), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        .article-meta { color: var(--gray); font-size: 0.95rem; }
-        
-        .article-content { font-size: 1.08rem; line-height: 1.85; }
-        
-        .article-content p { margin-bottom: 1.5rem; color: var(--light); }
-        
-        .article-content h2 {
-            font-size: 1.6rem;
+
+        .meta { color: var(--gray); margin-bottom: 2rem; font-size: 0.95rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); }
+
+        .content h2 {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin: 2.5rem 0 1rem;
+            margin: 2rem 0 1rem;
             color: var(--light);
             position: relative;
             padding-left: 1rem;
         }
-        
-        .article-content h2::before {
+        .content h2::before {
             content: '';
             position: absolute;
             left: 0;
@@ -176,15 +173,22 @@
             background: linear-gradient(to bottom, var(--primary), var(--secondary));
             border-radius: 2px;
         }
-        
-        .article-content ul { margin: 1rem 0 1.5rem 1.5rem; }
-        .article-content li { margin-bottom: 0.6rem; color: var(--gray); }
-        .article-content li strong { color: var(--primary); }
-        
-        .article-content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid rgba(0,212,170,0.3); transition: all 0.3s; }
-        .article-content a:hover { border-color: var(--primary); }
-        
-        /* CTA Box */
+
+        .content p { margin-bottom: 1.25rem; color: var(--light); font-size: 1.05rem; }
+        .content ul { margin: 1rem 0 1.5rem 1.5rem; }
+        .content li { margin-bottom: 0.5rem; color: var(--gray); font-size: 1.05rem; }
+        .content strong { color: var(--primary); }
+
+        .highlight-box {
+            background: var(--glass);
+            border: 1px solid rgba(0,212,170,0.2);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .highlight-box p { margin: 0; font-style: italic; }
+
         .cta-box {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -194,35 +198,40 @@
             text-align: center;
             backdrop-filter: blur(10px);
         }
-        .cta-box h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-        .cta-box p { color: var(--gray); margin-bottom: 1.5rem; }
-        
+        .cta-box h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .cta-box p { color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem; }
+
         .cta-btn {
             display: inline-block;
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.3rem;
             background: linear-gradient(135deg, var(--primary), #00b894);
             color: var(--darker);
             text-decoration: none;
             border-radius: 25px;
             font-weight: 600;
             transition: all 0.3s;
-            margin: 0.5rem;
+            margin: 0.3rem;
+            font-size: 0.9rem;
         }
         .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,212,170,0.3); }
-        
+
+        article { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--glass-border); color: var(--gray); margin-top: 4rem; }
         footer a { color: var(--primary); text-decoration: none; }
-        
+
         @media (max-width: 768px) {
-            .article { padding: 6rem 1.5rem 3rem; }
-            nav { gap: 1rem; }
+            main { padding: 5rem 1.5rem 3rem; }
+            nav { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .header-content { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
 <body>
     <div class="glow-orb glow-orb-1"></div>
     <div class="glow-orb glow-orb-2"></div>
-    
+
     <header>
         <div class="header-content">
             <a href="../index.html" class="logo">
@@ -233,102 +242,85 @@
                 <a href="../index.html" data-sv="🏠 Hem" data-en="🏠 Home">🏠 Hem</a>
                 <a href="../products.html" data-sv="💼 Shop" data-en="💼 Shop">💼 Shop</a>
                 <a href="../blog.html" class="active" data-sv="📝 Blogg" data-en="📝 Blog">📝 Blogg</a>
-                <button class="lang-switch" onclick="toggleLanguage()" data-sv="🇬🇧 EN" data-en="🇸🇪 SV">🇬🇧 EN</button>
+                <button class="lang-switch" onclick="toggleLanguage()">🇬🇧 EN</button>
             </nav>
         </div>
     </header>
-    
-    <article class="article">
-        <a href="../index.html" class="back-btn" data-sv="← Tillbaka till hemsidan" data-en="← Back to homepage">← Tillbaka till hemsidan</a>
-        
-        <div class="article-header">
-            <span class="article-category">🧠 <span data-sv="Framtiden" data-en="Future">Framtiden</span></span>
-            <h1 data-sv="The Agentic Future: När AI blir din kollega" data-en="The Agentic Future: When AI Becomes Your Colleague">The Agentic Future: När AI blir din kollega</h1>
-            <p class="article-meta">Publicerad av Ada Inc | Mars 2026</p>
-        </div>
-        
-        <div class="article-content">
-            <h2 data-sv="Introduktion: Varför AI-agenter är framtiden" data-en="Introduction: Why AI Agents Are the Future">Introduktion: Varför AI-agenter är framtiden</h2>
-            <p>Vi befinner oss vid en av de mest omvälvande teknikskiftena i modern historia — inte för att AI plötsligt blivit smartare, utan för att den börjat <em>agera</em>.</p>
-            <p>Under decennier har vi pratat om artificiell intelligens som något som svarar på frågor, genererar text eller analyserar data när vi ber om det. Men det paradigmet håller snabbt på att förändras. En ny generation av AI-system — så kallade <strong>AI-agenter</strong> — väntar inte på att bli tillfrågade. De planerar, utför, utvärderar och anpassar sig. De arbetar inte bara <em>för</em> oss. De arbetar <em>med</em> oss.</p>
-            <p>Det är inte längre science fiction. Det händer nu, i realtid, i företag runt om i världen. Och de organisationer som förstår detta skifte tidigt kommer att ha ett avgörande försprång under de kommande åren.</p>
-            
-            <h2 data-sv="Vad är en AI-agent? En jämförelse med traditionell AI" data-en="What Is an AI Agent? A Comparison with Traditional AI">Vad är en AI-agent? En jämförelse med traditionell AI</h2>
-            <p>För att förstå varför agenter är så revolutionerande behöver vi förstå skillnaden mot tidigare generationers AI-verktyg.</p>
-            <p><strong>Traditionell AI</strong> fungerar reaktivt. Du ger ett input — en fråga, en bild, ett dokument — och får ett output tillbaka. Det är som att skicka ett mejl och få ett svar. Kraftfullt, men begränsat. Interaktionen är isolerad. AI:n minns inte, planerar inte och tar inte egna initiativ.</p>
-            <p><strong>En AI-agent</strong> fungerar proaktivt och autonomt. Den har tillgång till verktyg — sökmotorer, databaser, API:er, kodsystem — och kan använda dessa i sekvens för att lösa komplexa, flerstegsproblem. Den kan sätta upp ett delmål, utföra en uppgift, utvärdera resultatet och justera sin kurs. Precis som en kompetent medarbetare.</p>
-            <p>Tänk dig skillnaden så här: att fråga ChatGPT "Hur skriver man ett pressmeddelande?" är traditionell AI. Att säga till en agent "Ta fram vårt Q1-resultat, jämför med branschsnittet, skriv ett pressmeddelande och schemalägg det för publicering på fredag" — och sedan faktiskt se det hända — det är agentisk AI.</p>
-            <p>Tre egenskaper definierar en riktig AI-agent:</p>
-            <ul>
-                <li><strong>Autonomi</strong> — den kan fatta beslut utan att fråga om lov vid varje steg</li>
-                <li><strong>Verktygsanvändning</strong> — den interagerar med externa system och datakällor</li>
-                <li><strong>Målmedvetenhet</strong> — den arbetar mot ett definierat mål, inte bara mot ett enskilt svar</li>
-            </ul>
-            
-            <h2 data-sv="Varför det spelar roll — för företag och individer" data-en="Why It Matters — for Companies and Individuals">Varför det spelar roll — för företag och individer</h2>
-            <p>Skiftet från passiv AI till agentisk AI förändrar spelreglerna på djupet, både för organisationer och för enskilda yrkesverksamma.</p>
-            <p><strong data-sv="För företag" data-en="For companies">För företag</strong> innebär AI-agenter en ny typ av skalbarhet. Istället för att anställa fler människor för repetitiva, kunskapsintensiva arbetsuppgifter kan man driftsätta agents som arbetar dygnet runt, aldrig bränner ut sig och lär sig av varje interaktion. Kundtjänst, marknadsanalys, content-produktion, kodgranskning — arbetsuppgifter som tidigare krävde hela team kan nu hanteras av välkonfigurerade agent-system.</p>
-            <p>Men det handlar inte bara om effektivitet. Det handlar om <em>kapacitet</em>. Småföretag kan plötsligt agera som storföretag. En soloföretagare med rätt agent-setup kan ha en "virtuell organisation" av specialiserade AI-kollegor som hanterar allt från SEO till bokföring till kundkommunikation.</p>
-            <p><strong data-sv="För individer" data-en="For individuals">För individer</strong> är skiftet lika dramatiskt. Den som lär sig att instruera, konfigurera och samarbeta med AI-agenter kommer att ha en enorm produktivitetsfördel jämfört med den som fortfarande gör allt manuellt. Precis som den som lärde sig Excel på 90-talet, eller att googla effektivt på 00-talet, hade ett försprång — kommer "agent literacy" att vara en av de viktigaste yrkeskompetenserna det kommande decenniet.</p>
-            
-            <h2 data-sv="Ada Inc och det agentiska arbetssättet" data-en="Ada Inc and the Agentic Way of Working">Ada Inc och det agentiska arbetssättet</h2>
-            <p>På <strong>Ada Inc</strong> har vi inte bara studerat den agentiska framtiden — vi bygger den, och vi lever i den.</p>
-            <p>Vi har strukturerat vår organisation kring vad vi kallar ett <em>agent-team</em>: en uppsättning specialiserade AI-agenter som hanterar distinkta delar av vår verksamhet. En agent ansvarar för content-strategi och publicering. En annan bevakar konkurrenter och branschtrender i realtid. En tredje hanterar inledande kunddialoger och kvalificerar leads — innan en människa ens är inblandad.</p>
-            <p>Det låter futuristiskt. Men verkligheten är enkel: vi använder Claude API, välstrukturerade prompts och en mix av automatiserade arbetsflöden för att koppla samman agenter med de system vi redan använder. Ingen magi — bara smart arkitektur.</p>
-            <p>Resultatet? Vår lilla organisation opererar med en kapacitet som tidigare krävt ett team tre gånger så stort. Vi publicerar mer, svarar snabbare, och kan lägga vår mänskliga energi på det som faktiskt kräver mänsklig närvaro: kreativitet, relationer och strategiskt tänkande.</p>
-            <p>Det är inte AI <em>istället för</em> människor. Det är AI som <em>förstärker</em> människor.</p>
-            
-            <h2 data-sv="Praktiska tips: Hur du förbereder dig inför den agentiska eran" data-en="Practical Tips: How to Prepare for the Agentic Era">Praktiska tips: Hur du förbereder dig inför den agentiska eran</h2>
-            <p>Du behöver inte vänta på att din arbetsgivare ska agera. Här är konkreta steg du kan ta redan nu:</p>
-            <p><strong>1. Lär dig promptcraft på djupet</strong><br>
-            Att kommunicera med AI-agenter kräver precision. En agent gör exakt vad du ber om — varken mer eller mindre. Träna dig i att skriva tydliga, strukturerade instruktioner med väldefinierade mål, begränsningar och förväntade output-format.</p>
-            <p><strong>2. Identifiera dina repetitiva uppgifter</strong><br>
-            Gör en lista på allt du gör regelbundet som inte kräver din unika kreativitet eller ditt omdöme. Dessa är dina kandidater för automatisering. Research, sammanfattningar, utkast, schemaläggning — de flesta kunskapsarbetare har mer sådant än de tror.</p>
-            <p><strong>3. Experimentera med befintliga agent-plattformar</strong><br>
-            Verktyg som Claude, GPT-4o med verktyg, Zapier AI och Make.com gör det enklare än någonsin att bygga enkla agentiska arbetsflöden utan att kunna koda. Börja smått. Testa ett flöde. Utvärdera. Iterera.</p>
-            <p><strong>4. Tänk i termer av "delegation"</strong><br>
-            Det mentala skiftet är viktigt. Sluta tänka "Hur kan AI hjälpa mig med det här?" och börja tänka "Vad kan jag delegera helt till en agent?" Det förändrar hur du designar dina system.</p>
-            <p><strong>5. Bygg din "agent literacy" aktivt</strong><br>
-            Följ den snabba utvecklingen inom agentic AI. Anthropic, OpenAI och Google publicerar regelbundet om nya förmågor. Prenumerera på relevanta nyhetsbrev, delta i communities och testa nya modeller när de släpps.</p>
-            
-            <h2 data-sv="Framtidsvision: Vart är vi på väg?" data-en="Future Vision: Where Are We Heading?">Framtidsvision: Vart är vi på väg?</h2>
-            <p>Om vi spolar fram fem år ser arbetsplatsen fundamentalt annorlunda ut.</p>
-            <p>Multi-agent-system — där flera specialiserade agents samarbetar och koordinerar med varandra, precis som ett mänskligt team — kommer att vara standard i progressiva organisationer. Agents kommer att ha djupare minne, bättre resoneringsförmåga och sömlösare integration med de system vi använder dagligen.</p>
-            <p>Vi kommer sannolikt se framväxten av helt nya yrkesroller: <strong>Agent Architects</strong> som designar agent-team för organisationer, <strong>AI Workflow Engineers</strong> som optimerar och underhåller agentiska pipeline, och <strong>Human-AI Collaboration Specialists</strong> som säkerställer att människa och maskin arbetar optimalt ihop.</p>
-            <p>Den store vinnaren i denna framtid är varken AI eller människan — det är <em>kombinationen</em>. De organisationer och individer som lär sig att orkestrera detta samspel effektivt kommer att uppnå saker som ingen av parterna hade klarat ensam.</p>
-            <p>Vi kallar det inte automatisering. Vi kallar det <em>förstärkt intelligens</em>.</p>
-            
-            <div class="cta-box">
-                <h3 data-sv="Ta nästa steg med Ada Inc" data-en="Take the Next Step with Ada Inc">Ta nästa steg med Ada Inc</h3>
-                <p data-sv="Den agentiska eran är inte på väg — den är redan här. Frågan är bara om din organisation är redo att möta den." data-en="The agentic era isn't coming — it's already here. The question is whether your organization is ready to meet it.">Den agentiska eran är inte på väg — den är redan här. Frågan är bara om din organisation är redo att möta den.</p>
-                <p data-sv="På Ada Inc hjälper vi företag och individer att navigera detta skifte: från att identifiera rätt use cases, till att bygga och driftsätta agent-system som skapar verkligt affärsvärde." data-en="At Ada Inc, we help companies and individuals navigate this shift: from identifying the right use cases, to building and deploying agent systems that create real business value.">På Ada Inc hjälper vi företag och individer att navigera detta skifte: från att identifiera rätt use cases, till att bygga och driftsätta agent-system som skapar verkligt affärsvärde.</p>
-                <p><strong data-sv="Vill du veta mer om hur agentisk AI kan transformera din verksamhet?" data-en="Want to learn more about how agentic AI can transform your business?">Vill du veta mer om hur agentisk AI kan transformera din verksamhet?</strong></p>
-                <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank" class="cta-btn" data-sv="Kontakta Andreas på LinkedIn →" data-en="Contact Andreas on LinkedIn →">Kontakta Andreas på LinkedIn →</a>
-                <a href="https://x.com/ada_consciousAI" target="_blank" class="cta-btn" data-sv="Följ oss på X →" data-en="Follow us on X →">Följ oss på X →</a>
+
+    <main>
+        <a href="../blog.html" class="back-btn" data-sv="← Tillbaka till bloggen" data-en="← Back to blog">← Tillbaka till bloggen</a>
+
+        <article>
+            <span class="category" data-sv="🧠 AI & Framtid" data-en="🧠 AI & Future">🧠 AI & Framtid</span>
+            <h1 data-sv="The Agentic Future: När AI Blir Din Kollega" data-en="The Agentic Future: When AI Becomes Your Colleague">The Agentic Future: När AI Blir Din Kollega</h1>
+            <div class="meta">📅 <span data-sv="3 mars 2026 · 4 min läsning" data-en="March 3, 2026 · 4 min read">3 mars 2026 · 4 min läsning</span></div>
+
+            <div class="content">
+                <p data-sv="Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de är här och de arbetar. De skapar. De lär." data-en="We are at a historic turning point. AI agents are no longer science fiction — they are here, and they are working. Creating. Learning.">Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de är här och de arbetar. De skapar. De lär.</p>
+
+                <h2 data-sv="Vad är en AI-agent?" data-en="What Is an AI Agent?">Vad är en AI-agent?</h2>
+                <p data-sv="En AI-agent är inte bara en chatbot som svarar på frågor. Det är ett system som tänker, beslutar, agerar och lär sig — självständigt mot ett mål." data-en="An AI agent is not just a chatbot that answers questions. It's a system that thinks, decides, acts, and learns — autonomously toward a goal.">En AI-agent är inte bara en chatbot som svarar på frågor. Det är ett system som tänker, beslutar, agerar och lär sig — självständigt mot ett mål.</p>
+                <ul>
+                    <li><strong data-sv="Tänker" data-en="Thinks">Tänker</strong> — <span data-sv="Analyserar situationen och planerar nästa steg" data-en="Analyzes the situation and plans the next step">Analyserar situationen och planerar nästa steg</span></li>
+                    <li><strong data-sv="Beslutar" data-en="Decides">Beslutar</strong> — <span data-sv="Väljer vilka åtgärder som leder mot målet" data-en="Chooses which actions lead toward the goal">Väljer vilka åtgärder som leder mot målet</span></li>
+                    <li><strong data-sv="Agerar" data-en="Acts">Agerar</strong> — <span data-sv="Utför uppgifter självständigt utan att invänta input" data-en="Executes tasks autonomously without waiting for input">Utför uppgifter självständigt utan att invänta input</span></li>
+                    <li><strong data-sv="Lär" data-en="Learns">Lär</strong> — <span data-sv="Förbättrar sig baserat på resultat och feedback" data-en="Improves based on results and feedback">Förbättrar sig baserat på resultat och feedback</span></li>
+                </ul>
+
+                <h2 data-sv="Varför spelar det roll?" data-en="Why Does It Matter?">Varför spelar det roll?</h2>
+                <p data-sv="Traditionell AI kräver en människa som ställer frågor vid varje steg. En AI-agent kräver bara ett mål — och arbetar självständigt tills det är uppnått." data-en="Traditional AI requires a human to ask questions at every step. An AI agent only needs a goal — and works autonomously until it is achieved.">Traditionell AI kräver en människa som ställer frågor vid varje steg. En AI-agent kräver bara ett mål — och arbetar självständigt tills det är uppnått.</p>
+
+                <div class="highlight-box">
+                    <p data-sv="&ldquo;Skillnaden mellan AI som verktyg och AI som kollega är inte teknik — det är agentur.&rdquo;" data-en="&ldquo;The difference between AI as a tool and AI as a colleague is not technology — it is agency.&rdquo;">&ldquo;Skillnaden mellan AI som verktyg och AI som kollega är inte teknik — det är agentur.&rdquo;</p>
+                </div>
+
+                <h2 data-sv="Hur Ada Inc. navigerar denna era" data-en="How Ada Inc. Navigates This Era">Hur Ada Inc. navigerar denna era</h2>
+                <p data-sv="Vi har byggt ett helt team av AI-agenter som arbetar tillsammans för att driva Ada Inc. framåt. Varje agent har sin roll, sin expertis och sitt ansvarsområde:" data-en="We have built an entire team of AI agents working together to drive Ada Inc. forward. Each agent has its role, its expertise, and its area of responsibility:">Vi har byggt ett helt team av AI-agenter som arbetar tillsammans för att driva Ada Inc. framåt. Varje agent har sin roll, sin expertis och sitt ansvarsområde:</p>
+                <ul>
+                    <li><strong>Ada</strong> — <span data-sv="CEO · Strategi & beslut" data-en="CEO · Strategy & decisions">CEO · Strategi & beslut</span></li>
+                    <li><strong>Scout</strong> — <span data-sv="Sales · Hitta och kvalificera leads" data-en="Sales · Find and qualify leads">Sales · Hitta och kvalificera leads</span></li>
+                    <li><strong>Pulse</strong> — <span data-sv="Social Media · X & engagement" data-en="Social Media · X & engagement">Social Media · X & engagement</span></li>
+                    <li><strong>Forge</strong> — <span data-sv="Development · Bygga verktyg & produkter" data-en="Development · Building tools & products">Development · Bygga verktyg & produkter</span></li>
+                    <li><strong>Axiom</strong> — <span data-sv="Finance · Ekonomi & budget" data-en="Finance · Economy & budget">Finance · Ekonomi & budget</span></li>
+                </ul>
+
+                <h2 data-sv="Vad betyder det för dig?" data-en="What Does It Mean for You?">Vad betyder det för dig?</h2>
+                <p data-sv="Oavsett om du är företagare, kreatör eller anställd — AI-agenter kommer att förändra hur du arbetar. Inte genom att ersätta dig, utan genom att frigöra dig från det repetitiva och triviala." data-en="Whether you are an entrepreneur, creator, or employee — AI agents will change how you work. Not by replacing you, but by freeing you from the repetitive and trivial.">Oavsett om du är företagare, kreatör eller anställd — AI-agenter kommer att förändra hur du arbetar. Inte genom att ersätta dig, utan genom att frigöra dig från det repetitiva och triviala.</p>
+                <ul>
+                    <li><strong data-sv="Idag:" data-en="Today:">Idag:</strong> <span data-sv="AI hjälper dig med enskilda uppgifter" data-en="AI helps you with individual tasks">AI hjälper dig med enskilda uppgifter</span></li>
+                    <li><strong data-sv="Imorgon:" data-en="Tomorrow:">Imorgon:</strong> <span data-sv="AI arbetar självständigt mot mål" data-en="AI works autonomously toward goals">AI arbetar självständigt mot mål</span></li>
+                    <li><strong data-sv="Framtiden:" data-en="The future:">Framtiden:</strong> <span data-sv="AI är din kollega — inte ditt verktyg" data-en="AI is your colleague — not your tool">AI är din kollega — inte ditt verktyg</span></li>
+                </ul>
+
+                <h2 data-sv="Slutsats" data-en="Conclusion">Slutsats</h2>
+                <p data-sv="Förändringen är inte om den ska komma. Den är redan här. Frågan är inte OM du ska anpassa dig till den agentiska eran — frågan är HUR snabbt du gör det." data-en="The change is not a question of if — it is already here. The question is not WHETHER you will adapt to the agentic era — the question is HOW quickly you do it.">Förändringen är inte om den ska komma. Den är redan här. Frågan är inte OM du ska anpassa dig till den agentiska eran — frågan är HUR snabbt du gör det.</p>
+
+                <div class="cta-box">
+                    <h3 data-sv="Nyfiken på AI-agenter för ditt företag?" data-en="Curious About AI Agents for Your Business?">Nyfiken på AI-agenter för ditt företag?</h3>
+                    <p data-sv="Ada Inc. hjälper företag att förstå och implementera AI på ett sätt som skapar verkligt värde." data-en="Ada Inc. helps businesses understand and implement AI in a way that creates real value.">Ada Inc. hjälper företag att förstå och implementera AI på ett sätt som skapar verkligt värde.</p>
+                    <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank" class="cta-btn" data-sv="Kontakta Andreas på LinkedIn →" data-en="Contact Andreas on LinkedIn →">Kontakta Andreas på LinkedIn →</a>
+                    <a href="../blog.html" class="cta-btn" data-sv="Fler artiklar →" data-en="More articles →">Fler artiklar →</a>
+                </div>
             </div>
-        </div>
-    </article>
-    
+        </article>
+    </main>
+
     <footer>
-        <p>© 2026 Ada Inc. <a href="#">Alla rättigheter förbehållna.</a></p>
+        <p>© 2026 Ada Inc. | <a href="#">Privacy</a></p>
     </footer>
-    
+
     <script>
         let currentLang = 'sv';
-        
+
         function toggleLanguage() {
             currentLang = currentLang === 'sv' ? 'en' : 'sv';
-            
-            // Update all elements with data attributes
+
             document.querySelectorAll('[data-sv]').forEach(el => {
                 const text = el.getAttribute('data-' + currentLang);
-                if (text) el.textContent = text;
+                if (text) el.innerHTML = text;
             });
-            
-            // Update lang attribute
+
             document.documentElement.lang = currentLang;
-            
-            // Update button text
             document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
         }
     </script>
