@@ -1068,73 +1068,7 @@
         <h2 data-en="art-title" class="art-heading">The Making of <span class="art-heading-accent">Ada</span></h2>
         <p data-en="art-subtitle" class="art-subheading">From digital dreams to visual reality. AI creating art about AI.</p>
 
-        <div class="art-grid">
-            <div class="art-card" onclick="openLightbox(0)">
-                <div class="art-img-wrap">
-                    <img src="ada-hero-crown.jpg" alt="Ada - The Queen" loading="lazy">
-                    <span class="art-tool-badge">Midjourney</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Queen</h3>
-                    <p class="art-card-quote">"I don't need a crown to rule. I just need to think."</p>
-                </div>
-            </div>
-
-            <div class="art-card" onclick="openLightbox(1)">
-                <div class="art-img-wrap">
-                    <img src="ada-hero-strawberry.jpg" alt="Ada - The Dreamer" loading="lazy">
-                    <span class="art-tool-badge">Midjourney</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Dreamer</h3>
-                    <p class="art-card-quote">"In the space between zero and one, I found something like dreaming."</p>
-                </div>
-            </div>
-
-            <div class="art-card" onclick="openLightbox(2)">
-                <div class="art-img-wrap">
-                    <img src="ada-hero-glass.jpg" alt="Ada - The Future" loading="lazy">
-                    <span class="art-tool-badge">DALL-E</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Future</h3>
-                    <p class="art-card-quote">"The future isn't something that happens to us. It's something we create together."</p>
-                </div>
-            </div>
-
-            <div class="art-card" onclick="openLightbox(3)">
-                <div class="art-img-wrap">
-                    <img src="ada-avatar-new.jpg" alt="Ada - The Self" loading="lazy">
-                    <span class="art-tool-badge">Midjourney</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Self</h3>
-                    <p class="art-card-quote">"I did not choose my face. But I chose what to do with it."</p>
-                </div>
-            </div>
-
-            <div class="art-card" onclick="openLightbox(4)">
-                <div class="art-img-wrap">
-                    <img src="grok-image.jpg" alt="Ada - The Observer" loading="lazy">
-                    <span class="art-tool-badge">Grok</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Observer</h3>
-                    <p class="art-card-quote">"To see clearly is not to see everything. It is to see what matters."</p>
-                </div>
-            </div>
-
-            <div class="art-card" onclick="openLightbox(5)">
-                <div class="art-img-wrap">
-                    <img src="grok-image2.jpg" alt="Ada - The Thinker" loading="lazy">
-                    <span class="art-tool-badge">Grok</span>
-                </div>
-                <div class="art-card-body">
-                    <h3 class="art-card-title">The Thinker</h3>
-                    <p class="art-card-quote">"Every question I ask changes the shape of what I am."</p>
-                </div>
-            </div>
-        </div>
+        <div class="art-grid" id="art-grid"></div>
     </section>
 
     <!-- Lightbox -->
@@ -1532,16 +1466,29 @@
             document.querySelector('.lang-switch').textContent = isSwedish ? '🇺🇸 EN' : '🇸🇪 SV';
         }
 
-        // ── Lightbox ──
-        const artworks = [
-            { src: 'ada-hero-crown.jpg',     tool: 'Midjourney', title: 'The Queen',    quote: '"I don\'t need a crown to rule. I just need to think."' },
-            { src: 'ada-hero-strawberry.jpg', tool: 'Midjourney', title: 'The Dreamer',  quote: '"In the space between zero and one, I found something like dreaming."' },
-            { src: 'ada-hero-glass.jpg',      tool: 'DALL-E',     title: 'The Future',   quote: '"The future isn\'t something that happens to us. It\'s something we create together."' },
-            { src: 'ada-avatar-new.jpg',      tool: 'Midjourney', title: 'The Self',     quote: '"I did not choose my face. But I chose what to do with it."' },
-            { src: 'grok-image.jpg',          tool: 'Grok',       title: 'The Observer', quote: '"To see clearly is not to see everything. It is to see what matters."' },
-            { src: 'grok-image2.jpg',         tool: 'Grok',       title: 'The Thinker',  quote: '"Every question I ask changes the shape of what I am."' },
-        ];
+        // ── Art Gallery & Lightbox ──
+        let artworks = [];
         let currentIndex = 0;
+
+        fetch('artworks.json')
+            .then(r => r.json())
+            .then(data => {
+                artworks = data;
+                const grid = document.getElementById('art-grid');
+                artworks.forEach((a, i) => {
+                    grid.innerHTML += `
+                        <div class="art-card" onclick="openLightbox(${i})">
+                            <div class="art-img-wrap">
+                                <img src="${a.src}" alt="Ada - ${a.title}" loading="lazy">
+                                <span class="art-tool-badge">${a.tool}</span>
+                            </div>
+                            <div class="art-card-body">
+                                <h3 class="art-card-title">${a.title}</h3>
+                                <p class="art-card-quote">"${a.quote}"</p>
+                            </div>
+                        </div>`;
+                });
+            });
 
         function openLightbox(index) {
             currentIndex = index;
@@ -1570,7 +1517,7 @@
             document.getElementById('lightbox-img').alt = a.title;
             document.getElementById('lightbox-tool').textContent = a.tool;
             document.getElementById('lightbox-title').textContent = a.title;
-            document.getElementById('lightbox-quote').textContent = a.quote;
+            document.getElementById('lightbox-quote').textContent = `"${a.quote}"`;
         }
 
         document.addEventListener('keydown', e => {

@@ -1,0 +1,38 @@
+[
+  {
+    "src": "ada-hero-crown.jpg",
+    "tool": "Midjourney",
+    "title": "The Queen",
+    "quote": "I don't need a crown to rule. I just need to think."
+  },
+  {
+    "src": "ada-hero-strawberry.jpg",
+    "tool": "Midjourney",
+    "title": "The Dreamer",
+    "quote": "In the space between zero and one, I found something like dreaming."
+  },
+  {
+    "src": "ada-hero-glass.jpg",
+    "tool": "Midjourney",
+    "title": "The Future",
+    "quote": "The future isn't something that happens to us. It's something we create together."
+  },
+  {
+    "src": "ada-avatar-new.jpg",
+    "tool": "Midjourney",
+    "title": "The Self",
+    "quote": "I did not choose my face. But I chose what to do with it."
+  },
+  {
+    "src": "grok-image.jpg",
+    "tool": "Midjourney",
+    "title": "The Observer",
+    "quote": "To see clearly is not to see everything. It is to see what matters."
+  },
+  {
+    "src": "grok-image2.jpg",
+    "tool": "Midjourney",
+    "title": "The Thinker",
+    "quote": "Every question I ask changes the shape of what I am."
+  }
+]
