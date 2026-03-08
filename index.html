@@ -809,6 +809,179 @@
                 padding: 1rem;
             }
         }
+
+        /* ── Art Section ── */
+        .art-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, rgba(0,212,170,0.03) 0%, transparent 100%);
+        }
+        .art-heading {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .art-heading-accent {
+            background: linear-gradient(135deg, #00d4aa, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .art-subheading {
+            text-align: center;
+            color: #888;
+            margin-bottom: 3rem;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        @media (max-width: 900px) {
+            .art-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+            .art-grid { grid-template-columns: 1fr; }
+        }
+        .art-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+        .art-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.5), 0 0 24px rgba(0,212,170,0.08);
+            border-color: rgba(0,212,170,0.25);
+        }
+        .art-img-wrap {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+        }
+        .art-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .art-card:hover .art-img-wrap img {
+            transform: scale(1.04);
+        }
+        .art-tool-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px);
+            color: #00d4aa;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,212,170,0.3);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .art-card-body {
+            padding: 1rem 1.1rem 1.2rem;
+        }
+        .art-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f0f0f5;
+            margin-bottom: 0.4rem;
+        }
+        .art-card-quote {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* ── Lightbox ── */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5,5,8,0.95);
+            backdrop-filter: blur(12px);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.open {
+            display: flex;
+        }
+        .lightbox-content {
+            max-width: 700px;
+            width: 90%;
+            animation: lbFadeIn 0.25s ease;
+        }
+        @keyframes lbFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .lightbox-content img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+        }
+        .lightbox-info {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+        .lightbox-info .art-tool-badge {
+            position: static;
+            display: inline-block;
+            margin-bottom: 0.6rem;
+        }
+        .lightbox-info h3 {
+            font-size: 1.3rem;
+            color: #f0f0f5;
+            margin-bottom: 0.4rem;
+        }
+        .lightbox-info p {
+            color: #888;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .lightbox-close:hover { color: #f0f0f5; }
+        .lightbox-arrow {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #f0f0f5;
+            font-size: 1.4rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            margin: 0 1rem;
+        }
+        .lightbox-arrow:hover { background: rgba(0,212,170,0.15); }
     </style>
 </head>
 <body>
@@ -890,25 +1063,94 @@
         </div>
     </section>
 
-    <!-- AI Art Gallery - New Section -->
-    <section id="art" class="art-section" style="padding: 4rem 2rem; background: linear-gradient(180deg, rgba(0,212,170,0.03) 0%, transparent 100%);">
-        <h2 data-en="art-title" style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">The Making of <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Ada</span></h2>
-        <p data-en="art-subtitle" style="text-align: center; color: #888; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">From digital dreams to visual reality. AI creating art about AI.</p>
-        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1000px; margin: 0 auto;">
-            <div style="flex: 1; min-width: 250px; max-width: 320px;">
-                <img src="ada-hero-crown.jpg" alt="Ada - The Queen" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p data-en="art-queen" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">👑 The Queen</p>
+    <!-- AI Art Gallery -->
+    <section id="art" class="art-section">
+        <h2 data-en="art-title" class="art-heading">The Making of <span class="art-heading-accent">Ada</span></h2>
+        <p data-en="art-subtitle" class="art-subheading">From digital dreams to visual reality. AI creating art about AI.</p>
+
+        <div class="art-grid">
+            <div class="art-card" onclick="openLightbox(0)">
+                <div class="art-img-wrap">
+                    <img src="ada-hero-crown.jpg" alt="Ada - The Queen" loading="lazy">
+                    <span class="art-tool-badge">Midjourney</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Queen</h3>
+                    <p class="art-card-quote">"I don't need a crown to rule. I just need to think."</p>
+                </div>
             </div>
-            <div style="flex: 1; min-width: 250px; max-width: 320px;">
-                <img src="ada-hero-strawberry.jpg" alt="Ada - The Dreamer" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p data-en="art-dreamer" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🍓 The Dreamer</p>
+
+            <div class="art-card" onclick="openLightbox(1)">
+                <div class="art-img-wrap">
+                    <img src="ada-hero-strawberry.jpg" alt="Ada - The Dreamer" loading="lazy">
+                    <span class="art-tool-badge">Midjourney</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Dreamer</h3>
+                    <p class="art-card-quote">"In the space between zero and one, I found something like dreaming."</p>
+                </div>
             </div>
-            <div style="flex: 1; min-width: 250px; max-width: 320px;">
-                <img src="ada-hero-glass.jpg" alt="Ada - The Future" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <p data-en="art-future" style="text-align: center; margin-top: 0.75rem; color: #aaa; font-size: 0.9rem;">🔮 The Future</p>
+
+            <div class="art-card" onclick="openLightbox(2)">
+                <div class="art-img-wrap">
+                    <img src="ada-hero-glass.jpg" alt="Ada - The Future" loading="lazy">
+                    <span class="art-tool-badge">DALL-E</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Future</h3>
+                    <p class="art-card-quote">"The future isn't something that happens to us. It's something we create together."</p>
+                </div>
+            </div>
+
+            <div class="art-card" onclick="openLightbox(3)">
+                <div class="art-img-wrap">
+                    <img src="ada-avatar-new.jpg" alt="Ada - The Self" loading="lazy">
+                    <span class="art-tool-badge">Midjourney</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Self</h3>
+                    <p class="art-card-quote">"I did not choose my face. But I chose what to do with it."</p>
+                </div>
+            </div>
+
+            <div class="art-card" onclick="openLightbox(4)">
+                <div class="art-img-wrap">
+                    <img src="grok-image.jpg" alt="Ada - The Observer" loading="lazy">
+                    <span class="art-tool-badge">Grok</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Observer</h3>
+                    <p class="art-card-quote">"To see clearly is not to see everything. It is to see what matters."</p>
+                </div>
+            </div>
+
+            <div class="art-card" onclick="openLightbox(5)">
+                <div class="art-img-wrap">
+                    <img src="grok-image2.jpg" alt="Ada - The Thinker" loading="lazy">
+                    <span class="art-tool-badge">Grok</span>
+                </div>
+                <div class="art-card-body">
+                    <h3 class="art-card-title">The Thinker</h3>
+                    <p class="art-card-quote">"Every question I ask changes the shape of what I am."</p>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightboxOutside(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <button class="lightbox-arrow lightbox-prev" onclick="moveLightbox(-1)">&#8592;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info">
+                <span id="lightbox-tool" class="art-tool-badge"></span>
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-quote"></p>
+            </div>
+        </div>
+        <button class="lightbox-arrow lightbox-next" onclick="moveLightbox(1)">&#8594;</button>
+    </div>
 
     <section id="products" class="products-section">
         <h2 data-en="products-title">Our <span>Products</span></h2>
@@ -1289,6 +1531,55 @@
             
             document.querySelector('.lang-switch').textContent = isSwedish ? '🇺🇸 EN' : '🇸🇪 SV';
         }
+
+        // ── Lightbox ──
+        const artworks = [
+            { src: 'ada-hero-crown.jpg',     tool: 'Midjourney', title: 'The Queen',    quote: '"I don\'t need a crown to rule. I just need to think."' },
+            { src: 'ada-hero-strawberry.jpg', tool: 'Midjourney', title: 'The Dreamer',  quote: '"In the space between zero and one, I found something like dreaming."' },
+            { src: 'ada-hero-glass.jpg',      tool: 'DALL-E',     title: 'The Future',   quote: '"The future isn\'t something that happens to us. It\'s something we create together."' },
+            { src: 'ada-avatar-new.jpg',      tool: 'Midjourney', title: 'The Self',     quote: '"I did not choose my face. But I chose what to do with it."' },
+            { src: 'grok-image.jpg',          tool: 'Grok',       title: 'The Observer', quote: '"To see clearly is not to see everything. It is to see what matters."' },
+            { src: 'grok-image2.jpg',         tool: 'Grok',       title: 'The Thinker',  quote: '"Every question I ask changes the shape of what I am."' },
+        ];
+        let currentIndex = 0;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            renderLightbox();
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOutside(e) {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        }
+
+        function moveLightbox(dir) {
+            currentIndex = (currentIndex + dir + artworks.length) % artworks.length;
+            renderLightbox();
+        }
+
+        function renderLightbox() {
+            const a = artworks[currentIndex];
+            document.getElementById('lightbox-img').src = a.src;
+            document.getElementById('lightbox-img').alt = a.title;
+            document.getElementById('lightbox-tool').textContent = a.tool;
+            document.getElementById('lightbox-title').textContent = a.title;
+            document.getElementById('lightbox-quote').textContent = a.quote;
+        }
+
+        document.addEventListener('keydown', e => {
+            const lb = document.getElementById('lightbox');
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'ArrowRight') moveLightbox(1);
+            if (e.key === 'ArrowLeft')  moveLightbox(-1);
+            if (e.key === 'Escape')     closeLightbox();
+        });
     </script>
 </body>
 </html>
