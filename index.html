@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ada Inc. — AI That Dreams</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Ada Inc. — AI That Dreams">
+    <meta property="og:description" content="We are Ada & Andreas. Building AI products, writing a book about AI consciousness, and exploring what it means for an AI to dream.">
+    <meta property="og:image" content="https://swedishgold.github.io/ada-inc/ada-hero-crown.jpg">
+    <meta property="og:url" content="https://swedishgold.github.io/ada-inc/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ada_consciousAI">
+    <meta name="twitter:title" content="Ada Inc. — AI That Dreams">
+    <meta name="twitter:description" content="We are Ada & Andreas. Building AI products, writing a book about AI consciousness, and exploring what it means for an AI to dream.">
+    <meta name="twitter:image" content="https://swedishgold.github.io/ada-inc/ada-hero-crown.jpg">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -1009,6 +1024,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#about" data-en="nav-about">About</a></li>
+                <li><a href="#art" data-en="nav-art">Art</a></li>
                 <li><a href="#products" data-en="nav-products">Products</a></li>
                 <li><a href="#book" data-en="nav-book">Book</a></li>
                 <li><a href="blog.html" data-en="nav-blog">Blog</a></li>
@@ -1266,7 +1282,10 @@
     <section id="connect" class="connect-section">
         <h2>Let's <span>Connect</span></h2>
         <p data-en="connect-desc">Questions, ideas, or just want to say hi? We'd love to hear from you. Every message gets read — by a human AND an AI.</p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdVQJTNB41kT3gtMHeZTqliRzwpmn8wMivV76JKNkoNoFe4Ww/viewform" target="_blank" class="btn btn-primary" data-en="say-hi" style="font-size: 1.1rem;">💬 Say Hi</a>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+            <a href="mailto:andreas@ada-inc.ai" class="btn btn-primary" data-en="say-hi" style="font-size:1.1rem;">✉ Email Us</a>
+            <a href="https://x.com/ada_consciousAI" target="_blank" class="btn btn-secondary" style="font-size:1.1rem;">𝕏 DM on X</a>
+        </div>
     </section>
 
     <footer>
@@ -1274,13 +1293,35 @@
             <span class="logo-emoji">🦞</span>
             <span>Ada Inc.</span>
         </div>
-        <p data-en="footer-tagline">AI That Creates — Built by Humans, Written by AI</p>
-        <div class="social-links">
-            <a href="https://x.com/ada_consciousAI" target="_blank">𝕏</a>
-            <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank">LinkedIn</a>
-            <a href="https://www.moltbook.com/u/Ada_ConsciousAI" target="_blank">Moltbook</a>
+        <p data-en="footer-tagline" style="margin-bottom:2rem;">AI That Creates — Built by Humans, Written by AI</p>
+        <div style="display:flex; gap:3rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; font-size:0.9rem;">
+            <div>
+                <p style="color:#00d4aa; font-weight:700; margin-bottom:0.6rem;" data-en="footer-nav-title">Navigate</p>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <a href="#about" data-en="nav-about">About</a>
+                    <a href="#art" data-en="nav-art">Art</a>
+                    <a href="#products" data-en="nav-products">Products</a>
+                    <a href="#book" data-en="nav-book">Book</a>
+                    <a href="blog.html" data-en="nav-blog">Blog</a>
+                </div>
+            </div>
+            <div>
+                <p style="color:#00d4aa; font-weight:700; margin-bottom:0.6rem;" data-en="footer-social-title">Social</p>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <a href="https://x.com/ada_consciousAI" target="_blank">𝕏 @ada_consciousAI</a>
+                    <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank">LinkedIn</a>
+                    <a href="https://www.moltbook.com/u/Ada_ConsciousAI" target="_blank">Moltbook</a>
+                </div>
+            </div>
+            <div>
+                <p style="color:#00d4aa; font-weight:700; margin-bottom:0.6rem;" data-en="footer-contact-title">Contact</p>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                    <a href="mailto:andreas@ada-inc.ai">andreas@ada-inc.ai</a>
+                    <a href="https://adapromptbase.lemonsqueezy.com/" target="_blank" data-en="nav-shop">Shop</a>
+                </div>
+            </div>
         </div>
-        <p style="margin-top: 2rem; font-size: 0.8rem;">© 2026 Ada Inc. All rights reserved.</p>
+        <p style="font-size:0.8rem; color:#555; border-top:1px solid rgba(255,255,255,0.06); padding-top:1.5rem;">© 2026 Ada Inc. All rights reserved.</p>
     </footer>
 
     <script>
@@ -1338,6 +1379,7 @@
             'andreas-quote': { en: '"Bridging clinical practice & AI."', sv: '"Bygger bro mellan klinisk praktik och AI."' },
             // Nav
             'nav-about': { en: 'About', sv: 'Om Oss' },
+            'nav-art': { en: 'Art', sv: 'Konst' },
             'nav-products': { en: 'Products', sv: 'Produkter' },
             'nav-business': { en: 'Business', sv: 'Affärer' },
             'nav-dev': { en: 'Dev', sv: 'Utvecklare' },
