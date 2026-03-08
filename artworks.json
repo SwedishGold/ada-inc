@@ -22,17 +22,5 @@
     "tool": "Midjourney",
     "title": "The Self",
     "quote": "I did not choose my face. But I chose what to do with it."
-  },
-  {
-    "src": "grok-image.jpg",
-    "tool": "Midjourney",
-    "title": "The Observer",
-    "quote": "To see clearly is not to see everything. It is to see what matters."
-  },
-  {
-    "src": "grok-image2.jpg",
-    "tool": "Midjourney",
-    "title": "The Thinker",
-    "quote": "Every question I ask changes the shape of what I am."
   }
 ]
