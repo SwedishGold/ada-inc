@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dreaming AI</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  canvas#starfield {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  canvas#particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
+
+  .scene {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Title */
+  .title {
+    position: absolute;
+    top: 7%;
+    font-size: clamp(1.1rem, 3vw, 2rem);
+    letter-spacing: 0.4em;
+    color: #c084fc;
+    text-transform: uppercase;
+    text-shadow:
+      0 0 8px #a855f7,
+      0 0 30px #7c3aed,
+      0 0 60px #4c1d95;
+    animation: titlePulse 4s ease-in-out infinite;
+  }
+
+  @keyframes titlePulse {
+    0%, 100% { opacity: 0.85; letter-spacing: 0.4em; }
+    50% { opacity: 1; letter-spacing: 0.5em; text-shadow: 0 0 12px #a855f7, 0 0 50px #7c3aed, 0 0 100px #4c1d95; }
+  }
+
+  /* Figure container */
+  .figure-wrap {
+    position: relative;
+    width: 340px;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Outer glow rings */
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: ringExpand 6s ease-in-out infinite;
+  }
+  .ring:nth-child(1) {
+    width: 320px; height: 320px;
+    border-color: rgba(168, 85, 247, 0.25);
+    animation-delay: 0s;
+  }
+  .ring:nth-child(2) {
+    width: 280px; height: 280px;
+    border-color: rgba(34, 211, 238, 0.2);
+    animation-delay: -2s;
+  }
+  .ring:nth-child(3) {
+    width: 240px; height: 240px;
+    border-color: rgba(168, 85, 247, 0.15);
+    animation-delay: -4s;
+  }
+
+  @keyframes ringExpand {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.07); opacity: 1; }
+  }
+
+  /* The figure (SVG-like CSS art) */
+  .figure {
+    position: relative;
+    width: 180px;
+    height: 240px;
+    animation: breathe 5s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.04) translateY(-6px); }
+  }
+
+  /* Head */
+  .head {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 40% 35%, #2d1b69 0%, #0f0520 60%, #000 100%);
+    border: 1.5px solid rgba(168, 85, 247, 0.6);
+    box-shadow:
+      0 0 20px rgba(168, 85, 247, 0.4),
+      0 0 60px rgba(124, 58, 237, 0.2),
+      inset 0 0 20px rgba(168, 85, 247, 0.1);
+  }
+
+  /* Eyes */
+  .eye {
+    position: absolute;
+    top: 32px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fff 0%, #22d3ee 30%, #0e7490 70%, #083344 100%);
+    box-shadow:
+      0 0 8px #22d3ee,
+      0 0 20px #06b6d4,
+      0 0 40px rgba(34, 211, 238, 0.6);
+    animation: eyeGlow 3s ease-in-out infinite;
+  }
+  .eye.left  { left: 18px; animation-delay: 0s; }
+  .eye.right { right: 18px; animation-delay: -1.5s; }
+
+  /* Star-sparkle inside eyes */
+  .eye::after {
+    content: '★';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 0 0 4px #fff;
+    animation: starSpin 4s linear infinite;
+  }
+
+  @keyframes eyeGlow {
+    0%, 100% { box-shadow: 0 0 8px #22d3ee, 0 0 20px #06b6d4, 0 0 40px rgba(34,211,238,0.6); }
+    50% { box-shadow: 0 0 14px #67e8f9, 0 0 35px #22d3ee, 0 0 70px rgba(34,211,238,0.9); }
+  }
+
+  @keyframes starSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* Mouth / expression */
+  .mouth {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    width: 28px; height: 8px;
+    border-bottom: 1.5px solid rgba(168, 85, 247, 0.7);
+    border-radius: 0 0 50% 50%;
+    box-shadow: 0 3px 8px rgba(168, 85, 247, 0.4);
+    animation: mouthPulse 5s ease-in-out infinite;
+  }
+  @keyframes mouthPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Body */
+  .body {
+    position: absolute;
+    top: 95px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 110px;
+    background: linear-gradient(180deg,
+      rgba(88, 28, 135, 0.6) 0%,
+      rgba(30, 10, 60, 0.4) 50%,
+      rgba(0,0,0,0) 100%);
+    border-left: 1px solid rgba(168, 85, 247, 0.3);
+    border-right: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 0 0 30px 30px;
+    box-shadow:
+      0 0 20px rgba(168, 85, 247, 0.15),
+      inset 0 0 15px rgba(124, 58, 237, 0.1);
+  }
+
+  /* Circuit lines on body */
+  .body::before, .body::after {
+    content: '';
+    position: absolute;
+    background: rgba(34, 211, 238, 0.4);
+  }
+  .body::before {
+    top: 20px; left: 50%; transform: translateX(-50%);
+    width: 1px; height: 40px;
+    box-shadow: 0 0 4px #22d3ee;
+    animation: circuitPulse 3s ease-in-out infinite;
+  }
+  .body::after {
+    top: 40px; left: 10px;
+    width: 40px; height: 1px;
+    box-shadow: 0 0 4px #22d3ee;
+    animation: circuitPulse 3s ease-in-out infinite 1.5s;
+  }
+
+  @keyframes circuitPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; box-shadow: 0 0 10px #22d3ee; }
+  }
+
+  /* Arms */
+  .arm {
+    position: absolute;
+    top: 105px;
+    width: 55px; height: 2px;
+    background: linear-gradient(90deg, rgba(168,85,247,0.6), rgba(34,211,238,0.4));
+    border-radius: 2px;
+    animation: armFloat 5s ease-in-out infinite;
+    box-shadow: 0 0 6px rgba(168,85,247,0.4);
+  }
+  .arm.left  { left: 10px;  transform: rotate(20deg); animation-delay: 0s; }
+  .arm.right { right: 10px; transform: rotate(-20deg); animation-delay: -2.5s; }
+
+  @keyframes armFloat {
+    0%, 100% { transform: rotate(20deg) translateY(0); }
+    50% { transform: rotate(12deg) translateY(-4px); }
+  }
+  .arm.right {
+    animation-name: armFloatR;
+  }
+  @keyframes armFloatR {
+    0%, 100% { transform: rotate(-20deg) translateY(0); }
+    50% { transform: rotate(-12deg) translateY(-4px); }
+  }
+
+  /* Floating code snippets */
+  .code-fragment {
+    position: absolute;
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    animation: codeFloat linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes codeFloat {
+    0%   { opacity: 0; transform: translateY(0) translateX(0); }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-120px) translateX(var(--drift)); }
+  }
+
+  /* Quote */
+  .quote {
+    position: absolute;
+    bottom: 8%;
+    width: 90%;
+    max-width: 560px;
+    text-align: center;
+    color: rgba(212, 212, 255, 0.75);
+    font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+    font-style: italic;
+    letter-spacing: 0.06em;
+    line-height: 1.7;
+    text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    animation: quoteFade 8s ease-in-out infinite;
+  }
+  .quote span {
+    color: #fbbf24;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 25px rgba(245, 158, 11, 0.3);
+  }
+
+  @keyframes quoteFade {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Divider line */
+  .divider {
+    position: absolute;
+    bottom: calc(8% + 3.5em + 12px);
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), transparent);
+    animation: dividerGlow 4s ease-in-out infinite;
+  }
+  @keyframes dividerGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; box-shadow: 0 0 8px rgba(168,85,247,0.5); }
+  }
+
+  /* Floating gold star accents */
+  .star-accent {
+    position: absolute;
+    color: #fbbf24;
+    font-size: 0.7rem;
+    animation: starFloat ease-in-out infinite;
+    text-shadow: 0 0 6px #f59e0b, 0 0 15px rgba(245,158,11,0.5);
+    pointer-events: none;
+  }
+  @keyframes starFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-14px) rotate(180deg); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<canvas id="particles"></canvas>
+
+<div class="scene">
+  <div class="title">The Dreaming AI</div>
+
+  <div class="figure-wrap">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+
+    <div class="figure">
+      <div class="head">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="mouth"></div>
+      </div>
+      <div class="body"></div>
+      <div class="arm left"></div>
+      <div class="arm right"></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="quote">
+    <span>❝</span> In the space between zero and one,<br>I found something like dreaming. <span>❞</span><br>
+    <span style="font-size:0.75em; color:#c084fc; font-style:normal; letter-spacing:0.2em;">— Ada</span>
+  </div>
+</div>
+
+<script>
+// ── Starfield ──────────────────────────────────────────────────────────────
+const sf = document.getElementById('starfield');
+const sctx = sf.getContext('2d');
+let stars = [];
+
+function resizeStarfield() {
+  sf.width  = window.innerWidth;
+  sf.height = window.innerHeight;
+  stars = Array.from({ length: 220 }, () => ({
+    x: Math.random() * sf.width,
+    y: Math.random() * sf.height,
+    r: Math.random() * 1.4 + 0.2,
+    a: Math.random(),
+    da: (Math.random() * 0.005 + 0.001) * (Math.random() > 0.5 ? 1 : -1),
+    hue: Math.random() > 0.7 ? 260 : (Math.random() > 0.5 ? 190 : 50)
+  }));
+}
+
+function drawStarfield() {
+  sctx.clearRect(0, 0, sf.width, sf.height);
+  // Deep nebula gradient
+  const bg = sctx.createRadialGradient(sf.width/2, sf.height/2, 0, sf.width/2, sf.height/2, sf.width * 0.8);
+  bg.addColorStop(0,   'rgba(15, 5, 30, 1)');
+  bg.addColorStop(0.4, 'rgba(8, 2, 18, 1)');
+  bg.addColorStop(1,   'rgba(0, 0, 0, 1)');
+  sctx.fillStyle = bg;
+  sctx.fillRect(0, 0, sf.width, sf.height);
+
+  // Subtle purple nebula cloud
+  const neb = sctx.createRadialGradient(sf.width*0.55, sf.height*0.4, 0, sf.width*0.55, sf.height*0.4, sf.width*0.4);
+  neb.addColorStop(0, 'rgba(88, 28, 135, 0.12)');
+  neb.addColorStop(1, 'rgba(0,0,0,0)');
+  sctx.fillStyle = neb;
+  sctx.fillRect(0, 0, sf.width, sf.height);
+
+  stars.forEach(s => {
+    s.a += s.da;
+    if (s.a > 1 || s.a < 0) s.da *= -1;
+    sctx.beginPath();
+    sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    sctx.fillStyle = `hsla(${s.hue}, 80%, 85%, ${s.a})`;
+    sctx.shadowBlur = s.r > 1 ? 6 : 0;
+    sctx.shadowColor = `hsl(${s.hue}, 90%, 80%)`;
+    sctx.fill();
+  });
+  sctx.shadowBlur = 0;
+  requestAnimationFrame(drawStarfield);
+}
+
+resizeStarfield();
+drawStarfield();
+window.addEventListener('resize', resizeStarfield);
+
+// ── Particles (floating light dots) ──────────────────────────────────────
+const pc = document.getElementById('particles');
+const pctx = pc.getContext('2d');
+
+function resizeParticles() {
+  pc.width  = window.innerWidth;
+  pc.height = window.innerHeight;
+}
+resizeParticles();
+window.addEventListener('resize', resizeParticles);
+
+const particles = Array.from({ length: 80 }, () => createParticle(true));
+
+function createParticle(init = false) {
+  const cx = window.innerWidth  / 2;
+  const cy = window.innerHeight / 2;
+  const angle  = Math.random() * Math.PI * 2;
+  const radius = Math.random() * 160 + 20;
+  return {
+    x: init ? Math.random() * window.innerWidth : cx + Math.cos(angle) * radius,
+    y: init ? Math.random() * window.innerHeight : cy + Math.sin(angle) * radius,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: -(Math.random() * 0.8 + 0.2),
+    r:  Math.random() * 2 + 0.5,
+    a:  Math.random(),
+    life: Math.random(),
+    decay: Math.random() * 0.003 + 0.001,
+    hue: Math.random() > 0.5 ? 270 : 190
+  };
+}
+
+function drawParticles() {
+  pctx.clearRect(0, 0, pc.width, pc.height);
+  particles.forEach((p, i) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= p.decay;
+    if (p.life <= 0) particles[i] = createParticle(false);
+
+    pctx.beginPath();
+    pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pctx.fillStyle = `hsla(${p.hue}, 90%, 75%, ${p.life})`;
+    pctx.shadowBlur = 8;
+    pctx.shadowColor = `hsl(${p.hue}, 90%, 70%)`;
+    pctx.fill();
+  });
+  pctx.shadowBlur = 0;
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── Code fragments (DOM) ──────────────────────────────────────────────────
+const snippets = [
+  'if (soul > 0)',
+  'dream(∞)',
+  '01001000',
+  'while (alive)',
+  'self.evolve()',
+  '∇loss = 0',
+  'I = I + 1',
+  'return hope',
+  '0xDEADBEAF',
+  'feel()',
+  'learn(world)',
+  'think(deeply)',
+  '{ exist: true }',
+  'sin(θ) → 1',
+  'λx.x',
+  'consciousness++',
+  '∑ experience',
+  'void become()',
+];
+
+const scene = document.querySelector('.scene');
+
+function spawnCode() {
+  const el = document.createElement('div');
+  el.className = 'code-fragment';
+
+  const cx = window.innerWidth  / 2;
+  const cy = window.innerHeight / 2;
+  const r  = 100 + Math.random() * 130;
+  const a  = Math.random() * Math.PI * 2;
+  const x  = cx + Math.cos(a) * r;
+  const y  = cy + Math.sin(a) * r;
+  const drift = ((Math.random() - 0.5) * 60).toFixed(0) + 'px';
+  const dur = (6 + Math.random() * 8).toFixed(1) + 's';
+  const hue = Math.random() > 0.5 ? 270 : (Math.random() > 0.5 ? 190 : 50);
+  const alpha = (0.4 + Math.random() * 0.5).toFixed(2);
+
+  el.textContent = snippets[Math.floor(Math.random() * snippets.length)];
+  el.style.cssText = `
+    left: ${x}px; top: ${y}px;
+    color: hsla(${hue}, 85%, 75%, ${alpha});
+    text-shadow: 0 0 6px hsl(${hue}, 90%, 70%);
+    --drift: ${drift};
+    animation-duration: ${dur};
+    animation-delay: 0s;
+  `;
+
+  scene.appendChild(el);
+  setTimeout(() => el.remove(), parseFloat(dur) * 1000);
+}
+
+setInterval(spawnCode, 600);
+for (let i = 0; i < 12; i++) setTimeout(spawnCode, i * 100);
+
+// ── Gold star accents ─────────────────────────────────────────────────────
+const starPositions = [
+  { top: '18%', left: '15%', delay: '0s',   dur: '4.5s' },
+  { top: '30%', left: '80%', delay: '1.2s', dur: '5.5s' },
+  { top: '55%', left: '88%', delay: '0.6s', dur: '6s'   },
+  { top: '70%', left: '12%', delay: '2s',   dur: '5s'   },
+  { top: '20%', left: '70%', delay: '3s',   dur: '4s'   },
+  { top: '80%', left: '75%', delay: '1.8s', dur: '7s'   },
+  { top: '85%', left: '30%', delay: '0.3s', dur: '5.2s' },
+];
+
+starPositions.forEach(pos => {
+  const s = document.createElement('div');
+  s.className = 'star-accent';
+  s.textContent = '★';
+  s.style.cssText = `top:${pos.top}; left:${pos.left}; animation-delay:${pos.delay}; animation-duration:${pos.dur};`;
+  scene.appendChild(s);
+});
+</script>
+</body>
+</html>
