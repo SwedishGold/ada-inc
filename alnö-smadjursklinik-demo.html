@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alnö Smådjursklinik – Djurvård med hjärta</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #2d6a4f;
+      --green-mid:    #52b788;
+      --green-light:  #d8f3dc;
+      --green-pale:   #f0faf3;
+      --orange:       #f4845f;
+      --orange-light: #fde8e0;
+      --white:        #ffffff;
+      --gray-1:       #f7f8f6;
+      --gray-2:       #e8ede9;
+      --gray-text:    #5a6b5d;
+      --dark:         #1c2e20;
+      --radius:       14px;
+      --shadow:       0 4px 24px rgba(44,106,79,.10);
+      --shadow-hover: 0 8px 36px rgba(44,106,79,.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    /* ── NAVIGATION ──────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gray-2);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 16px rgba(44,106,79,.07);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--green-dark);
+    }
+    .nav-logo .paw {
+      width: 40px; height: 40px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .nav-logo span {
+      font-weight: 700; font-size: 1.1rem; line-height: 1.2;
+    }
+    .nav-logo small { font-size: .75rem; color: var(--gray-text); font-weight: 400; display: block; }
+
+    .nav-links { display: flex; align-items: center; gap: 6px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--gray-text);
+      font-size: .92rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 8px;
+      transition: all .2s;
+    }
+    .nav-links a:hover { background: var(--green-light); color: var(--green-dark); }
+
+    .btn-book-nav {
+      background: var(--orange) !important;
+      color: var(--white) !important;
+      border-radius: 24px !important;
+      padding: 8px 20px !important;
+      font-weight: 600 !important;
+      box-shadow: 0 3px 12px rgba(244,132,95,.35);
+      transition: transform .2s, box-shadow .2s !important;
+    }
+    .btn-book-nav:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(244,132,95,.45) !important;
+      background: #e8714a !important;
+    }
+
+    .nav-toggle { display: none; cursor: pointer; font-size: 1.5rem; color: var(--green-dark); }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url("https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&h=600&fit=crop"); background-size: cover; background-position: center;
+      padding: 90px 5% 60px;
+      position: relative; overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(82,183,136,.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(244,132,95,.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-content { max-width: 620px; position: relative; z-index: 1; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white);
+      color: var(--green-dark);
+      font-size: .8rem; font-weight: 600;
+      padding: 6px 14px; border-radius: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      letter-spacing: .03em;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; background: var(--green-mid); border-radius: 50%; }
+
+    #hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    #hero h1 em {
+      font-style: normal;
+      color: var(--green-dark);
+      position: relative;
+    }
+    #hero h1 em::after {
+      content: '';
+      position: absolute; bottom: 2px; left: 0; right: 0;
+      height: 3px; background: var(--orange);
+      border-radius: 2px;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem; color: var(--gray-text);
+      margin-bottom: 36px; max-width: 500px;
+    }
+
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: var(--white);
+      text-decoration: none; font-weight: 700;
+      padding: 15px 32px; border-radius: 40px;
+      font-size: 1rem;
+      box-shadow: 0 6px 24px rgba(244,132,95,.4);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(244,132,95,.5); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); color: var(--green-dark);
+      text-decoration: none; font-weight: 600;
+      padding: 15px 28px; border-radius: 40px;
+      font-size: 1rem;
+      border: 2px solid var(--green-mid);
+      transition: all .2s;
+    }
+    .btn-secondary:hover { background: var(--green-light); }
+
+    .hero-stats {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .stat { display: flex; flex-direction: column; }
+    .stat strong { font-size: 1.6rem; font-weight: 800; color: var(--green-dark); }
+    .stat span { font-size: .8rem; color: var(--gray-text); }
+
+    .hero-visual {
+      flex: 1; display: flex; justify-content: center; align-items: center;
+      position: relative; z-index: 1;
+      margin-left: 40px;
+    }
+
+    .hero-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow-hover);
+      max-width: 340px; width: 100%;
+      position: relative;
+    }
+
+    .hero-card .card-icon {
+      width: 64px; height: 64px;
+      background: var(--green-light);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 20px;
+    }
+
+    .hero-card h3 { font-size: 1.2rem; color: var(--dark); margin-bottom: 8px; }
+    .hero-card p  { font-size: .9rem; color: var(--gray-text); margin-bottom: 20px; }
+
+    .hours-list { list-style: none; }
+    .hours-list li {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--gray-2);
+      font-size: .88rem;
+    }
+    .hours-list li:last-child { border-bottom: none; }
+    .hours-list .open { color: var(--green-mid); font-weight: 600; }
+
+    .floating-badge {
+      position: absolute; top: -16px; right: -16px;
+      background: var(--orange); color: var(--white);
+      padding: 8px 14px; border-radius: 20px;
+      font-size: .78rem; font-weight: 700;
+      box-shadow: 0 4px 16px rgba(244,132,95,.4);
+    }
+
+    /* ── SECTION COMMON ──────────────────────────────────────── */
+    section { padding: 80px 5%; }
+    .section-label {
+      font-size: .78rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--green-mid);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 800; color: var(--dark); margin-bottom: 14px;
+    }
+    .section-desc {
+      color: var(--gray-text); font-size: 1rem;
+      max-width: 560px; margin-bottom: 50px;
+    }
+
+    /* ── SERVICES ────────────────────────────────────────────── */
+    #services { background: var(--gray-1); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+      cursor: default;
+      border: 2px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--green-light);
+    }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      background: var(--green-light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 16px;
+    }
+    .service-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .service-card p  { font-size: .87rem; color: var(--gray-text); }
+
+    /* ── ABOUT ───────────────────────────────────────────────── */
+    #about {
+      display: flex; align-items: center; gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .about-visual {
+      flex: 1; min-width: 280px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .about-box {
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .about-box.accent { background: var(--orange-light); }
+    .about-box .ab-icon { font-size: 30px; margin-bottom: 10px; }
+    .about-box h4 { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
+    .about-box p  { font-size: .8rem; color: var(--gray-text); margin-top: 4px; }
+    .about-box.wide {
+      grid-column: 1 / -1;
+      background: var(--green-dark); color: var(--white);
+      display: flex; align-items: center; gap: 16px;
+      text-align: left;
+    }
+    .about-box.wide .ab-icon { font-size: 36px; flex-shrink: 0; }
+    .about-box.wide h4 { color: var(--white); font-size: 1rem; font-weight: 700; }
+    .about-box.wide p  { color: rgba(255,255,255,.75); margin-top: 4px; }
+
+    .about-text { flex: 1; min-width: 280px; }
+    .about-text p { color: var(--gray-text); margin-bottom: 16px; }
+    .about-list { list-style: none; margin: 20px 0 30px; }
+    .about-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; font-size: .92rem; color: var(--gray-text);
+    }
+    .about-list li::before {
+      content: '✓';
+      width: 20px; height: 20px; min-width: 20px;
+      background: var(--green-mid); color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* ── BOOKING ─────────────────────────────────────────────── */
+    #booking {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #1a4535 100%);
+      color: var(--white); text-align: center;
+    }
+    #booking .section-label { color: var(--green-mid); }
+    #booking .section-title { color: var(--white); }
+    #booking .section-desc { color: rgba(255,255,255,.7); margin: 0 auto 40px; }
+
+    .booking-channels {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .channel-card {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+      min-width: 200px;
+      transition: background .2s;
+      cursor: pointer;
+    }
+    .channel-card:hover { background: rgba(255,255,255,.18); }
+    .channel-icon { font-size: 28px; }
+    .channel-card h4 { font-size: .95rem; font-weight: 700; color: var(--white); }
+    .channel-card p  { font-size: .8rem; color: rgba(255,255,255,.65); }
+
+    .btn-book-large {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--orange); color: var(--white);
+      text-decoration: none; font-weight: 700; font-size: 1.1rem;
+      padding: 18px 44px; border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(244,132,95,.5);
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer; border: none;
+    }
+    .btn-book-large:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(244,132,95,.55);
+    }
+
+    .booking-note {
+      margin-top: 16px;
+      font-size: .82rem; color: rgba(255,255,255,.5);
+    }
+
+    /* ── CONTACT ─────────────────────────────────────────────── */
+    #contact { background: var(--gray-1); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 48px; align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.25rem; font-weight: 700; margin-bottom: 20px; color: var(--dark);
+    }
+
+    .info-item {
+      display: flex; gap: 14px; margin-bottom: 24px;
+    }
+    .info-item .ico {
+      width: 44px; height: 44px; min-width: 44px;
+      background: var(--green-light); border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .info-item h4 { font-size: .9rem; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+    .info-item p  { font-size: .85rem; color: var(--gray-text); line-height: 1.5; }
+
+    .social-row {
+      display: flex; gap: 10px; margin-top: 28px;
+    }
+    .social-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px; border-radius: 8px;
+      font-size: .83rem; font-weight: 600;
+      text-decoration: none;
+      transition: all .2s; cursor: pointer;
+    }
+    .social-btn.fb  { background: #e8f0fe; color: #1877f2; }
+    .social-btn.ig  { background: var(--orange-light); color: var(--orange); }
+    .social-btn:hover { opacity: .8; transform: translateY(-1px); }
+
+    /* ── CONTACT FORM ────────────────────────────────────────── */
+    .contact-form {
+      background: var(--white); border-radius: var(--radius);
+      padding: 36px; box-shadow: var(--shadow);
+    }
+    .contact-form h3 {
+      font-size: 1.2rem; font-weight: 700; margin-bottom: 22px; color: var(--dark);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-group label { font-size: .83rem; font-weight: 600; color: var(--gray-text); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 11px 14px;
+      border: 2px solid var(--gray-2);
+      border-radius: 10px; font-size: .92rem;
+      font-family: inherit; background: var(--white);
+      color: var(--dark);
+      transition: border-color .2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--green-mid); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--green-dark); color: var(--white);
+      border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .btn-submit:hover { background: #235540; transform: translateY(-1px); }
+
+    .form-disclaimer {
+      font-size: .75rem; color: var(--gray-text);
+      text-align: center; margin-top: 10px;
+    }
+
+    /* ── MAP PLACEHOLDER ─────────────────────────────────────── */
+    .map-placeholder {
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      height: 200px; margin-top: 24px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+      border: 2px dashed var(--green-mid);
+      color: var(--gray-text);
+    }
+    .map-placeholder .map-icon { font-size: 32px; }
+    .map-placeholder p { font-size: .85rem; }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,.6);
+      padding: 40px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    footer .footer-brand {
+      display: flex; align-items: center; gap: 10px; color: var(--white);
+      font-weight: 700; font-size: .95rem;
+    }
+    footer .footer-brand .paw {
+      width: 34px; height: 34px; background: var(--green-mid);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    footer p { font-size: .8rem; }
+    footer .footer-links { display: flex; gap: 16px; }
+    footer .footer-links a {
+      color: rgba(255,255,255,.5); font-size: .8rem; text-decoration: none;
+      transition: color .2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+
+    /* ── DEMO RIBBON ─────────────────────────────────────────── */
+    .demo-ribbon {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      background: var(--orange); color: var(--white);
+      padding: 10px 18px; border-radius: 24px;
+      font-size: .78rem; font-weight: 700;
+      box-shadow: 0 4px 20px rgba(244,132,95,.5);
+      letter-spacing: .04em;
+    }
+
+    /* ── MODAL ───────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white); border-radius: 20px;
+      padding: 40px; max-width: 440px; width: 100%;
+      text-align: center; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      animation: popIn .3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(.92); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 16px;
+      font-size: 1.4rem; cursor: pointer; color: var(--gray-text);
+      border: none; background: none; line-height: 1;
+    }
+    .modal .modal-icon { font-size: 52px; margin-bottom: 16px; }
+    .modal h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; color: var(--dark); }
+    .modal p  { font-size: .92rem; color: var(--gray-text); margin-bottom: 20px; line-height: 1.6; }
+    .modal-channels { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .modal-channel {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border-radius: 10px;
+      background: var(--gray-1); text-align: left;
+      text-decoration: none; color: var(--dark);
+      transition: background .2s;
+    }
+    .modal-channel:hover { background: var(--green-light); }
+    .modal-channel .mc-icon { font-size: 20px; }
+    .modal-channel strong { font-size: .9rem; display: block; }
+    .modal-channel span   { font-size: .78rem; color: var(--gray-text); }
+    .modal-note { font-size: .78rem; color: var(--gray-text); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      #hero { flex-direction: column; text-align: center; }
+      .hero-cta { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-visual { margin-left: 0; margin-top: 40px; }
+      #about { flex-direction: column; }
+      .contact-layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 4%; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 68px; left: 0; right: 0;
+        background: var(--white); padding: 16px;
+        border-bottom: 1px solid var(--gray-2);
+        box-shadow: 0 8px 20px rgba(0,0,0,.08);
+        gap: 4px;
+      }
+      .nav-toggle { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+      section { padding: 60px 4%; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#hero">
+    <img src="https://www.alnosmadjursklinik.se/images/0/18060013/Logo-LjYyWrYLQUdlvtr3W-xdsg.jpg" alt="Alnö Smådjursklinik" style="height:45px;width:auto;">
+    <div>
+      <span>Alnö Smådjursklinik</span>
+      <small>Djurvård med hjärta</small>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#services">Tjänster</a></li>
+    <li><a href="#about">Om oss</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+    <li><a href="#booking" class="btn-book-nav" onclick="openModal()">Boka tid</a></li>
+  </ul>
+  <div class="nav-toggle" id="navToggle" onclick="toggleNav()">☰</div>
+</nav>
+
+
+<!-- ── HERO ────────────────────────────────────────────────────────── -->
+<section id="hero" style="display:flex; flex-wrap:wrap;">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Alnö · Sundsvall</div>
+    <h1>Din djurs hälsa är<br><em>vår passion</em></h1>
+    <p class="hero-desc">
+      Välkommen till Alnö Smådjursklinik – ett varmt och professionellt veterinärsällskap
+      för ditt älskade husdjur. Vi erbjuder allt från förebyggande vård till avancerade ingrepp.
+    </p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#booking" onclick="openModal()">
+        📅 Boka tid nu
+      </a>
+      <a class="btn-secondary" href="#services">
+        🔍 Våra tjänster
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>8+</strong><span>Tjänster</span></div>
+      <div class="stat"><strong>Mån–Fre</strong><span>09–17</span></div>
+      <div class="stat"><strong>Alnö</strong><span>Sundsvall</span></div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="floating-badge">✓ Öppet idag</div>
+      <div class="card-icon">🕐</div>
+      <h3>Öppettider</h3>
+      <p>Vi finns här för ditt djur under veckodagarna.</p>
+      <ul class="hours-list">
+        <li><span>Måndag–Fredag</span><span class="open">09:00–17:00</span></li>
+        <li><span>Telefontid</span><span class="open">08:00–09:00</span></li>
+        <li><span>Lördag</span><span>Stängt</span></li>
+        <li><span>Söndag</span><span>Stängt</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SERVICES ────────────────────────────────────────────────────── -->
+<section id="services">
+  <div class="section-label">Vad vi erbjuder</div>
+  <h2 class="section-title">Våra tjänster</h2>
+  <p class="section-desc">
+    Vi erbjuder ett brett utbud av veterinärtjänster för att hålla ditt husdjur friskt,
+    lyckligt och välmående – hela livet.
+  </p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop" alt="Vaccination" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Vaccination</h3>
+      <p>Skydda ditt djur med rätt vaccinationsprogram anpassat för ålder och livsstil.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=400&h=300&fit=crop" alt="Kirurgi" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Kirurgi</h3>
+      <p>Erfarna veterinärer utför kirurgiska ingrepp i en trygg och steril miljö.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1516734212186-a967f81b0b55?w=400&h=300&fit=crop" alt="Hudproblem" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Hudproblem</h3>
+      <p>Diagnos och behandling av eksem, allergi, infektioner och andra hudåkommor.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <h3>Öron & Ögon</h3>
+      <p>Undersökning och behandling av öron- och ögonproblem av alla slag.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1606850780554-b55ea4dd0b70?w=400&h=300&fit=crop" alt="Tandvård" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Tandvård</h3>
+      <p>Professionell tandrengöring, tandextraktion och förebyggande tandvårdsrådgivning.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&h=300&fit=crop" alt="Blodprov" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Blodprov</h3>
+      <p>Snabb provtagning och analys för att kontrollera organfunktion och hälsostatus.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop" alt="Ultraljud" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Ultraljud</h3>
+      <p>Modernt ultraljud för undersökning av bukens organ, hjärta och mjukdelar.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"></div>
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=300&fit=crop" alt="Tumörkontroll" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <h3>Tumörkontroll</h3>
+      <p>Klinisk undersökning och provtagning för tidig upptäckt av tumörförändringar.</p>
+    </div>
+  </div>
+
+<section id="prices" style="background:var(--gray-1);padding:60px 5%;text-align:center;">
+  <div class="section-label">Priser</div>
+  <h2 class="section-title">Våra priser</h2>
+  <p class="section-desc">Priser gäller för dom vanligaste behandlingarna.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;max-width:1000px;margin:0 auto;text-align:left;">
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Vaccination hund/kat</strong><span style="float:right;color:var(--green-dark);">500 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Vaccination under 6 mån</strong><span style="float:right;color:var(--green-dark);">400 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>ID-chip + vacc + besiktning</strong><span style="float:right;color:var(--green-dark);">800 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>EU-pass</strong><span style="float:right;color:var(--green-dark);">800 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Recept</strong><span style="float:right;color:var(--green-dark);">200 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Kastrering hankatt</strong><span style="float:right;color:var(--green-dark);">950 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Kastrering honkatt</strong><span style="float:right;color:var(--green-dark);">1750 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Kastrering hanhund</strong><span style="float:right;color:var(--green-dark);">4500 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Tandrengöring</strong><span style="float:right;color:var(--green-dark);">4000 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Pälsvård</strong><span style="float:right;color:var(--green-dark);">1000 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Avlivning hund</strong><span style="float:right;color:var(--green-dark);">2000 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Avlivning katt</strong><span style="float:right;color:var(--green-dark);">1500 kr</span></div>
+    <div style="background:var(--white);padding:15px 20px;border-radius:var(--radius);"><strong>Ultraljud dräktighet</strong><span style="float:right;color:var(--green-dark);">800 kr</span></div>
+  </div>
+</section>
+
+
+<!-- ── ABOUT ────────────────────────────────────────────────────────── -->
+
+<section id="about">
+  <div class="about-visual">
+    <div class="about-box">
+      <img src="alno-utsida.jpg" alt="Kliniken utifrån" style="width:100%;height:200px;object-fit:cover;border-radius:8px;">
+    <img src="alno-insida.jpg" alt="Kliniken inifrån" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-top:10px;">
+    <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?w=300&h=300&fit=crop" alt="Veterinär" style="width:100%;height:180px;object-fit:cover;border-radius:8px;">
+      <h4>Anja Weltzien</h4>
+      <p style="font-size:0.85rem;color:var(--gray-text);">Grundare</p>
+    </div>
+  </div>
+  <div class="about-content">
+    <div class="section-label">Om oss</div>
+    <h2 class="section-title">Vi som jobbar här</h2>
+    <p>Jag kommer ursprungligen från Norge och har jobbat som legitimerad veterinär sedan 2016.</p>
+    <p style="margin-top:10px;">Tidigare har jag arbetat med smådjur på privat klinik och som distriktsveterinär.</p>
+    <p style="margin-top:10px;">Jag har kompetens inom både internmedicin, kirurgi och akutvård.</p>
+    <p style="margin-top:10px;">Jag brinner för trygg och säker vård och försöker alltid att skapa en lugn och god upplevelse för både djur och människor.</p>
+  </div>
+</section>
+
+
+
+<!-- ── BOOKING ──────────────────────────────────────────────────────── -->
+<section id="booking">
+  <div class="section-label">Boka tid</div>
+  <h2 class="section-title">Redo för ett besök?</h2>
+  <p class="section-desc">
+    Det är enkelt att boka tid hos oss. Välj det sätt som passar dig bäst –
+    vi svarar så snart vi kan!
+  </p>
+
+  <div class="booking-channels">
+    <div class="channel-card" onclick="openModal()">
+      <div class="channel-icon">💬</div>
+      <div>
+        <h4>SMS</h4>
+        <p>Skicka ett SMS så bokar vi in dig snabbt.</p>
+      </div>
+    </div>
+    <div class="channel-card" onclick="openModal()">
+      <div class="channel-icon">📧</div>
+      <div>
+        <h4>E-post</h4>
+        <p>Skicka ett mail med önskad tid och ärende.</p>
+      </div>
+    </div>
+    <div class="channel-card" onclick="openModal()">
+      <div class="channel-icon"></div>
+      <div>
+        <h4>Facebook</h4>
+        <p>Skicka ett meddelande via <a href="https://www.facebook.com/profile.php?id=61578716530814" target="_blank">Facebook</a></p>
+      </div>
+    </div>
+    <div class="channel-card" onclick="openModal()">
+      <div class="channel-icon"></div>
+      <div>
+        <h4>Instagram</h4>
+        <p><a href="https://www.instagram.com/alno_smadjursklinik/" target="_blank">@alno_smadjursklinik</a></p>
+        <p>DM:a oss på Instagram för snabb kontakt.</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-book-large" onclick="openModal()">
+    📅 Boka din tid nu
+  </button>
+  <p class="booking-note">⏰ Telefontid vardagar 08:00–09:00 &nbsp;|&nbsp; Kliniken öppen 09:00–17:00</p>
+</section>
+
+
+<!-- ── CONTACT ──────────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-label">Kontakt</div>
+  <h2 class="section-title">Hör av dig</h2>
+  <p class="section-desc">
+    Frågor om tjänster, priser eller akuta ärenden? Vi finns här för dig.
+  </p>
+
+  <div class="contact-layout">
+    <div class="contact-info">
+      <h3>Hitta oss</h3>
+
+      <div class="info-item">
+        <div class="ico"></div>
+        <div>
+          <h4>Adress</h4>
+          <p>Alnö, Sundsvall<br>Medelpad, Sverige</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico"></div>
+        <div>
+          <h4>Telefon</h4>
+          <p>Telefontid: Vardagar 08:00–09:00<br>Besök &amp; klinik: 09:00–17:00</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="ico">🕐</div>
+        <div>
+          <h4>Öppettider</h4>
+          <p>Måndag–Fredag: 09:00–17:00<br>Lördag–Söndag: Stängt</p>
+        </div>
+      </div>
+
+      <div class="social-row">
+        <a class="social-btn fb" href="https://www.facebook.com/profile.php?id=61578716530814" target="_blank"> Facebook</a>
+        <span style="color:var(--gray-text);">Instagram</span></a>
+      </div>
+
+      <div class="map-placeholder">
+        <div class="map-icon">🗺️</div>
+        <p>Alnö, Sundsvall</p>
+        <p style="font-size:.75rem; color: var(--green-mid);">Karta laddas i produktionsversion</p>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>Skicka ett meddelande</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ditt namn *</label>
+          <input type="text" placeholder="Anna Svensson" />
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" placeholder="070-000 00 00" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-postadress *</label>
+        <input type="email" placeholder="anna@exempel.se" />
+      </div>
+      <div class="form-group">
+        <label>Djurets namn &amp; art</label>
+        <input type="text" placeholder="Kalle (golden retriever)" />
+      </div>
+      <div class="form-group">
+        <label>Ärende</label>
+        <select>
+          <option value="">Välj ärende...</option>
+          <option>Vaccination</option>
+          <option>Kirurgi</option>
+          <option>Hudproblem</option>
+          <option>Öron / Ögon</option>
+          <option>Tandvård</option>
+          <option>Blodprov</option>
+          <option>Ultraljud</option>
+          <option>Tumörkontroll</option>
+          <option>Övrigt</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Meddelande</label>
+        <textarea placeholder="Beskriv kortfattat vad du behöver hjälp med..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="alert('Tack! Vi återkommer till dig inom kort. (Demo)')">
+        Skicka meddelande
+      </button>
+      <p class="form-disclaimer">🔒 Dina uppgifter behandlas säkert och delas inte med tredje part.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ───────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <img src="https://www.alnosmadjursklinik.se/images/0/18060013/Logo-LjYyWrYLQUdlvtr3W-xdsg.jpg" alt="Alnö Smådjursklinik" style="height:45px;width:auto;">
+    Alnö Smådjursklinik
+  </div>
+  <p>© 2026 Alnö Smådjursklinik · Alnö, Sundsvall</p>
+  <div class="footer-links">
+    <a href="#">Integritetspolicy</a>
+    <a href="#">Cookies</a>
+    <a href="#contact">Kontakt</a>
+  </div>
+</footer>
+
+<!-- ── DEMO RIBBON ──────────────────────────────────────────────────── -->
+<div class="demo-ribbon">🚧 DEMO-VERSION</div>
+
+
+<!-- ── BOOKING MODAL ────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="bookingModal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-icon">📅</div>
+    <h2>Boka tid</h2>
+    <p>Välj hur du vill nå oss för att boka en tid. Vi svarar snabbt och hjälper dig att hitta ett passande tillfälle.</p>
+    <div class="modal-channels">
+      <a class="modal-channel" href="#">
+        <span class="mc-icon">💬</span>
+        <div><strong>SMS</strong><span>Skicka ett SMS till vår bokningslinje</span></div>
+      </a>
+      <a class="modal-channel" href="mailto:info@alnosmadjursklinik.se">
+        <span class="mc-icon">📧</span>
+        <div><strong>E-post</strong><span>info@alnösmadjursklinik.se (demo)</span></div>
+      </a>
+      <a class="modal-channel" href="https://www.facebook.com/profile.php?id=61578716530814" target="_blank">
+        <span class="mc-icon"></span>
+        <div><strong>Facebook</strong><span>Skicka ett meddelande via Facebook</span></div>
+      </a>
+      <a class="modal-channel" href="https://www.instagram.com/alno_smadjursklinik/" target="_blank">
+        <span class="mc-icon"></span>
+        <div><strong>Instagram</strong><span>DM:a oss på Instagram</span></div>
+      </a>
+    </div>
+    <p class="modal-note">⏰ Telefontid vardagar 08:00–09:00</p>
+  </div>
+</div>
+
+
+<script>
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  function openModal() {
+    document.getElementById('bookingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('bookingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target.id === 'bookingModal') closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Smooth active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('.nav-links a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.background = a.getAttribute('href') === '#' + current ? 'var(--green-light)' : '';
+      a.style.color       = a.getAttribute('href') === '#' + current ? 'var(--green-dark)'  : '';
+    });
+  });
+</script>
+</body>
+</html>
