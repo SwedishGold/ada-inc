@@ -1,0 +1,218 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const { Command } = require('commander');
+
+const STANDUP_DIR = path.join(process.env.HOME || process.env.USERPROFILE, '.ada', 'standups');
+
+// Ensure directory exists
+function ensureDir() {
+  if (!fs.existsSync(STANDUP_DIR)) {
+    fs.mkdirSync(STANDUP_DIR, { recursive: true });
+  }
+}
+
+// Get today's date string
+function getToday() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// Load or create standup data
+function loadStandup(date) {
+  const file = path.join(STANDUP_DIR, `${date}.json`);
+  if (fs.existsSync(file)) {
+    return JSON.parse(fs.readFileSync(file, 'utf-8'));
+  }
+  return { date, yesterday: [], today: [], blockers: [] };
+}
+
+// Save standup data
+function saveStandup(data) {
+  const file = path.join(STANDUP_DIR, `${data.date}.json`);
+  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  console.log(`✅ Sparad: ${data.date}`);
+}
+
+// Load index
+function loadIndex() {
+  const file = path.join(STANDUP_DIR, 'index.json');
+  if (fs.existsSync(file)) {
+    return JSON.parse(fs.readFileSync(file, 'utf-8'));
+  }
+  return { entries: [] };
+}
+
+// Save index
+function saveIndex(index) {
+  const file = path.join(STANDUP_DIR, 'index.json');
+  fs.writeFileSync(file, JSON.stringify(index, null, 2));
+}
+
+// Add entry to standup
+function addEntry(date, type, text) {
+  ensureDir();
+  const standup = loadStandup(date);
+  standup[type].push(text);
+  saveStandup(standup);
+  
+  // Update index
+  const index = loadIndex();
+  index.entries = index.entries.filter(e => e.date !== date);
+  index.entries.unshift({ date, hasBlockers: standup.blockers.length > 0 });
+  saveIndex(index);
+  
+  console.log(`✅ Lagt till i ${type}: "${text}"`);
+}
+
+// List standups
+function listStandups(limit = 7) {
+  ensureDir();
+  const index = loadIndex();
+  const entries = index.entries.slice(0, limit);
+  
+  if (entries.length === 0) {
+    console.log('Inga standups hittade.');
+    return;
+  }
+  
+  entries.forEach(e => {
+    const standup = loadStandup(e.date);
+    console.log(`\n📅 ${e.date}`);
+    if (standup.yesterday.length) {
+      console.log('  Igår:');
+      standup.yesterday.forEach(t => console.log(`    • ${t}`));
+    }
+    if (standup.today.length) {
+      console.log('  Idag:');
+      standup.today.forEach(t => console.log(`    • ${t}`));
+    }
+    if (standup.blockers.length) {
+      console.log('  🚫 Blockers:');
+      standup.blockers.forEach(t => console.log(`    • ${t}`));
+    }
+  });
+}
+
+// Export to markdown
+function exportMarkdown(dates) {
+  ensureDir();
+  let output = '# Agent Standups\n\n';
+  
+  dates.forEach(date => {
+    const standup = loadStandup(date);
+    output += `## ${date}\n\n`;
+    
+    if (standup.yesterday.length) {
+      output += '### Igår\n';
+      standup.yesterday.forEach(t => output += `- ${t}\n`);
+      output += '\n';
+    }
+    if (standup.today.length) {
+      output += '### Idag\n';
+      standup.today.forEach(t => output += `- ${t}\n`);
+      output += '\n';
+    }
+    if (standup.blockers.length) {
+      output += '### 🚫 Blockers\n';
+      standup.blockers.forEach(t => output += `- ${t}\n`);
+      output += '\n';
+    }
+  });
+  
+  console.log(output);
+}
+
+// Interactive new standup
+function interactiveNew() {
+  const readline = require('readline');
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const standup = { date: getToday(), yesterday: [], today: [], blockers: [] };
+  
+  console.log('\n📝 Ny standup - ' + standup.date + '\n');
+  
+  const ask = (field, prompt) => {
+    return new Promise(resolve => {
+      rl.question(prompt, ans => {
+        if (ans.trim()) standup[field].push(ans.trim());
+        resolve();
+      });
+    });
+  };
+  
+  (async () => {
+    console.log('\n--- Igår --- (tom rad för att fortsätta)');
+    while (true) {
+      const ans = await new Promise(r => rl.question('  > ', r));
+      if (!ans.trim()) break;
+      standup.yesterday.push(ans.trim());
+    }
+    
+    console.log('\n--- Idag --- (tom rad för att fortsätta)');
+    while (true) {
+      const ans = await new Promise(r => rl.question('  > ', r));
+      if (!ans.trim()) break;
+      standup.today.push(ans.trim());
+    }
+    
+    console.log('\n--- Blockers --- (tom rad för att fortsätta)');
+    while (true) {
+      const ans = await new Promise(r => rl.question('  > ', r));
+      if (!ans.trim()) break;
+      standup.blockers.push(ans.trim());
+    }
+    
+    rl.close();
+    saveStandup(standup);
+  })();
+}
+
+// CLI setup
+const program = new Command();
+
+program
+  .name('standup')
+  .description('Agent Standup Framework CLI')
+  .version('1.0.0');
+
+program
+  .command('new')
+  .description('Interaktiv ny standup')
+  .action(interactiveNew);
+
+program
+  .command('add')
+  .description('Lägg till entry')
+  .argument('<type>', 'yesterday, today, eller blocker')
+  .argument('<text>', 'Text att lägga till')
+  .option('-d, --date <date>', 'Datum (YYYY-MM-DD)', getToday())
+  .action((type, text, options) => {
+    if (!['yesterday', 'today', 'blocker', 'blockers'].includes(type)) {
+      console.log('❌ Fel: type måste vara yesterday, today, eller blocker');
+      process.exit(1);
+    }
+    const field = type === 'blocker' || type === 'blockers' ? 'blockers' : type;
+    addEntry(options.date, field, text);
+  });
+
+program
+  .command('list')
+  .description('Visa senaste standups')
+  .option('-n, --limit <num>', 'Antal att visa', '7')
+  .action(options => listStandups(parseInt(options.limit)));
+
+program
+  .command('export')
+  .description('Exportera till markdown')
+  .option('-d, --dates <dates>', 'Comma-separated datum', '')
+  .action(options => {
+    ensureDir();
+    if (options.dates) {
+      exportMarkdown(options.dates.split(','));
+    } else {
+      const index = loadIndex();
+      exportMarkdown(index.entries.map(e => e.date));
+    }
+  });
+
+program.parse();

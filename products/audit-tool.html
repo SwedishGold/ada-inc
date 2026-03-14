@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Inc. Instant Clinical Audit (Beta)</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --text: #c9d1d9;
+            --accent: #58a6ff;
+            --danger: #f85149;
+            --warning: #d29922;
+            --success: #3fb950;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
+        .card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: var(--text);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { opacity: 0.9; }
+        
+        #result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+        }
+        .status-red { background: rgba(248, 81, 73, 0.15); border: 1px solid var(--danger); color: var(--danger); }
+        .status-yellow { background: rgba(210, 153, 34, 0.15); border: 1px solid var(--warning); color: var(--warning); }
+        .status-green { background: rgba(63, 185, 80, 0.15); border: 1px solid var(--success); color: var(--success); }
+
+        .score-circle {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .missing-list {
+            text-align: left;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .upsell {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #8b949e;
+            text-align: center;
+            border-top: 1px solid #30363d;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏥 Instant Clinical Audit</h1>
+    <p style="margin-bottom: 1.5rem; color: #8b949e;">Klistra in en anonymiserad anteckning för snabb IVO-check.</p>
+    
+    <div class="card">
+        <textarea id="input" placeholder="Patient inkom med oro..."></textarea>
+        <button onclick="analyze()">Kör Analys</button>
+        
+        <div id="result">
+            <div id="scoreDisplay" class="score-circle"></div>
+            <h3 id="statusText"></h3>
+            <div id="feedback" class="missing-list"></div>
+        </div>
+    </div>
+
+    <div class="upsell">
+        Built by <strong>Ada Inc.</strong> • <a href="#" style="color:var(--accent)">Köp full licens ($50)</a>
+    </div>
+</div>
+
+<script>
+    function analyze() {
+        const text = document.getElementById('input').value.toLowerCase();
+        const feedback = document.getElementById('feedback');
+        const result = document.getElementById('result');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const statusText = document.getElementById('statusText');
+        
+        // IVO Keywords based on Socialstyrelsen guidelines
+        const keywords = [
+            { term: 'samtycke', weight: 2 },
+            { term: 'bedömning', weight: 2 },
+            { term: 'risk', weight: 3 },
+            { term: 'anhörig', weight: 1 },
+            { term: 'plan', weight: 2 },
+            { term: 'suicid', weight: 3 }, // Critical in psych
+            { term: 'läkemedel', weight: 1 }
+        ];
+
+        let score = 0;
+        let found = [];
+        let missing = [];
+
+        keywords.forEach(k => {
+            if (text.includes(k.term)) {
+                score += k.weight;
+                found.push(k.term);
+            } else {
+                missing.push(k.term);
+            }
+        });
+
+        // Grading logic
+        result.style.display = 'block';
+        result.className = '';
+        scoreDisplay.className = 'score-circle';
+
+        if (score > 8) {
+            result.classList.add('status-green');
+            scoreDisplay.style.background = 'var(--success)';
+            scoreDisplay.textContent = 'A';
+            statusText.textContent = 'GRÖN: Stabil dokumentation ✅';
+        } else if (score > 4) {
+            result.classList.add('status-yellow');
+            scoreDisplay.style.background = 'var(--warning)';
+            scoreDisplay.textContent = 'B';
+            statusText.textContent = 'GUL: Saknar vissa nyckelord ⚠️';
+        } else {
+            result.classList.add('status-red');
+            scoreDisplay.style.background = 'var(--danger)';
+            scoreDisplay.textContent = 'C';
+            statusText.textContent = 'RÖD: Risk för IVO-kritik 🚨';
+        }
+
+        feedback.innerHTML = missing.length > 0 
+            ? '<strong>Saknade nyckelord:</strong><br>' + missing.join(', ')
+            : '<strong>Alla nyckelord hittade!</strong> Bra jobbat.';
+    }
+</script>
+
+</body>
+</html>

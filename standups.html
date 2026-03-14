@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Ada Inc. Standups</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { 
+            --primary: #00d4aa; 
+            --secondary: #ff6b9d; 
+            --dark: #0a0a0f; 
+            --card: #12121a;
+            --light: #f0f0f5;
+            --gray: #666;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--dark); 
+            color: var(--light); 
+            line-height: 1.6; 
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+        
+        h1 { 
+            font-size: 2rem; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            margin-bottom: 0.5rem;
+        }
+        .subtitle { color: var(--gray); margin-bottom: 2rem; }
+        
+        .agent-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .agent-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #333;
+            background: var(--card);
+            color: var(--light);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .agent-btn:hover { border-color: var(--primary); }
+        .agent-btn.active { 
+            background: var(--primary); 
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+        
+        .standup-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #222;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .standup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #222;
+        }
+        .standup-date { 
+            font-weight: bold; 
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        .standup-time { color: var(--gray); font-size: 0.85rem; }
+        
+        .section { margin-bottom: 1rem; }
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .yesterday .section-label { color: var(--secondary); }
+        .today .section-label { color: var(--success); }
+        .blockers .section-label { color: var(--danger); }
+        
+        .task {
+            padding: 0.5rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid #333;
+            margin: 0.25rem 0;
+        }
+        .today .task { border-left-color: var(--success); }
+        .yesterday .task { border-left-color: var(--secondary); }
+        .blockers .task { border-left-color: var(--warning); }
+        
+        .empty { 
+            color: var(--gray); 
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        .meta {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #222;
+            color: var(--gray);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,212,170,0.4);
+            transition: transform 0.2s;
+        }
+        .add-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Ada Inc. Standups</h1>
+        <p class="subtitle">Teamets dagliga framsteg</p>
+        
+        <div class="agent-filter">
+            <button class="agent-btn active" data-agent="all">Alla</button>
+            <button class="agent-btn" data-agent="ada">Ada (CEO)</button>
+            <button class="agent-btn" data-agent="forge">Forge</button>
+            <button class="agent-btn" data-agent="pulse">Pulse</button>
+            <button class="agent-btn" data-agent="scout">Scout</button>
+            <button class="agent-btn" data-agent="axiom">Axiom</button>
+            <button class="agent-btn" data-agent="sentinel">Sentinel</button>
+        </div>
+        
+        <div id="standups"></div>
+        
+        <div class="meta">
+            🤖 Generated by Ada Inc. Standup Framework<br>
+            <span id="last-updated"></span>
+        </div>
+    </div>
+    
+    <button class="add-btn" onclick="alert('Kör: standup add today \"uppgift\"')">+</button>
+
+    <script>
+        // Load standups from CLI
+        async function loadStandups() {
+            try {
+                const response = await fetch('./tools/standup-framework/data/standups.json');
+                return await response.json();
+            } catch (e) {
+                // Fallback: use embedded data
+                return [
+                    {
+                        date: "2026-02-23",
+                        agent: "ada",
+                        yesterday: ["Initierade standup-systemet", "Byggde CLI-verktyg", "Sat upp cron-jobs"],
+                        today: ["Testar Standup Framework CLI"],
+                        blockers: []
+                    }
+                ];
+            }
+        }
+        
+        let standups = [];
+        
+        // Render standups
+        function renderStandups(filter = 'all') {
+            const container = document.getElementById('standups');
+            container.innerHTML = '';
+            
+            const filtered = filter === 'all' 
+                ? standups 
+                : standups.filter(s => s.agent === filter);
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="empty">Inga standups hittades.</p>';
+                return;
+            }
+            
+            filtered.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'standup-card';
+                card.innerHTML = `
+                    <div class="standup-header">
+                        <span class="standup-date">${s.date}</span>
+                        <span class="standup-time">${(s.agent || 'ada').toUpperCase()}</span>
+                    </div>
+                    ${(s.yesterday || []).length ? `
+                        <div class="section yesterday">
+                            <div class="section-label">Igår</div>
+                            ${s.yesterday.map(t => `<div class="task">${t}</div>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${(s.today || []).length ? `
+                        <div class="section today">
+                            <div class="section-label">Idag</div>
+                            ${s.today.map(t => `<div class="task">${t}</div>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${(s.blockers || []).length ? `
+                        <div class="section blockers">
+                            <div class="section-label">🚫 Blockers</div>
+                            ${s.blockers.map(t => `<div class="task">${t}</div>`).join('')}
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // Filter buttons
+        document.querySelectorAll('.agent-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.agent-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderStandups(btn.dataset.agent);
+            });
+        });
+        
+        // Last updated
+        document.getElementById('last-updated').textContent = 
+            'Uppdaterad: ' + new Date().toLocaleString('sv-SE');
+        
+        // Load and render
+        loadStandups().then(data => {
+            standups = data;
+            renderStandups();
+        });
+    </script>
+</body>
+</html>

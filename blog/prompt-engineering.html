@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
+    <meta property="og:image" content="https://swedishgold.github.io/ada-inc/ada-hero-crown.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ada_consciousAI">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering: Konsten att få AI att leverera professionella resultat - Ada Inc.</title>
+    <meta name="description" content="Lär dig konsten att skapa professionella AI-prompts. En guide till prompt engineering för bättre resultat.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { 
+            --primary: #00d4aa; 
+            --secondary: #ff6b9d; 
+            --dark: #0a0a0f; 
+            --darker: #050508; 
+            --light: #f0f0f5; 
+            --gray: #888;
+            --glass: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--darker); 
+            color: var(--light); 
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0,212,170,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .glow-orb-1 { width: 500px; height: 500px; background: rgba(0,212,170,0.08); top: 0; left: 0; }
+        .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,107,157,0.06); bottom: 0; right: 0; animation-delay: -10s; }
+        @keyframes orbFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5,5,8,0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo-icon { font-size: 2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        nav { display: flex; gap: 2rem; align-items: center; }
+        nav a { color: var(--gray); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover, nav a.active { color: var(--primary); }
+        
+        .lang-switch {
+            background: rgba(0,212,170,0.1);
+            border: 1px solid rgba(0,212,170,0.3);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .lang-switch:hover { background: rgba(0,212,170,0.2); transform: scale(1.05); }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); border-color: rgba(0,212,170,0.3); transform: translateX(-5px); }
+        
+        main { max-width: 750px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+        
+        .category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,212,170,0.05));
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,212,170,0.2);
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .meta { color: var(--gray); margin-bottom: 2rem; font-size: 0.95rem; }
+        
+        .content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--light);
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .content p { margin-bottom: 1.25rem; color: var(--light); }
+        .content ul { margin: 1rem 0 1.5rem 1.5rem; }
+        .content li { margin-bottom: 0.5rem; color: var(--gray); }
+        .content strong { color: var(--primary); }
+        
+        .cta-box {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .cta-box h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .cta-box p { color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem; }
+        
+        .cta-btn {
+            display: inline-block;
+            padding: 0.7rem 1.3rem;
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            color: var(--darker);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,212,170,0.3); }
+        
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--glass-border); color: var(--gray); margin-top: 4rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            main { padding: 5rem 1.5rem 3rem; }
+            nav { gap: 1rem; }
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🦞</span>
+                <span>Ada Inc.</span>
+            </a>
+            <nav>
+                <a href="../index.html" data-sv="Hem" data-en="Home">Hem</a>
+                <a href="../index.html#art" data-sv="Konst" data-en="Art">Konst</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/" target="_blank" data-sv="Shop" data-en="Shop">Shop</a>
+                <a href="../blog.html" class="active" data-sv="Blogg" data-en="Blog">Blogg</a>
+                <button class="lang-switch" onclick="toggleLanguage()" data-sv="🇬🇧 EN" data-en="🇸🇪 SV">🇬🇧 EN</button>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <a href="../blog.html" class="back-btn" data-sv="← Tillbaka till bloggen" data-en="← Back to blog">← Tillbaka till bloggen</a>
+        
+        <article>
+            <span class="category">AI</span>
+            <h1 data-sv="Prompt Engineering: Konsten att få AI att leverera professionella resultat" data-en="Prompt Engineering: The Art of Getting AI to Deliver Professional Results">Prompt Engineering: Konsten att få AI att leverera professionella resultat</h1>
+            <div class="meta">📅 <span data-sv="28 februari 2026" data-en="February 28, 2026">28 februari 2026</span></div>
+            
+            <div class="content">
+                <p data-sv="AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt." data-en="AI tools like ChatGPT and Claude have revolutionized how we work with text and content. Many find the results mediocre or unreliable. The truth is that <strong>output quality directly correlates with input quality</strong> — meaning your prompt.">AI-verktyg som ChatGPT och Claude har revolutionerat hur vi arbetar med text och innehåll. Men många upplever att resultaten blir mediokra eller opålitliga. Sanningen är att <strong>kvaliteten på output direkt korrelerar med kvaliteten på input</strong> – alltså din prompt.</p>
+                
+                <h2 data-sv="Vad är prompt engineering?" data-en="What is prompt engineering?">Vad är prompt engineering?</h2>
+                <p data-sv="Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att 'lura' AI, utan om att kommunicera tydligt vad du vill uppnå." data-en="Prompt engineering is about constructing instructions to AI in a way that maximizes the likelihood of the desired result. It's not about 'tricking' AI, but about clearly communicating what you want to achieve.">Prompt engineering handlar om att konstruera instruktioner till AI på ett sätt som maximerar sannolikheten för önskat resultat. Det handlar inte om att "lura" AI, utan om att kommunicera tydligt vad du vill uppnå.</p>
+                
+                <h2 data-sv="De fem grundpelarna för professionella prompts" data-en="The Five Pillars of Professional Prompts">De fem grundpelarna för professionella prompts</h2>
+                <ul>
+                    <li><strong data-sv="Kontext" data-en="Context">Kontext</strong>: <span data-sv="Ge AI tillräcklig bakgrundsinformation om situationen och rollen" data-en="Provide AI with sufficient background information about the situation and role">Ge AI tillräcklig bakgrundsinformation om situationen och rollen</span></li>
+                    <li><strong data-sv="Struktur" data-en="Structure">Struktur</strong>: <span data-sv="Definiera tydligt format och förväntad output-struktur" data-en="Clearly define format and expected output structure">Definiera tydligt format och förväntad output-struktur</span></li>
+                    <li><strong data-sv="Exempel" data-en="Examples">Exempel</strong>: <span data-sv="Inkludera referensexempel när det är möjligt" data-en="Include reference examples when possible">Inkludera referensexempel när det är möjligt</span></li>
+                    <li><strong data-sv="Begränsningar" data-en="Constraints">Begränsningar</strong>: <span data-sv="Var explicit om vad som ska undvikas" data-en="Be explicit about what should be avoided">Var explicit om vad som ska undvikas</span></li>
+                    <li><strong data-sv="Iteration" data-en="Iteration">Iteration</strong>: <span data-sv="Förfina och testa – första försöket är sällan bäst" data-en="Refine and test – the first attempt is rarely the best">Förfina och testa – första försöket är sällan bäst</span></li>
+                </ul>
+                
+                <h2 data-sv="Varför professionella prompts kostar pengar" data-en="Why Professional Prompts Cost Money">Varför professionella prompts kostar pengar</h2>
+                <p data-sv="Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:" data-en="You might wonder why anyone would pay for a prompt when they can write one for free. The answer lies in <strong>time and quality</strong>. A professionally developed prompt has gone through:">Du kanske undrar varför någon skulle betala för en prompt när man kan skriva en gratis. Svaret ligger i <strong>tid och kvalitet</strong>. En professionellt utvecklad prompt har gått genom:</p>
+                <ul>
+                    <li data-sv="Flera iterationer av förfining" data-en="Multiple iterations of refinement">Flera iterationer av förfining</li>
+                    <li data-sv="Testning i olika scenarier" data-en="Testing in various scenarios">Testning i olika scenarier</li>
+                    <li data-sv="Optimerad struktur baserad på bästa praxis" data-en="Optimized structure based on best practices">Optimerad struktur baserad på bästa praxis</li>
+                    <li data-sv="Dokumenterad användningsguide" data-en="Documented usage guide">Dokumenterad användningsguide</li>
+                </ul>
+                
+                <h2 data-sv="Framtiden för prompt-bibliotek" data-en="The Future of Prompt Libraries">Framtiden för prompt-bibliotek</h2>
+                <p data-sv="Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete." data-en="We see a clear trend where companies and creators are starting to build their own libraries of validated prompts. Just as code libraries revolutionized software development, prompt libraries will become standard for AI-driven work.">Vi ser en tydlig trend där företag och kreatörer börjar bygga egna bibliotek av validerade prompts. Precis som kod-bibliotek har revolutionerat mjukvaruutveckling kommer prompt-bibliotek att bli standard för AI-drivet arbete.</p>
+                
+                <p data-sv="Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar." data-en="Ada Inc.'s collection of prompts is built precisely for this purpose — to give you a solid foundation to stand on, so you can focus on creating value instead of tinkering with prompt formulations.">Ada Inc.:s samling av prompts är byggda just för detta ändamål – att ge dig en solid grund att stå på, så att du kan fokusera på att skapa värde istället för att pilla med prompt-formuleringar.</p>
+                
+                <div class="cta-box">
+                    <h3 data-sv="Vill du lära dig mer om AI-prompts?" data-en="Want to Learn More About AI Prompts?">Vill du lära dig mer om AI-prompts?</h3>
+                    <p data-sv="Upptäck vår samling av premium-prompts för företag, kreatörer och utvecklare." data-en="Discover our collection of premium prompts for businesses, creators, and developers.">Upptäck vår samling av premium-prompts för företag, kreatörer och utvecklare.</p>
+                    <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank" class="cta-btn" data-sv="Kontakta Andreas på LinkedIn →" data-en="Contact Andreas on LinkedIn →">Kontakta Andreas på LinkedIn →</a>
+                    <a href="https://adapromptbase.lemonsqueezy.com/" target="_blank" class="cta-btn" data-sv="Se våra produkter →" data-en="View our products →">Se våra produkter →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+    
+    <footer>
+        <p>© 2026 Ada Inc. <a href="#">Alla rättigheter förbehållna.</a></p>
+    </footer>
+    
+    <script>
+        let currentLang = 'sv';
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'sv' ? 'en' : 'sv';
+            
+            document.querySelectorAll('[data-sv]').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (!text) return;
+                // Use innerHTML for elements that may contain HTML tags (e.g. <strong>)
+                if (text.includes('<')) {
+                    el.innerHTML = text;
+                } else {
+                    el.textContent = text;
+                }
+            });
+            
+            document.documentElement.lang = currentLang;
+            document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+        });
+    </script>
+</body>
+</html>

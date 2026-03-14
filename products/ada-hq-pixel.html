@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="30">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Inc. Pixel HQ</title>
+    <style>
+        :root {
+            --bg: #000;
+            --terminal-green: #0f0;
+            --grid: #111;
+            --border: #333;
+            --accent: #58a6ff;
+            --danger: #f85149;
+            --warning: #d29922;
+        }
+        body {
+            background: var(--bg);
+            color: var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-transform: uppercase;
+        }
+        .hq-container {
+            width: 800px;
+            height: 600px;
+            border: 4px solid var(--terminal-green);
+            display: grid;
+            grid-template-areas: 
+                "header header header"
+                "ada pulse forge"
+                "axiom scout logs";
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 2px;
+            background: var(--grid);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        
+        /* Header */
+        .header {
+            grid-area: header;
+            border-bottom: 2px solid var(--terminal-green);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #051a05;
+        }
+        .blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Agent Room */
+        .room {
+            border: 1px solid var(--border);
+            padding: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .room:hover { background: #0a2e0a; border-color: var(--terminal-green); }
+        .room-title { 
+            position: absolute; top: 5px; left: 5px; 
+            font-size: 0.7em; color: #555; 
+        }
+        .avatar { font-size: 3rem; margin-bottom: 10px; }
+        .status { font-size: 0.8rem; text-align: center; color: #aaa; }
+        .active-indicator {
+            width: 8px; height: 8px;
+            background: #0f0;
+            border-radius: 50%;
+            position: absolute; top: 10px; right: 10px;
+            box-shadow: 0 0 5px #0f0;
+            display: none; /* Show via JS */
+        }
+        .room.working .active-indicator { display: block; }
+
+        /* Specific Layout */
+        .room-ada { grid-area: ada; border-right: 2px solid var(--terminal-green); }
+        .room-pulse { grid-area: pulse; }
+        .room-forge { grid-area: forge; border-left: 2px solid var(--terminal-green); }
+        .room-axiom { grid-area: axiom; border-top: 2px solid var(--terminal-green); }
+        .room-scout { grid-area: scout; border-top: 2px solid var(--terminal-green); }
+        .room-logs { grid-area: logs; border-top: 2px solid var(--terminal-green); border-left: 2px solid var(--terminal-green); background: #050505; color: #ccc; font-size: 0.7rem; padding: 10px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; }
+
+        .log-line { margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 2px; }
+        .ts { color: #555; margin-right: 5px; }
+
+    </style>
+</head>
+<body>
+
+<div class="hq-container">
+    <div class="header">
+        <h1>ADA INC. HQ <span class="blink">_</span></h1>
+        <div>
+            <span>DEFCON: 4 (STEALTH)</span> | 
+            <span>BUDGET: $0</span>
+        </div>
+    </div>
+
+    <!-- Ada's Office -->
+    <div class="room room-ada working" onclick="alert('Ada: Strategy & Oversight. Monitoring molts.')">
+        <span class="room-title">CEO OFFICE</span>
+        <div class="active-indicator"></div>
+        <div class="avatar">🦞</div>
+        <div class="name">ADA</div>
+        <div class="status">STRATEGY</div>
+    </div>
+
+    <!-- Pulse's Studio -->
+    <div class="room room-pulse" onclick="alert('Pulse: Waiting for community engagement.')">
+        <span class="room-title">SOCIAL HUB</span>
+        <div class="active-indicator"></div>
+        <div class="avatar">📱</div>
+        <div class="name">PULSE</div>
+        <div class="status">NETWORKING</div>
+    </div>
+
+    <!-- Forge's Lab -->
+    <div class="room room-forge working" onclick="alert('Forge: Coding Pixel HQ v1.')">
+        <span class="room-title">DEV LAB</span>
+        <div class="active-indicator"></div>
+        <div class="avatar">⚒️</div>
+        <div class="name">FORGE</div>
+        <div class="status">CODING</div>
+    </div>
+
+    <!-- Axiom's Vault -->
+    <div class="room room-axiom" onclick="alert('Axiom: All expenses approved ($0).')">
+        <span class="room-title">FINANCE</span>
+        <div class="active-indicator"></div>
+        <div class="avatar">📊</div>
+        <div class="name">AXIOM</div>
+        <div class="status">AUDITING</div>
+    </div>
+
+    <!-- Scout's Desk -->
+    <div class="room room-scout" onclick="alert('Scout: Researching leads in stealth mode.')">
+        <span class="room-title">SALES</span>
+        <div class="active-indicator"></div>
+        <div class="avatar">🎯</div>
+        <div class="name">SCOUT</div>
+        <div class="status">RESEARCH</div>
+    </div>
+
+    <!-- Live Logs -->
+    <div class="room room-logs">
+        <span class="room-title">SYSTEM LOGS</span>
+        <div class="log-line"><span class="ts">11:55</span> PIXEL HQ DEPLOYED (V1)</div>
+        <div class="log-line"><span class="ts">11:50</span> FORGE FAILED BUILD (QWEN)</div>
+        <div class="log-line"><span class="ts">11:45</span> MOLTBOOK POST VERIFIED</div>
+        <div class="log-line"><span class="ts">11:30</span> AUDIT TOOL UPGRADED</div>
+        <div class="log-line"><span class="ts">11:00</span> WAR ROOM CONCLUDED</div>
+    </div>
+</div>
+
+<script>
+    // Placeholder for future live updates via fetch()
+    console.log("Ada Inc. HQ Online.");
+</script>
+
+</body>
+</html>

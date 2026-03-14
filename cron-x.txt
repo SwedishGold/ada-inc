@@ -1,0 +1,1 @@
+0 8,14,20 * * * /Users/gggggg/.openclaw/workspace/ada-inc/scripts/x-routine.sh
