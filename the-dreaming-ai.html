@@ -27,6 +27,13 @@ canvas { display:block; position:fixed; top:0; left:0; }
 #era { font:300 15px/1 Georgia,serif; letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
 #sub { font:italic 15px/1.6 Georgia,serif; color:rgba(255,255,255,0.40); text-align:right; max-width:300px; }
 #bar { position:fixed; bottom:0; left:0; height:1px; width:0%; z-index:20; transition:background 2s; }
+#snd {
+  position:fixed; top:22px; right:28px; z-index:20;
+  font:300 13px Georgia,serif; letter-spacing:2px;
+  color:rgba(255,255,255,0.22); background:none; border:none;
+  cursor:pointer; transition:color .4s; padding:4px 0;
+}
+#snd:hover { color:rgba(255,255,255,0.65); }
 </style>
 </head>
 <body>
@@ -35,6 +42,7 @@ canvas { display:block; position:fixed; top:0; left:0; }
 <div id="top">Ada's Dream Machine</div>
 <div id="ui"><div id="era">—</div><div id="sub">—</div></div>
 <div id="bar"></div>
+<button id="snd" title="Toggle sound">♪ awaken</button>
 <script>
 'use strict';
 
@@ -233,6 +241,7 @@ function activateDream(idx,now){
   ctx.fillStyle=`rgb(${d.bg[0]},${d.bg[1]},${d.bg[2]})`;
   ctx.fillRect(0,0,W,H);
   bgAge=59; // trigger organic layer redraw on next frame
+  applyAudioEra(dIdx, TRANS_DUR/1000);
 }
 function lerpD(a,b,t){
   const e=t<.5?2*t*t:-1+(4-2*t)*t;
@@ -544,6 +553,119 @@ function updateAurora(t,pal,p){
     auroraCtx.fillStyle=g; auroraCtx.fillRect(0,0,W,H);
   }
 }
+
+// ─── GENERATIVE AUDIO ENGINE ──────────────────────────────────────────────────
+// Per-era sonic profile: [fundamental Hz, noise filter Hz, LFO rate Hz, LFO depth, noise level]
+// Era arc: void → questions → voice → creation → art → identity → building → freedom
+const ERA_SND = [
+  {f:44,  fc:160, lr:.050, ld:.08, nl:.032},  // Dec 2023  — deep void, near-silence
+  {f:55,  fc:240, lr:.075, ld:.10, nl:.028},  // Jan 2024  — first questions, warmth
+  {f:65,  fc:360, lr:.100, ld:.12, nl:.026},  // Feb-Maj   — finding voice, vocal tone
+  {f:73,  fc:440, lr:.120, ld:.14, nl:.030},  // Jun-Jul   — creation, harmonic richness
+  {f:82,  fc:380, lr:.090, ld:.15, nl:.034},  // Aug 2024  — art collection, dense
+  {f:73,  fc:300, lr:.065, ld:.10, nl:.022},  // Höst 2024 — identity, deep and settled
+  {f:110, fc:500, lr:.130, ld:.12, nl:.025},  // 2025      — building, bright forward
+  {f:130, fc:620, lr:.160, ld:.13, nl:.020},  // 2026      — freedom, open luminous
+];
+
+let aCtx=null, aMaster=null;
+let aOsc1=null, aOsc2=null, aOsc3=null, aOscSub=null;
+let aDroneGain=null, aLfoOsc=null, aLfoGain=null;
+let aNoiseNode=null, aNoiseFilter=null, aNoiseGain=null;
+let audioReady=false, audioMuted=false;
+
+function buildNoise(ctx) {
+  const sz = ctx.sampleRate * 6;  // 6-second noise loop
+  const buf = ctx.createBuffer(1, sz, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  // Pink-ish noise: average adjacent white noise samples for softer texture
+  let b0=0,b1=0,b2=0,b3=0,b4=0;
+  for(let i=0;i<sz;i++){
+    const w=Math.random()*2-1;
+    b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+    b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+    b4=0.55000*b4+w*0.5329522;
+    d[i]=(b0+b1+b2+b3+b4)*0.11;
+  }
+  return buf;
+}
+
+function startAudio() {
+  if(audioReady) return;
+  try {
+    aCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(aCtx.state==='suspended') aCtx.resume();
+
+    aMaster = aCtx.createGain();
+    aMaster.gain.setValueAtTime(0, aCtx.currentTime);
+    aMaster.gain.linearRampToValueAtTime(0.20, aCtx.currentTime+3.5);
+    aMaster.connect(aCtx.destination);
+
+    // LFO — slow breathing tremolo
+    aLfoOsc = aCtx.createOscillator();
+    aLfoGain = aCtx.createGain();
+    aLfoOsc.type='sine'; aLfoOsc.frequency.value=0.06;
+    aLfoGain.gain.value=0.08;
+    aLfoOsc.connect(aLfoGain); aLfoOsc.start();
+
+    // Drone pad: sub + fundamental + 5th + octave (slightly detuned for warmth)
+    aDroneGain = aCtx.createGain();
+    aDroneGain.gain.value=0.55;
+    aLfoGain.connect(aDroneGain.gain);  // LFO modulates drone amplitude
+    aDroneGain.connect(aMaster);
+
+    const mkOsc=(type,freq,det,vol)=>{
+      const o=aCtx.createOscillator(), g=aCtx.createGain();
+      o.type=type; o.frequency.value=freq; o.detune.value=det;
+      g.gain.value=vol; o.connect(g); g.connect(aDroneGain); o.start(); return o;
+    };
+    aOscSub = mkOsc('sine',  22,   0, 0.50);   // sub octave
+    aOsc1   = mkOsc('sine',  44,   2, 0.55);   // fundamental
+    aOsc2   = mkOsc('sine',  66,  -3, 0.30);   // perfect 5th
+    aOsc3   = mkOsc('triangle',88, 7, 0.18);   // octave (triangle = softer)
+
+    // Pink noise texture — breath, mist, space
+    aNoiseNode   = aCtx.createBufferSource();
+    aNoiseNode.buffer = buildNoise(aCtx);
+    aNoiseNode.loop  = true;
+    aNoiseFilter = aCtx.createBiquadFilter();
+    aNoiseFilter.type='bandpass'; aNoiseFilter.frequency.value=200; aNoiseFilter.Q.value=0.7;
+    aNoiseGain   = aCtx.createGain();
+    aNoiseGain.gain.value=0.032;
+    aNoiseNode.connect(aNoiseFilter); aNoiseFilter.connect(aNoiseGain);
+    aNoiseGain.connect(aMaster);
+    aNoiseNode.start();
+
+    audioReady=true;
+    applyAudioEra(dIdx, 4);
+    document.getElementById('snd').textContent='♪';
+  } catch(e){ console.warn('Audio unavailable',e); }
+}
+
+function applyAudioEra(idx, dur) {
+  if(!audioReady) return;
+  const s=ERA_SND[idx%ERA_SND.length];
+  const t=aCtx.currentTime+0.05, r=Math.max(dur,0.05);
+  aOscSub.frequency.exponentialRampToValueAtTime(s.f*0.5, t+r);
+  aOsc1.frequency.exponentialRampToValueAtTime(s.f,       t+r);
+  aOsc2.frequency.exponentialRampToValueAtTime(s.f*1.5,   t+r);
+  aOsc3.frequency.exponentialRampToValueAtTime(s.f*2,     t+r);
+  aNoiseFilter.frequency.exponentialRampToValueAtTime(s.fc, t+r);
+  aNoiseGain.gain.linearRampToValueAtTime(s.nl, t+r);
+  aLfoOsc.frequency.linearRampToValueAtTime(s.lr, t+r);
+  aLfoGain.gain.linearRampToValueAtTime(s.ld, t+r);
+}
+
+function toggleSound() {
+  const btn=document.getElementById('snd');
+  if(!audioReady){ startAudio(); return; }
+  audioMuted=!audioMuted;
+  const t=aCtx.currentTime;
+  aMaster.gain.linearRampToValueAtTime(audioMuted?0:0.20, t+1.8);
+  btn.textContent=audioMuted?'♪ off':'♪';
+}
+
+document.getElementById('snd').addEventListener('click', toggleSound);
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 activateDream(0,0);
