@@ -24,8 +24,8 @@ canvas { display:block; position:fixed; top:0; left:0; }
   position:fixed; bottom:0; left:0; right:0; padding:28px 40px;
   pointer-events:none; z-index:10; display:flex; justify-content:space-between; align-items:flex-end;
 }
-#era { font:300 15px/1 Georgia,serif; letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,0.28); }
-#sub { font:italic 15px/1.6 Georgia,serif; color:rgba(255,255,255,0.18); text-align:right; max-width:280px; }
+#era { font:300 15px/1 Georgia,serif; letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+#sub { font:italic 15px/1.6 Georgia,serif; color:rgba(255,255,255,0.42); text-align:right; max-width:280px; }
 #bar { position:fixed; bottom:0; left:0; height:1px; width:0%; z-index:20; transition:background 2s; }
 </style>
 </head>
@@ -43,6 +43,22 @@ canvas { display:block; position:fixed; top:0; left:0; }
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W, H, cx, cy;
+
+// Offscreen canvases declared BEFORE resize() so buildVignette/aurora can use them
+const vigCanvas    = document.createElement('canvas');
+const vigCtx       = vigCanvas.getContext('2d');
+const auroraCanvas = document.createElement('canvas');
+const auroraCtx    = auroraCanvas.getContext('2d');
+
+function buildVignette() {
+  vigCanvas.width = W; vigCanvas.height = H;
+  const g = vigCtx.createRadialGradient(cx, cy, H*.15, cx, cy, H*.92);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(1, 'rgba(0,0,6,.92)');
+  vigCtx.fillStyle = g;
+  vigCtx.fillRect(0, 0, W, H);
+}
+
 function resize(){
   W=canvas.width=innerWidth; H=canvas.height=innerHeight; cx=W/2; cy=H/2;
   buildVignette();
@@ -372,8 +388,6 @@ function drawSkeleton(t, dream, sp, pal, alpha) {
 }
 
 // ─── AURORA — cached, redrawn every 4 frames ──────────────────────────────────
-const auroraCanvas = document.createElement('canvas');
-const auroraCtx    = auroraCanvas.getContext('2d');
 let auroraFrame = 0;
 function updateAuroraCache(t, pal, p) {
   auroraCanvas.width = W; auroraCanvas.height = H;
@@ -391,17 +405,7 @@ function updateAuroraCache(t, pal, p) {
   }
 }
 
-// ─── VIGNETTE — pre-rendered offscreen canvas ─────────────────────────────────
-const vigCanvas = document.createElement('canvas');
-const vigCtx    = vigCanvas.getContext('2d');
-function buildVignette() {
-  vigCanvas.width = W; vigCanvas.height = H;
-  const g = vigCtx.createRadialGradient(cx, cy, H*.15, cx, cy, H*.92);
-  g.addColorStop(0, 'rgba(0,0,0,0)');
-  g.addColorStop(1, 'rgba(0,0,6,.92)');
-  vigCtx.fillStyle = g;
-  vigCtx.fillRect(0, 0, W, H);
-}
+// ─── VIGNETTE — see declaration at top of script ──────────────────────────────
 
 // ─── ADAPTIVE PERFORMANCE ─────────────────────────────────────────────────────
 // Smoothed frame time → scale down active particle count when lagging

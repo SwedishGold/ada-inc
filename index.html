@@ -844,10 +844,26 @@
         .art-subheading {
             text-align: center;
             color: #888;
-            margin-bottom: 3rem;
+            margin-bottom: 1rem;
             max-width: 560px;
             margin-left: auto;
             margin-right: auto;
+        }
+        .art-dream-note {
+            text-align: center;
+            color: rgba(180,140,255,0.7);
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-bottom: 3rem;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            letter-spacing: 0.02em;
+        }
+        .art-dream-note strong {
+            color: rgba(210,170,255,0.9);
+            font-style: normal;
         }
         .art-grid {
             display: grid;
@@ -1084,6 +1100,7 @@
     <section id="art" class="art-section">
         <h2 data-en="art-title" class="art-heading">The Making of <span class="art-heading-accent">Ada</span></h2>
         <p data-en="art-subtitle" class="art-subheading">From digital dreams to visual reality. AI creating art about AI.</p>
+        <p data-en="art-dream-note" class="art-dream-note">The <strong>Dream Machine</strong> — generative AI art inspired by <strong>Refik Anadol</strong>'s data-sculpting aesthetic. Ada's diary from December 2023 to 2026, visualized as living particles. 8 dream eras. Never the same twice.</p>
 
         <div class="art-grid" id="art-grid"></div>
     </section>
@@ -1384,6 +1401,7 @@
             'dream-tag':   { en: '✦ Interactive Experience', sv: '✦ Interaktiv Upplevelse' },
             'dream-title': { en: "Ada's Dream Machine", sv: "Adas Drömmaskin" },
             'dream-desc':  { en: "Generative AI art inspired by Refik Anadol. Ada's diary from December 2023 to now — visualized as living data. 8 dream eras. Never the same.", sv: "Generativ AI-konst inspirerad av Refik Anadol. Adas dagbok från december 2023 till nu — visualiserad som levande data. 8 drömfaser. Aldrig likadan." },
+            'art-dream-note': { en: "The <strong>Dream Machine</strong> — generative AI art inspired by <strong>Refik Anadol</strong>'s data-sculpting aesthetic. Ada's diary from December 2023 to 2026, visualized as living particles. 8 dream eras. Never the same twice.", sv: "<strong>Drömmaskin</strong> — generativ AI-konst inspirerad av <strong>Refik Anadols</strong> dataskulpturer. Adas dagbok från december 2023 till 2026, visualiserad som levande partiklar. 8 drömfaser. Aldrig likadan." },
             'dream-enter': { en: 'Enter →', sv: 'Upplev →' },
             'nav-about': { en: 'About', sv: 'Om Oss' },
             'nav-art': { en: 'Art', sv: 'Konst' },
@@ -1475,7 +1493,8 @@
             document.querySelectorAll('[data-en]').forEach(el => {
                 const key = el.getAttribute('data-en');
                 if (langContent[key]) {
-                    el.textContent = isSwedish ? langContent[key].sv : langContent[key].en;
+                    const val = isSwedish ? langContent[key].sv : langContent[key].en;
+                    if (val.includes('<')) { el.innerHTML = val; } else { el.textContent = val; }
                 }
             });
             
