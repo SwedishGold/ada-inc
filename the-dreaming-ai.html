@@ -44,11 +44,13 @@ const canvas = document.getElementById('c');
 const ctx    = canvas.getContext('2d');
 let W, H, cx, cy;
 
-// Offscreen canvases declared first (before resize) to avoid TDZ crash
+// All vars that resize() or buildVignette() touch must be declared BEFORE resize()
 const vigCanvas    = document.createElement('canvas');
 const vigCtx       = vigCanvas.getContext('2d');
 const auroraCanvas = document.createElement('canvas');
 const auroraCtx    = auroraCanvas.getContext('2d');
+let vfAge = 999, vfDirty = true;   // vector field state — needed by resize()
+let auroraAge = 0;                 // aurora frame counter
 
 function buildVignette() {
   vigCanvas.width = W; vigCanvas.height = H;
@@ -219,7 +221,7 @@ function getDriftedParams(base, t) {
 const VFC = 64, VFR = 48;            // 64×48 = 3072 cells
 const vfX = new Float32Array(VFC*VFR);
 const vfY = new Float32Array(VFC*VFR);
-let vfAge = 999, vfDirty = true;    // force rebuild on first frame
+// vfAge/vfDirty declared at top — force rebuild on first frame
 
 function updateVF(t, p, shapeF) {
   const cw = W/VFC, ch = H/VFR;
@@ -391,7 +393,6 @@ function drawSkeleton(t,dream,sp,pal,alpha){
 }
 
 // ─── AURORA — cached offscreen, update every 4 frames ─────────────────────────
-let auroraAge = 0;
 function updateAurora(t,pal,p){
   auroraCanvas.width=W; auroraCanvas.height=H;
   auroraCtx.clearRect(0,0,W,H);
