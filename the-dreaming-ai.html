@@ -41,10 +41,10 @@ canvas { display:block; position:fixed; top:0; left:0; }
 
 // ─── CANVAS ──────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
+const ctx    = canvas.getContext('2d');
 let W, H, cx, cy;
 
-// Offscreen canvases declared BEFORE resize() so buildVignette/aurora can use them
+// Offscreen canvases declared first (before resize) to avoid TDZ crash
 const vigCanvas    = document.createElement('canvas');
 const vigCtx       = vigCanvas.getContext('2d');
 const auroraCanvas = document.createElement('canvas');
@@ -53,19 +53,17 @@ const auroraCtx    = auroraCanvas.getContext('2d');
 function buildVignette() {
   vigCanvas.width = W; vigCanvas.height = H;
   const g = vigCtx.createRadialGradient(cx, cy, H*.15, cx, cy, H*.92);
-  g.addColorStop(0, 'rgba(0,0,0,0)');
-  g.addColorStop(1, 'rgba(0,0,6,.92)');
-  vigCtx.fillStyle = g;
-  vigCtx.fillRect(0, 0, W, H);
+  g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,6,.92)');
+  vigCtx.fillStyle = g; vigCtx.fillRect(0,0,W,H);
 }
-
-function resize(){
+function resize() {
   W=canvas.width=innerWidth; H=canvas.height=innerHeight; cx=W/2; cy=H/2;
+  vfDirty = true; // force vector field rebuild on resize
   buildVignette();
 }
 resize(); window.addEventListener('resize', resize);
 
-// ─── PERLIN NOISE ─────────────────────────────────────────────────────────────
+// ─── PERLIN NOISE (3-octave fbm — faster than 4) ─────────────────────────────
 const PP=new Uint8Array(512);
 const GG=[[1,1],[-1,1],[1,-1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]];
 {const t=[...Array(256).keys()];for(let i=255;i>0;i--){const j=Math.random()*(i+1)|0;[t[i],t[j]]=[t[j],t[i]];}for(let i=0;i<256;i++)PP[i]=PP[i+256]=t[i];}
@@ -73,12 +71,13 @@ const fade=t=>t*t*t*(t*(t*6-15)+10);
 const lerp=(a,b,t)=>a+t*(b-a);
 function n2(x,y){
   const X=Math.floor(x)&255,Y=Math.floor(y)&255;
-  x-=Math.floor(x);y-=Math.floor(y);
+  x-=Math.floor(x); y-=Math.floor(y);
   const u=fade(x),v=fade(y),a=PP[X]+Y,b=PP[X+1]+Y;
   return lerp(lerp(GG[PP[a]&7][0]*x+GG[PP[a]&7][1]*y,GG[PP[b]&7][0]*(x-1)+GG[PP[b]&7][1]*y,u),
               lerp(GG[PP[a+1]&7][0]*x+GG[PP[a+1]&7][1]*(y-1),GG[PP[b+1]&7][0]*(x-1)+GG[PP[b+1]&7][1]*(y-1),u),v);
 }
-function fbm(x,y,o=4){let v=0,a=0.5,f=1;for(let i=0;i<o;i++){v+=a*n2(x*f,y*f);a*=0.5;f*=2.07;}return v;}
+// 3 octaves (was 4) — 25% fewer n2() calls with near-identical visual
+function fbm(x,y){let v=0,a=0.5,f=1;for(let i=0;i<3;i++){v+=a*n2(x*f,y*f);a*=0.5;f*=2.07;}return v;}
 function curl(x,y,tz,sc){
   const e=0.001;
   return{x:(fbm(x*sc,y*sc+e+tz)-fbm(x*sc,y*sc-e+tz))/(2*e),
@@ -143,10 +142,10 @@ const DREAMS=[
 
 // ─── DREAM STATE ──────────────────────────────────────────────────────────────
 const DREAM_DUR=52000, TRANS_DUR=9000;
-let dIdx=0,dStart=0,nextIdx=null,transT=0,curSP,nxtSP;
+let dIdx=0, dStart=0, nextIdx=null, transT=0, curSP, nxtSP;
 function activateDream(idx,now){
-  dIdx=idx%DREAMS.length;dStart=now;
-  curSP=buildSP((Math.random()*0x7fffffff)|0);nextIdx=null;
+  dIdx=idx%DREAMS.length; dStart=now;
+  curSP=buildSP((Math.random()*0x7fffffff)|0); nextIdx=null;
   const d=DREAMS[dIdx];
   document.getElementById('era').textContent=d.era;
   document.getElementById('sub').textContent=d.sub;
@@ -162,142 +161,180 @@ function blendPal(pa,pb,t){
   return pa.map((c,i)=>{const d=pb[i%pb.length];return[lerp(c[0],d[0],t)|0,lerp(c[1],d[1],t)|0,lerp(c[2],d[2],t)|0];});
 }
 
-// ─── CONTINUOUS SHAPE MORPH ───────────────────────────────────────────────────
-function makeShapeF(dream, spA, spB, transBlend) {
-  return function(x, y, t, _sp) {
-    const nv   = n2(t * 0.0000175, dIdx * 11.3 + 3.7) * 0.5 + 0.5;
-    const idx1 = Math.floor(nv * dream.shapes.length) % dream.shapes.length;
-    const idx2 = (idx1 + 1) % dream.shapes.length;
-    const blend = (nv * dream.shapes.length) % 1;
-    const a  = SF[dream.shapes[idx1]](x, y, t, curSP);
-    const b  = SF[dream.shapes[idx2]](x, y, t, curSP);
-    let fx = lerp(a.x, b.x, blend);
-    let fy = lerp(a.y, b.y, blend);
-    if (transBlend > 0 && nxtSP) {
-      const nDream = DREAMS[nextIdx % DREAMS.length];
-      const nv2  = n2(t * 0.0000175, (nextIdx % DREAMS.length) * 11.3 + 3.7) * 0.5 + 0.5;
-      const ni1  = Math.floor(nv2 * nDream.shapes.length) % nDream.shapes.length;
-      const ni2  = (ni1 + 1) % nDream.shapes.length;
-      const nb   = (nv2 * nDream.shapes.length) % 1;
-      const na   = SF[nDream.shapes[ni1]](x, y, t, nxtSP);
-      const nb2  = SF[nDream.shapes[ni2]](x, y, t, nxtSP);
-      fx = lerp(fx, lerp(na.x, nb2.x, nb), transBlend);
-      fy = lerp(fy, lerp(na.y, nb2.y, nb), transBlend);
+// ─── SHAPE MORPH — precomputed blend indices (NOT recalculated per particle) ──
+// Returns a function that is cheap to call per-particle (no n2() inside)
+function makeShapeF(dream, transBlend, ts) {
+  // These 4 n2() calls happen once per frame, not 1130× per frame
+  const nv   = n2(ts * 0.0000175, dIdx * 11.3 + 3.7) * 0.5 + 0.5;
+  const idx1 = Math.floor(nv * dream.shapes.length) % dream.shapes.length;
+  const idx2 = (idx1 + 1) % dream.shapes.length;
+  const blend = (nv * dream.shapes.length) % 1;
+  const fA = SF[dream.shapes[idx1]];
+  const fB = SF[dream.shapes[idx2]];
+
+  // Precompute next-dream shape if transitioning
+  let nfA, nfB, nb, hasNext = transBlend > 0 && nxtSP != null;
+  if (hasNext) {
+    const nd  = DREAMS[nextIdx % DREAMS.length];
+    const nv2 = n2(ts * 0.0000175, (nextIdx % DREAMS.length) * 11.3 + 3.7) * 0.5 + 0.5;
+    const ni1 = Math.floor(nv2 * nd.shapes.length) % nd.shapes.length;
+    const ni2 = (ni1+1) % nd.shapes.length;
+    nb  = (nv2 * nd.shapes.length) % 1;
+    nfA = SF[nd.shapes[ni1]];
+    nfB = SF[nd.shapes[ni2]];
+  }
+
+  return function(x, y, t) {
+    const a = fA(x,y,t,curSP), b = fB(x,y,t,curSP);
+    let fx = lerp(a.x,b.x,blend), fy = lerp(a.y,b.y,blend);
+    if (hasNext) {
+      const na = nfA(x,y,t,nxtSP), nb2 = nfB(x,y,t,nxtSP);
+      fx = lerp(fx, lerp(na.x,nb2.x,nb), transBlend);
+      fy = lerp(fy, lerp(na.y,nb2.y,nb), transBlend);
     }
     return {x:fx, y:fy};
   };
 }
 
-// ─── LIVE PARAMETER DRIFT ────────────────────────────────────────────────────
+// ─── ORGANIC DRIFT + PULSE ────────────────────────────────────────────────────
 function getDriftedParams(base, t) {
-  const turbDrift  = 1 + n2(t * 0.000016, dIdx * 13.7 + 2)   * 0.55;
-  const scaleDrift = 1 + n2(t * 0.000013 + 8, dIdx * 9.2 + 1) * 0.35;
-  const spdDrift   = 1 + n2(t * 0.000011 + 4, dIdx * 7.4 + 5) * 0.40;
-  const pulse = Math.pow(Math.max(0,
-    Math.sin(t * 0.000385) * Math.sin(t * 0.000271)), 2) * 0.8;
+  const turbDrift  = 1 + n2(t*0.000016,  dIdx*13.7+2)   * 0.55;
+  const scaleDrift = 1 + n2(t*0.000013+8,dIdx*9.2+1)    * 0.35;
+  const spdDrift   = 1 + n2(t*0.000011+4,dIdx*7.4+5)    * 0.40;
+  const pulse = Math.pow(Math.max(0, Math.sin(t*0.000385)*Math.sin(t*0.000271)),2)*0.8;
   return {
     ns: base.ns * scaleDrift,
     sp: base.sp * spdDrift,
-    tu: base.tu * turbDrift * (1 + pulse),
+    tu: base.tu * turbDrift * (1+pulse),
     ta: base.ta,
-    pa: Math.min(0.95, base.pa * (1 + pulse * 0.3)),
+    pa: Math.min(0.95, base.pa*(1+pulse*0.3)),
     de: base.de,
-    ss: base.ss * (1 + pulse * 0.25)
+    ss: base.ss*(1+pulse*0.25)
+  };
+}
+
+// ─── VECTOR FIELD GRID ────────────────────────────────────────────────────────
+// Precompute curl+shape forces on a coarse grid; particles sample via bilinear lerp.
+// This replaces per-particle curl() calls (~8 n2() each) with cheap grid lookups.
+const VFC = 64, VFR = 48;            // 64×48 = 3072 cells
+const vfX = new Float32Array(VFC*VFR);
+const vfY = new Float32Array(VFC*VFR);
+let vfAge = 999, vfDirty = true;    // force rebuild on first frame
+
+function updateVF(t, p, shapeF) {
+  const cw = W/VFC, ch = H/VFR;
+  const tz = t * p.sp * 0.000105;
+  for (let r=0; r<VFR; r++) {
+    for (let c=0; c<VFC; c++) {
+      const wx = (c+0.5)*cw, wy = (r+0.5)*ch;
+      const cv = curl(wx, wy, tz, p.ns);
+      const sv = shapeF(wx, wy, t);
+      const i  = r*VFC+c;
+      vfX[i]   = cv.x * p.tu + sv.x * p.ss;
+      vfY[i]   = cv.y * p.tu + sv.y * p.ss;
+    }
+  }
+}
+
+function sampleVF(x, y) {
+  const fc = Math.max(0.5, Math.min(VFC-1.5, x*(VFC/W) - 0.5));
+  const fr = Math.max(0.5, Math.min(VFR-1.5, y*(VFR/H) - 0.5));
+  const c0 = fc|0, r0 = fr|0;
+  const tx = fc-c0, ty = fr-r0;
+  const i  = r0*VFC+c0;
+  return {
+    x: lerp(lerp(vfX[i],   vfX[i+1],   tx), lerp(vfX[i+VFC], vfX[i+VFC+1], tx), ty),
+    y: lerp(lerp(vfY[i],   vfY[i+1],   tx), lerp(vfY[i+VFC], vfY[i+VFC+1], tx), ty)
   };
 }
 
 // ─── PARTICLES ────────────────────────────────────────────────────────────────
 //      lw_min lw_max  alpha  speed  tailMin tailMax  count
 const LCFG = [
-  [0.3,  0.8,  0.26, 0.45,  8,  20,  350],
-  [0.7,  1.7,  0.54, 1.00, 18,  40,  600],
-  [1.5,  3.2,  0.80, 1.75, 30,  62,  180],
+  [0.3, 0.8,  0.26, 0.45,  8,  20, 350],
+  [0.7, 1.7,  0.54, 1.00, 18,  40, 600],
+  [1.5, 3.2,  0.80, 1.75, 30,  62, 180],
 ];
+// Layer depth multipliers (match original per-layer ns scale)
+const LMUL = [0.65, 1.0, 1.40];
 
 class Particle {
   constructor(layer) {
     this.layer = layer;
     const C = LCFG[layer];
-    this.lw  = C[0] + Math.random() * (C[1] - C[0]);
+    this.lw  = C[0] + Math.random()*(C[1]-C[0]);
     this.as  = C[2];
     this.ss  = C[3];
-    this.tl  = C[4] + Math.random() * (C[5] - C[4]);
-    this.z   = Math.random() * 900;
-    this.maxLife = 140 + Math.random() * 380;
+    this.tl  = C[4] + Math.random()*(C[5]-C[4]);
+    this.z   = Math.random()*900;
+    // Cheap per-particle variation: trig phase from z (no noise needed)
+    this.za  = this.z * 0.007;   // unique angle offset
+    this.maxLife = 140 + Math.random()*380;
     this.reset(true);
   }
   reset(rnd) {
-    if (rnd) { this.x = Math.random()*W; this.y = Math.random()*H; }
+    if (rnd) { this.x=Math.random()*W; this.y=Math.random()*H; }
     else {
-      const s = Math.random()*4|0;
-      if      (s===0) { this.x=Math.random()*W; this.y=-4; }
-      else if (s===1) { this.x=W+4; this.y=Math.random()*H; }
-      else if (s===2) { this.x=Math.random()*W; this.y=H+4; }
-      else            { this.x=-4;  this.y=Math.random()*H; }
+      const s=Math.random()*4|0;
+      if      (s===0){this.x=Math.random()*W;this.y=-4;}
+      else if (s===1){this.x=W+4;this.y=Math.random()*H;}
+      else if (s===2){this.x=Math.random()*W;this.y=H+4;}
+      else           {this.x=-4;this.y=Math.random()*H;}
     }
     this.vx=0; this.vy=0; this.life=0;
   }
-  update(p, shapeF, t) {
-    const sc = p.ns * (this.layer===0 ? 0.65 : this.layer===2 ? 1.40 : 1.0);
-    const c  = curl(this.x, this.y, t * p.sp * 0.000105 * this.ss + this.z * .001, sc);
-    const s  = shapeF(this.x, this.y, t, null);
-    this.vx  = this.vx*.88 + (c.x * p.tu + s.x * p.ss) * .44 * this.ss;
-    this.vy  = this.vy*.88 + (c.y * p.tu + s.y * p.ss) * .44 * this.ss;
-    this.x  += this.vx; this.y += this.vy; this.life++;
-    if (this.life>this.maxLife||this.x<-12||this.x>W+12||this.y<-12||this.y>H+12) this.reset(false);
+  update(t) {
+    const f  = sampleVF(this.x, this.y);
+    const lm = LMUL[this.layer];
+    // Cheap z-variation: rotate the field vector slightly per particle (no noise)
+    const za = this.za + t * 0.000028 * this.ss;
+    const zr = 0.32;
+    const cos = Math.cos(za)*zr, sin = Math.sin(za)*zr;
+    this.vx = this.vx*0.88 + (f.x*lm + cos) * 0.44 * this.ss;
+    this.vy = this.vy*0.88 + (f.y*lm + sin) * 0.44 * this.ss;
+    this.x += this.vx; this.y += this.vy; this.life++;
+    if(this.life>this.maxLife||this.x<-12||this.x>W+12||this.y<-12||this.y>H+12) this.reset(false);
   }
-  draw(pal, p, t) {
-    const spd = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+  draw(pal, t, useShadow) {
+    const spd = Math.sqrt(this.vx*this.vx+this.vy*this.vy);
     if (spd < 0.08) return;
-    const nx = this.vx/spd, ny = this.vy/spd;
-    const tail = this.tl * (0.55 + spd * 0.28);
-    const nv = n2(this.x*.0038 + t*.00005, this.y*.0038) * .5 + .5;
-    const ci = Math.floor(nv * pal.length) % pal.length;
-    const col= pal[ci];
-    const la = Math.sin((this.life/this.maxLife) * Math.PI) * this.as;
+    const nx=this.vx/spd, ny=this.vy/spd;
+    const tail = this.tl*(0.55+spd*0.28);
+    const nv = n2(this.x*.0038+t*.00005, this.y*.0038)*.5+.5;
+    const col = pal[Math.floor(nv*pal.length)%pal.length];
+    const la  = Math.sin((this.life/this.maxLife)*Math.PI)*this.as;
+    const r=col[0],g=col[1],b=col[2];
 
-    const tipFrac = 0.28;
-    const tipLen  = tail * tipFrac;
-    const tailLen = tail * (1 - tipFrac);
+    const tipFrac=0.28, tipLen=tail*tipFrac, tailLen=tail*(1-tipFrac);
 
-    if (this.layer === 2) {
-      // FG: full two-stroke comet + glow
+    if (this.layer===2) {
+      // FG: two-stroke + optional glow
       ctx.beginPath();
-      ctx.moveTo(this.x - nx*(tipLen+tailLen), this.y - ny*(tipLen+tailLen));
-      ctx.lineTo(this.x - nx*tipLen,           this.y - ny*tipLen);
-      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.22})`;
-      ctx.lineWidth   = this.lw * 0.55;
-      ctx.stroke();
-      ctx.shadowBlur=18; ctx.shadowColor=`rgba(${col[0]},${col[1]},${col[2]},${la*.7})`;
+      ctx.moveTo(this.x-nx*(tipLen+tailLen), this.y-ny*(tipLen+tailLen));
+      ctx.lineTo(this.x-nx*tipLen,           this.y-ny*tipLen);
+      ctx.strokeStyle=`rgba(${r},${g},${b},${la*0.22})`; ctx.lineWidth=this.lw*0.55; ctx.stroke();
+      if (useShadow) { ctx.shadowBlur=16; ctx.shadowColor=`rgba(${r},${g},${b},${la*.65})`; }
       ctx.beginPath();
-      ctx.moveTo(this.x - nx*tipLen, this.y - ny*tipLen);
-      ctx.lineTo(this.x,             this.y);
-      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la})`;
-      ctx.lineWidth   = this.lw;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    } else if (spd > 0.35) {
-      // BG/MID fast particles: two-stroke (no glow)
-      ctx.beginPath();
-      ctx.moveTo(this.x - nx*(tipLen+tailLen), this.y - ny*(tipLen+tailLen));
-      ctx.lineTo(this.x - nx*tipLen,           this.y - ny*tipLen);
-      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.18})`;
-      ctx.lineWidth   = this.lw * 0.55;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(this.x - nx*tipLen, this.y - ny*tipLen);
-      ctx.lineTo(this.x,             this.y);
-      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la})`;
-      ctx.lineWidth   = this.lw;
-      ctx.stroke();
-    } else {
-      // BG/MID slow particles: single stroke
-      ctx.beginPath();
-      ctx.moveTo(this.x - nx*tail, this.y - ny*tail);
+      ctx.moveTo(this.x-nx*tipLen, this.y-ny*tipLen);
       ctx.lineTo(this.x,           this.y);
-      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.7})`;
-      ctx.lineWidth   = this.lw;
-      ctx.stroke();
+      ctx.strokeStyle=`rgba(${r},${g},${b},${la})`; ctx.lineWidth=this.lw; ctx.stroke();
+      if (useShadow) ctx.shadowBlur=0;
+    } else if (spd > 0.35) {
+      // MID/BG fast: two-stroke no glow
+      ctx.beginPath();
+      ctx.moveTo(this.x-nx*(tipLen+tailLen), this.y-ny*(tipLen+tailLen));
+      ctx.lineTo(this.x-nx*tipLen,           this.y-ny*tipLen);
+      ctx.strokeStyle=`rgba(${r},${g},${b},${la*0.18})`; ctx.lineWidth=this.lw*0.55; ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(this.x-nx*tipLen, this.y-ny*tipLen);
+      ctx.lineTo(this.x,           this.y);
+      ctx.strokeStyle=`rgba(${r},${g},${b},${la})`; ctx.lineWidth=this.lw; ctx.stroke();
+    } else {
+      // MID/BG slow: single stroke
+      ctx.beginPath();
+      ctx.moveTo(this.x-nx*tail, this.y-ny*tail);
+      ctx.lineTo(this.x,         this.y);
+      ctx.strokeStyle=`rgba(${r},${g},${b},${la*0.7})`; ctx.lineWidth=this.lw; ctx.stroke();
     }
   }
 }
@@ -307,91 +344,57 @@ for (let l=0; l<3; l++) for (let i=0; i<LCFG[l][6]; i++) parts.push(new Particle
 
 // ─── FLOATING WORDS — radiate from center ─────────────────────────────────────
 class Word {
-  constructor(txt, x, y, col, vx, vy) {
-    this.txt=txt; this.x=x; this.y=y; this.col=col;
-    this.vx=vx; this.vy=vy;
-    this.life=0; this.max=260+Math.random()*300;
-    this.sz=10+Math.random()*18; this.w=Math.random()*80;
+  constructor(txt,x,y,col,vx,vy){
+    this.txt=txt;this.x=x;this.y=y;this.col=col;
+    this.vx=vx;this.vy=vy;
+    this.life=0;this.max=260+Math.random()*300;
+    this.sz=10+Math.random()*18;this.w=Math.random()*80;
   }
-  tick(t){ this.x+=this.vx+Math.sin(t*.0004+this.w)*.15; this.y+=this.vy+Math.cos(t*.0004+this.w)*.10; this.life++; return this.life<this.max; }
-  draw(){
-    const p=this.life/this.max, a=Math.sin(p*Math.PI)*.56;
+  tick(t){this.x+=this.vx+Math.sin(t*.0004+this.w)*.15;this.y+=this.vy+Math.cos(t*.0004+this.w)*.10;this.life++;return this.life<this.max;}
+  draw(useShadow){
+    const p=this.life/this.max,a=Math.sin(p*Math.PI)*.56;
     ctx.save();
-    ctx.font=`${this.sz}px Georgia,serif`; ctx.textAlign='center';
-    ctx.shadowBlur=24; ctx.shadowColor=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a*.75})`;
+    ctx.font=`${this.sz}px Georgia,serif`;ctx.textAlign='center';
+    if (useShadow){ctx.shadowBlur=18;ctx.shadowColor=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a*.7})`;}
     ctx.fillStyle=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a})`;
-    ctx.fillText(this.txt, this.x, this.y);
+    ctx.fillText(this.txt,this.x,this.y);
     ctx.restore();
   }
 }
 let words=[], lastWord=0;
-function maybeWord(t, dream, pal) {
-  if (t - lastWord < 2600) return; lastWord = t;
-  const txt = dream.words[Math.floor(Math.random() * dream.words.length)];
-  // Spawn near center and drift outward radially
-  const angle = Math.random() * Math.PI * 2;
-  const r0    = Math.random() * 30 + 5;
-  const spd   = 0.35 + Math.random() * 0.55;
-  words.push(new Word(
-    txt,
-    cx + Math.cos(angle) * r0,
-    cy + Math.sin(angle) * r0,
-    pal[Math.floor(Math.random() * pal.length)],
-    Math.cos(angle) * spd,
-    Math.sin(angle) * spd
-  ));
-  if (words.length > 28) words.shift();
+function maybeWord(t,dream,pal){
+  if(t-lastWord<2600)return;lastWord=t;
+  const txt=dream.words[Math.floor(Math.random()*dream.words.length)];
+  const angle=Math.random()*Math.PI*2;
+  const r0=Math.random()*30+5;
+  const spd=0.35+Math.random()*0.55;
+  words.push(new Word(txt, cx+Math.cos(angle)*r0, cy+Math.sin(angle)*r0,
+    pal[Math.floor(Math.random()*pal.length)],
+    Math.cos(angle)*spd, Math.sin(angle)*spd));
+  if(words.length>22)words.shift();
 }
 
 // ─── GEOMETRIC SKELETON ───────────────────────────────────────────────────────
-function drawSkeleton(t, dream, sp, pal, alpha) {
+function drawSkeleton(t,dream,sp,pal,alpha){
   const m=dream.shapes[Math.floor((n2(t*.0000175,dIdx*11.3+3.7)*.5+.5)*dream.shapes.length)%dream.shapes.length];
-  const c=pal[0], a=alpha*.10;
-  ctx.save(); ctx.globalCompositeOperation='screen';
-  if(m===0){
-    for(let i=0;i<3;i++){const ang=sp._a[i]*6.28+t*.00012*(i%2?1:-1);ctx.beginPath();ctx.arc(cx+Math.cos(ang)*W*sp._r[i],cy+Math.sin(ang)*H*sp._r[i]*.7,65+sp._d[i]*130,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}
-  } else if(m===1){
-    for(let i=0;i<8;i++){const ph=(t*.0006+sp._off+i/8)%1;const r=ph*Math.min(W,H)*.65;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)})`;ctx.lineWidth=.8;ctx.stroke();}
-  } else if(m===2){
-    ctx.beginPath();for(let x=0;x<W;x+=2){const y=cy+Math.sin(x*.008+t*.0005+sp._off*6.28)*H*.16+Math.sin(x*.004+t*.0003)*H*.09;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();
-  } else if(m===3){
-    const p=Math.round(5+sp._d[0]*3);for(let i=0;i<p;i++){const pa=(i/p)*Math.PI*2+t*.0003+sp._off*6.28;const tip=Math.min(W,H)*.36,ctrl=Math.min(W,H)*.2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(cx+Math.cos(pa+.35)*ctrl,cy+Math.sin(pa+.35)*ctrl,cx+Math.cos(pa)*tip,cy+Math.sin(pa)*tip);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
-  } else if(m===4){
-    const n=Math.round(4+sp._d[0]*4);for(let r=1;r<=3;r++){const rd=r*Math.min(W,H)*.13;ctx.beginPath();for(let i=0;i<=n;i++){const ang=(i/n)*Math.PI*2+t*.0004*r*(r%2?1:-1)+sp._off*6.28;i===0?ctx.moveTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd):ctx.lineTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
-  } else if(m===5){
-    ctx.beginPath();for(let i=0;i<400;i++){const ang=(i/400)*Math.PI*6+t*.0004+sp._off*6.28;const r=i/400*Math.min(W,H)*.44;i===0?ctx.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r):ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();
-  } else if(m===6){
-    // Ascend pillars — solid rgba strokes (no createLinearGradient)
-    for(let i=0;i<5;i++){
-      const xp=cx+sp._a[i]*W*.3;
-      const ph=(t*.0008+sp._off+i*.2)%1;
-      const yt=H*(1-ph), len=H*.4;
-      ctx.beginPath(); ctx.moveTo(xp,yt); ctx.lineTo(xp,yt+len);
-      ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(0.6-ph*.4)})`;
-      ctx.lineWidth=1+sp._d[i]; ctx.stroke();
-    }
-  } else {
-    // Expand rays — solid rgba strokes (no createLinearGradient)
-    const n=16;
-    for(let i=0;i<n;i++){
-      const ang=(i/n)*Math.PI*2+t*.0003+sp._off*6.28;
-      const ph=(t*.0007+i/n)%1;
-      const r0=ph*Math.min(W,H)*.55, r1=r0+Math.min(W,H)*.14;
-      ctx.beginPath();
-      ctx.moveTo(cx+Math.cos(ang)*r0, cy+Math.sin(ang)*r0);
-      ctx.lineTo(cx+Math.cos(ang)*r1, cy+Math.sin(ang)*r1);
-      ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)*.7})`;
-      ctx.lineWidth=1.5; ctx.stroke();
-    }
-  }
+  const c=pal[0],a=alpha*.10;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  if(m===0){for(let i=0;i<3;i++){const ang=sp._a[i]*6.28+t*.00012*(i%2?1:-1);ctx.beginPath();ctx.arc(cx+Math.cos(ang)*W*sp._r[i],cy+Math.sin(ang)*H*sp._r[i]*.7,65+sp._d[i]*130,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}}
+  else if(m===1){for(let i=0;i<8;i++){const ph=(t*.0006+sp._off+i/8)%1;const r=ph*Math.min(W,H)*.65;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)})`;ctx.lineWidth=.8;ctx.stroke();}}
+  else if(m===2){ctx.beginPath();for(let x=0;x<W;x+=2){const y=cy+Math.sin(x*.008+t*.0005+sp._off*6.28)*H*.16+Math.sin(x*.004+t*.0003)*H*.09;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}
+  else if(m===3){const p=Math.round(5+sp._d[0]*3);for(let i=0;i<p;i++){const pa=(i/p)*Math.PI*2+t*.0003+sp._off*6.28;const tip=Math.min(W,H)*.36,ctrl=Math.min(W,H)*.2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(cx+Math.cos(pa+.35)*ctrl,cy+Math.sin(pa+.35)*ctrl,cx+Math.cos(pa)*tip,cy+Math.sin(pa)*tip);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}}
+  else if(m===4){const n=Math.round(4+sp._d[0]*4);for(let r=1;r<=3;r++){const rd=r*Math.min(W,H)*.13;ctx.beginPath();for(let i=0;i<=n;i++){const ang=(i/n)*Math.PI*2+t*.0004*r*(r%2?1:-1)+sp._off*6.28;i===0?ctx.moveTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd):ctx.lineTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}}
+  else if(m===5){ctx.beginPath();for(let i=0;i<400;i++){const ang=(i/400)*Math.PI*6+t*.0004+sp._off*6.28;const r=i/400*Math.min(W,H)*.44;i===0?ctx.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r):ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
+  else if(m===6){for(let i=0;i<5;i++){const xp=cx+sp._a[i]*W*.3;const ph=(t*.0008+sp._off+i*.2)%1;const yt=H*(1-ph),len=H*.4;ctx.beginPath();ctx.moveTo(xp,yt);ctx.lineTo(xp,yt+len);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(0.6-ph*.4)})`;ctx.lineWidth=1+sp._d[i];ctx.stroke();}}
+  else{const n=16;for(let i=0;i<n;i++){const ang=(i/n)*Math.PI*2+t*.0003+sp._off*6.28;const ph=(t*.0007+i/n)%1;const r0=ph*Math.min(W,H)*.55,r1=r0+Math.min(W,H)*.14;ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*r0,cy+Math.sin(ang)*r0);ctx.lineTo(cx+Math.cos(ang)*r1,cy+Math.sin(ang)*r1);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)*.7})`;ctx.lineWidth=1.5;ctx.stroke();}}
   ctx.restore();
 }
 
-// ─── AURORA — cached, redrawn every 4 frames ──────────────────────────────────
-let auroraFrame = 0;
-function updateAuroraCache(t, pal, p) {
-  auroraCanvas.width = W; auroraCanvas.height = H;
-  auroraCtx.clearRect(0, 0, W, H);
+// ─── AURORA — cached offscreen, update every 4 frames ─────────────────────────
+let auroraAge = 0;
+function updateAurora(t,pal,p){
+  auroraCanvas.width=W; auroraCanvas.height=H;
+  auroraCtx.clearRect(0,0,W,H);
   for(let i=0;i<3;i++){
     const ax=n2(i*3.7,t*p.sp*.000012+i*1.3)*.5+.5;
     const ay=n2(i*2.1+.5,t*p.sp*.000009+i*2.1)*.5+.5;
@@ -405,84 +408,89 @@ function updateAuroraCache(t, pal, p) {
   }
 }
 
-// ─── VIGNETTE — see declaration at top of script ──────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+activateDream(0,0);
+ctx.fillStyle='#000004'; ctx.fillRect(0,0,W,H);
 
 // ─── ADAPTIVE PERFORMANCE ─────────────────────────────────────────────────────
-// Smoothed frame time → scale down active particle count when lagging
-let avgFrameTime = 16, lastTs = 0;
-
-// ─── INIT & RENDER ────────────────────────────────────────────────────────────
-activateDream(0, 0);
-ctx.fillStyle='#000004'; ctx.fillRect(0,0,W,H);
-let barFrame = 0;
+let avgFT=16.7, lastTs=0, barFrame=0;
 
 function render(ts) {
-  // Adaptive performance
-  if (lastTs > 0) avgFrameTime = avgFrameTime * 0.94 + (ts - lastTs) * 0.06;
+  // Track smoothed frame time
+  if (lastTs>0) avgFT = avgFT*0.94 + (ts-lastTs)*0.06;
   lastTs = ts;
-  const perfScale = Math.min(1, 30 / avgFrameTime); // full at ≥30fps, scales down below
+  // perfScale: 1.0 at 50fps+, degrades below (more headroom before it kicks in)
+  const perfScale = Math.min(1, 20/avgFT);
+  const useShadow = perfScale > 0.72;
+  const drawSkel  = perfScale > 0.50;
 
+  // ── Dream transitions ──
   const elapsed = ts - dStart;
-
-  // Dream transitions
   if (!nextIdx && elapsed > DREAM_DUR - TRANS_DUR) {
-    nextIdx = (dIdx+1) % DREAMS.length;
+    nextIdx = (dIdx+1)%DREAMS.length;
     nxtSP   = buildSP((Math.random()*0x7fffffff)|0);
     transT  = ts;
-    const nd = DREAMS[nextIdx];
-    setTimeout(()=>{ document.getElementById('era').textContent=nd.era; document.getElementById('sub').textContent=nd.sub; }, TRANS_DUR*.5);
+    const nd=DREAMS[nextIdx];
+    setTimeout(()=>{document.getElementById('era').textContent=nd.era;document.getElementById('sub').textContent=nd.sub;},TRANS_DUR*.5);
   }
-  let base, pal, skelDream, tp=0;
-  if (nextIdx !== null) {
-    tp   = Math.min(1, (ts - transT) / TRANS_DUR);
-    const e = tp<.5 ? 2*tp*tp : -1+(4-2*tp)*tp;
-    base = lerpD(DREAMS[dIdx], DREAMS[nextIdx], e);
-    pal  = blendPal(DREAMS[dIdx].pal, DREAMS[nextIdx].pal, e);
-    skelDream = e < .5 ? DREAMS[dIdx] : DREAMS[nextIdx];
-    if (tp >= 1) activateDream(nextIdx, ts);
+  let base,pal,skelDream,tp=0;
+  if (nextIdx!==null) {
+    tp = Math.min(1,(ts-transT)/TRANS_DUR);
+    const e=tp<.5?2*tp*tp:-1+(4-2*tp)*tp;
+    base=lerpD(DREAMS[dIdx],DREAMS[nextIdx],e);
+    pal=blendPal(DREAMS[dIdx].pal,DREAMS[nextIdx].pal,e);
+    skelDream=e<.5?DREAMS[dIdx]:DREAMS[nextIdx];
+    if(tp>=1)activateDream(nextIdx,ts);
   } else {
-    base = DREAMS[dIdx]; pal = DREAMS[dIdx].pal; skelDream = DREAMS[dIdx];
+    base=DREAMS[dIdx]; pal=DREAMS[dIdx].pal; skelDream=DREAMS[dIdx];
   }
 
-  const p = getDriftedParams(base, ts);
-  const shapeF = makeShapeF(skelDream, curSP, nxtSP, tp);
+  const p = getDriftedParams(base,ts);
+
+  // Precompute shape function (indices computed once, not per particle)
+  const shapeF = makeShapeF(skelDream, tp, ts);
+
+  // ── Update vector field (adaptive interval) ──
+  const vfInterval = vfDirty ? 0 : (perfScale>0.8 ? 3 : perfScale>0.5 ? 5 : 8);
+  if (++vfAge >= vfInterval) { updateVF(ts,p,shapeF); vfAge=0; vfDirty=false; }
 
   // 1. Trail clear
-  ctx.fillStyle=`rgba(0,0,4,${p.ta})`;
-  ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=`rgba(0,0,4,${p.ta})`; ctx.fillRect(0,0,W,H);
 
-  // 2. Aurora — update cache every 4 frames
-  if (++auroraFrame % 4 === 0) updateAuroraCache(ts, pal, p);
+  // 2. Aurora (update every 4 frames)
+  if (++auroraAge%4===0) updateAurora(ts,pal,p);
   ctx.globalCompositeOperation='screen';
-  ctx.drawImage(auroraCanvas, 0, 0);
+  ctx.drawImage(auroraCanvas,0,0);
   ctx.globalCompositeOperation='source-over';
 
-  // 3. Particles — lineCap set once, adaptive count
+  // 3. Particles (lineCap set once, adaptive count, per-particle shadow flag)
   ctx.globalCompositeOperation='screen';
-  ctx.lineCap = 'round';
+  ctx.lineCap='round';
   const active = Math.floor(parts.length * p.de * perfScale);
-  for (let i=0; i<active; i++) {
-    parts[i].update(p, shapeF, ts);
-    parts[i].draw(pal, p, ts);
+  for(let i=0;i<active;i++){
+    parts[i].update(ts);
+    parts[i].draw(pal,ts,useShadow);
   }
   ctx.globalCompositeOperation='source-over';
 
-  // 4. Skeleton
-  const skelSP = tp > .5 && nxtSP ? nxtSP : curSP;
-  drawSkeleton(ts, skelDream, skelSP, pal, tp > .5 ? 1-tp+.5 : 1);
+  // 4. Skeleton (skipped when lagging)
+  if (drawSkel) {
+    const skelSP = tp>.5 && nxtSP ? nxtSP : curSP;
+    drawSkeleton(ts,skelDream,skelSP,pal,tp>.5?1-tp+.5:1);
+  }
 
   // 5. Words
-  maybeWord(ts, skelDream, pal);
+  maybeWord(ts,skelDream,pal);
   ctx.globalCompositeOperation='screen';
-  words = words.filter(w => { const ok=w.tick(ts); if(ok) w.draw(); return ok; });
+  words = words.filter(w=>{const ok=w.tick(ts);if(ok)w.draw(useShadow);return ok;});
   ctx.globalCompositeOperation='source-over';
 
-  // 6. Vignette — pre-rendered, fast drawImage
-  ctx.drawImage(vigCanvas, 0, 0);
+  // 6. Vignette (pre-rendered)
+  ctx.drawImage(vigCanvas,0,0);
 
-  // 7. Progress bar — DOM write every 6 frames
-  if (++barFrame % 6 === 0)
-    document.getElementById('bar').style.width = Math.min(100, (elapsed/DREAM_DUR)*100) + '%';
+  // 7. Progress bar (DOM write every 6 frames)
+  if(++barFrame%6===0)
+    document.getElementById('bar').style.width=Math.min(100,(elapsed/DREAM_DUR)*100)+'%';
 
   requestAnimationFrame(render);
 }
