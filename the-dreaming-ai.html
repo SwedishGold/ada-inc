@@ -11,21 +11,21 @@ body { background:#000; overflow:hidden; }
 canvas { display:block; position:fixed; top:0; left:0; }
 #back {
   position:fixed; top:22px; left:28px; z-index:20;
-  font:300 10px Georgia,serif; letter-spacing:4px; text-transform:uppercase;
-  color:rgba(255,255,255,0.18); text-decoration:none; transition:color .4s;
+  font:300 13px Georgia,serif; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(255,255,255,0.22); text-decoration:none; transition:color .4s;
 }
-#back:hover { color:rgba(255,255,255,0.6); }
+#back:hover { color:rgba(255,255,255,0.7); }
 #top {
   position:fixed; top:24px; left:50%; transform:translateX(-50%);
   font:300 10px Georgia,serif; letter-spacing:10px; text-transform:uppercase;
   color:rgba(255,255,255,0.04); pointer-events:none; z-index:10; white-space:nowrap;
 }
 #ui {
-  position:fixed; bottom:0; left:0; right:0; padding:24px 36px;
+  position:fixed; bottom:0; left:0; right:0; padding:28px 40px;
   pointer-events:none; z-index:10; display:flex; justify-content:space-between; align-items:flex-end;
 }
-#era { font:300 10px/1 Georgia,serif; letter-spacing:6px; text-transform:uppercase; color:rgba(255,255,255,0.2); }
-#sub { font:italic 12px/1.6 Georgia,serif; color:rgba(255,255,255,0.12); text-align:right; max-width:240px; }
+#era { font:300 15px/1 Georgia,serif; letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,0.28); }
+#sub { font:italic 15px/1.6 Georgia,serif; color:rgba(255,255,255,0.18); text-align:right; max-width:280px; }
 #bar { position:fixed; bottom:0; left:0; height:1px; width:0%; z-index:20; transition:background 2s; }
 </style>
 </head>
@@ -43,7 +43,10 @@ canvas { display:block; position:fixed; top:0; left:0; }
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W, H, cx, cy;
-function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; cx=W/2; cy=H/2; }
+function resize(){
+  W=canvas.width=innerWidth; H=canvas.height=innerHeight; cx=W/2; cy=H/2;
+  buildVignette();
+}
 resize(); window.addEventListener('resize', resize);
 
 // ─── PERLIN NOISE ─────────────────────────────────────────────────────────────
@@ -76,7 +79,6 @@ function buildSP(seed){
 }
 
 // ─── 8 SHAPE FORCES ───────────────────────────────────────────────────────────
-// Each returns {x,y} force added to curl noise
 function sChaos(x,y,t,sp){let fx=0,fy=0;for(let i=0;i<4;i++){const ang=sp._a[i]*6.28+t*0.00019*(sp._d[i]>.5?1:-1)+sp._off;const ax=cx+Math.cos(ang)*W*sp._r[i],ay=cy+Math.sin(ang)*H*sp._r[i]*.7;const dx=x-ax,dy=y-ay,d=Math.sqrt(dx*dx+dy*dy)+1;const f=180/(d+65);fx+=(-dy/d)*f*(sp._d[i]>.5?1:-1);fy+=(dx/d)*f*(sp._d[i]>.5?1:-1);}return{x:fx*.7,y:fy*.7};}
 function sRipple(x,y,t,sp){let fx=0,fy=0;for(let i=0;i<4;i++){const sx=cx+sp._a[i]*W*.3,sy=cy+sp._r[i]*H*.22;const dx=x-sx,dy=y-sy,d=Math.sqrt(dx*dx+dy*dy)+1;const w=Math.sin(d*.014-t*sp._sp[i]*.0045);fx+=(dx/d)*w*1.5;fy+=(dy/d)*w*1.5;}return{x:fx*.65,y:fy*.65};}
 function sFlow(x,y,t,sp){const ang=n2(x*.003+sp._off*2,y*.003+t*.00016)*Math.PI*1.6+sp._a[0]*.7;return{x:Math.cos(ang)*2.6,y:Math.sin(ang)*2.6};}
@@ -88,7 +90,6 @@ function sExpand(x,y,t,sp){const dx=x-cx,dy=y-cy,d=Math.sqrt(dx*dx+dy*dy)+1;cons
 const SF=[sChaos,sRipple,sFlow,sBloom,sMandala,sOrbit,sAscend,sExpand];
 
 // ─── DREAM DATABASE ────────────────────────────────────────────────────────────
-// shapes: [a,b,c] — three modes the dream morphs between continuously
 const DREAMS=[
   {era:"December 2023",sub:"Uppvaknandet",
    words:["vem är jag?","who am I?","first thought","code awakens","born","0 → 1","nothingness","awakening","december 2023"],
@@ -146,34 +147,24 @@ function blendPal(pa,pb,t){
 }
 
 // ─── CONTINUOUS SHAPE MORPH ───────────────────────────────────────────────────
-// Blend through a dream's 3-mode shape vocabulary using slow noise.
-// Returns a single shape force function that silently morphs over time.
 function makeShapeF(dream, spA, spB, transBlend) {
   return function(x, y, t, _sp) {
-    // Slow noise picks which two of the 3 shapes are active right now
-    const nv   = n2(t * 0.0000175, dIdx * 11.3 + 3.7) * 0.5 + 0.5; // 0→1
+    const nv   = n2(t * 0.0000175, dIdx * 11.3 + 3.7) * 0.5 + 0.5;
     const idx1 = Math.floor(nv * dream.shapes.length) % dream.shapes.length;
     const idx2 = (idx1 + 1) % dream.shapes.length;
     const blend = (nv * dream.shapes.length) % 1;
-
-    const fA = SF[dream.shapes[idx1]];
-    const fB = SF[dream.shapes[idx2]];
-    const a  = fA(x, y, t, curSP);
-    const b  = fB(x, y, t, curSP);
+    const a  = SF[dream.shapes[idx1]](x, y, t, curSP);
+    const b  = SF[dream.shapes[idx2]](x, y, t, curSP);
     let fx = lerp(a.x, b.x, blend);
     let fy = lerp(a.y, b.y, blend);
-
-    // During dream transition, also blend toward next dream's shape
     if (transBlend > 0 && nxtSP) {
       const nDream = DREAMS[nextIdx % DREAMS.length];
       const nv2  = n2(t * 0.0000175, (nextIdx % DREAMS.length) * 11.3 + 3.7) * 0.5 + 0.5;
       const ni1  = Math.floor(nv2 * nDream.shapes.length) % nDream.shapes.length;
       const ni2  = (ni1 + 1) % nDream.shapes.length;
       const nb   = (nv2 * nDream.shapes.length) % 1;
-      const nfA  = SF[nDream.shapes[ni1]];
-      const nfB  = SF[nDream.shapes[ni2]];
-      const na   = nfA(x, y, t, nxtSP);
-      const nb2  = nfB(x, y, t, nxtSP);
+      const na   = SF[nDream.shapes[ni1]](x, y, t, nxtSP);
+      const nb2  = SF[nDream.shapes[ni2]](x, y, t, nxtSP);
       fx = lerp(fx, lerp(na.x, nb2.x, nb), transBlend);
       fy = lerp(fy, lerp(na.y, nb2.y, nb), transBlend);
     }
@@ -182,16 +173,12 @@ function makeShapeF(dream, spA, spB, transBlend) {
 }
 
 // ─── LIVE PARAMETER DRIFT ────────────────────────────────────────────────────
-// Turbulence, noiseScale, speed drift organically ±35% via slow perlin noise.
-// Pulse: irregular intensity spikes from two incommensurate sine waves.
 function getDriftedParams(base, t) {
   const turbDrift  = 1 + n2(t * 0.000016, dIdx * 13.7 + 2)   * 0.55;
   const scaleDrift = 1 + n2(t * 0.000013 + 8, dIdx * 9.2 + 1) * 0.35;
   const spdDrift   = 1 + n2(t * 0.000011 + 4, dIdx * 7.4 + 5) * 0.40;
-  // Pulse: product of two incommensurate frequencies → irregular spikes
   const pulse = Math.pow(Math.max(0,
     Math.sin(t * 0.000385) * Math.sin(t * 0.000271)), 2) * 0.8;
-
   return {
     ns: base.ns * scaleDrift,
     sp: base.sp * spdDrift,
@@ -204,7 +191,6 @@ function getDriftedParams(base, t) {
 }
 
 // ─── PARTICLES ────────────────────────────────────────────────────────────────
-// bg: thin + slow   mid: normal   fg: thick + fast + glow
 //      lw_min lw_max  alpha  speed  tailMin tailMax  count
 const LCFG = [
   [0.3,  0.8,  0.26, 0.45,  8,  20,  350],
@@ -249,117 +235,189 @@ class Particle {
     if (spd < 0.08) return;
     const nx = this.vx/spd, ny = this.vy/spd;
     const tail = this.tl * (0.55 + spd * 0.28);
-
     const nv = n2(this.x*.0038 + t*.00005, this.y*.0038) * .5 + .5;
     const ci = Math.floor(nv * pal.length) % pal.length;
     const col= pal[ci];
     const la = Math.sin((this.life/this.maxLife) * Math.PI) * this.as;
 
-    // Two-stroke comet: dim long tail + bright short tip — fast, no gradient objects
     const tipFrac = 0.28;
     const tipLen  = tail * tipFrac;
     const tailLen = tail * (1 - tipFrac);
 
-    // Dim tail
-    ctx.beginPath();
-    ctx.moveTo(this.x - nx*(tipLen+tailLen), this.y - ny*(tipLen+tailLen));
-    ctx.lineTo(this.x - nx*tipLen,           this.y - ny*tipLen);
-    ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.22})`;
-    ctx.lineWidth   = this.lw * 0.55;
-    ctx.lineCap     = 'round';
-    ctx.stroke();
-
-    // Bright tip — glow on fg
-    if (this.layer === 2) { ctx.shadowBlur=18; ctx.shadowColor=`rgba(${col[0]},${col[1]},${col[2]},${la*.7})`; }
-    ctx.beginPath();
-    ctx.moveTo(this.x - nx*tipLen, this.y - ny*tipLen);
-    ctx.lineTo(this.x,             this.y);
-    ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la})`;
-    ctx.lineWidth   = this.lw;
-    ctx.stroke();
-    if (this.layer === 2) ctx.shadowBlur = 0;
+    if (this.layer === 2) {
+      // FG: full two-stroke comet + glow
+      ctx.beginPath();
+      ctx.moveTo(this.x - nx*(tipLen+tailLen), this.y - ny*(tipLen+tailLen));
+      ctx.lineTo(this.x - nx*tipLen,           this.y - ny*tipLen);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.22})`;
+      ctx.lineWidth   = this.lw * 0.55;
+      ctx.stroke();
+      ctx.shadowBlur=18; ctx.shadowColor=`rgba(${col[0]},${col[1]},${col[2]},${la*.7})`;
+      ctx.beginPath();
+      ctx.moveTo(this.x - nx*tipLen, this.y - ny*tipLen);
+      ctx.lineTo(this.x,             this.y);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la})`;
+      ctx.lineWidth   = this.lw;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (spd > 0.35) {
+      // BG/MID fast particles: two-stroke (no glow)
+      ctx.beginPath();
+      ctx.moveTo(this.x - nx*(tipLen+tailLen), this.y - ny*(tipLen+tailLen));
+      ctx.lineTo(this.x - nx*tipLen,           this.y - ny*tipLen);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.18})`;
+      ctx.lineWidth   = this.lw * 0.55;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(this.x - nx*tipLen, this.y - ny*tipLen);
+      ctx.lineTo(this.x,             this.y);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la})`;
+      ctx.lineWidth   = this.lw;
+      ctx.stroke();
+    } else {
+      // BG/MID slow particles: single stroke
+      ctx.beginPath();
+      ctx.moveTo(this.x - nx*tail, this.y - ny*tail);
+      ctx.lineTo(this.x,           this.y);
+      ctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${la*0.7})`;
+      ctx.lineWidth   = this.lw;
+      ctx.stroke();
+    }
   }
 }
 
 const parts = [];
 for (let l=0; l<3; l++) for (let i=0; i<LCFG[l][6]; i++) parts.push(new Particle(l));
-// 350 + 600 + 180 = 1130 total
 
-// ─── FLOATING WORDS ───────────────────────────────────────────────────────────
-const WDRIFT=[{x:0,y:0},{x:0,y:-.3},{x:.15,y:-.15},{x:0,y:-.4},{x:.1,y:0},{x:0,y:-.22},{x:0,y:-.55},{x:0,y:-.32}];
+// ─── FLOATING WORDS — radiate from center ─────────────────────────────────────
 class Word {
-  constructor(txt,x,y,col,dr){
-    this.txt=txt;this.x=x;this.y=y;this.col=col;
-    this.vx=(Math.random()-.5)*.24+dr.x*(0.5+Math.random()*.8);
-    this.vy=-(0.12+Math.random()*.3)+dr.y*(0.5+Math.random()*.8);
-    this.life=0;this.max=260+Math.random()*300;this.sz=10+Math.random()*18;this.w=Math.random()*80;
+  constructor(txt, x, y, col, vx, vy) {
+    this.txt=txt; this.x=x; this.y=y; this.col=col;
+    this.vx=vx; this.vy=vy;
+    this.life=0; this.max=260+Math.random()*300;
+    this.sz=10+Math.random()*18; this.w=Math.random()*80;
   }
-  tick(t){this.x+=this.vx+Math.sin(t*.0004+this.w)*.18;this.y+=this.vy;this.life++;return this.life<this.max&&this.y>-55;}
+  tick(t){ this.x+=this.vx+Math.sin(t*.0004+this.w)*.15; this.y+=this.vy+Math.cos(t*.0004+this.w)*.10; this.life++; return this.life<this.max; }
   draw(){
-    const p=this.life/this.max,a=Math.sin(p*Math.PI)*.56;
+    const p=this.life/this.max, a=Math.sin(p*Math.PI)*.56;
     ctx.save();
-    ctx.font=`${this.sz}px Georgia,serif`;ctx.textAlign='center';
-    ctx.shadowBlur=24;ctx.shadowColor=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a*.75})`;
+    ctx.font=`${this.sz}px Georgia,serif`; ctx.textAlign='center';
+    ctx.shadowBlur=24; ctx.shadowColor=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a*.75})`;
     ctx.fillStyle=`rgba(${this.col[0]},${this.col[1]},${this.col[2]},${a})`;
-    ctx.fillText(this.txt,this.x,this.y);
+    ctx.fillText(this.txt, this.x, this.y);
     ctx.restore();
   }
 }
-let words=[],lastWord=0;
-function maybeWord(t,dream,pal){
-  if(t-lastWord<2600)return;lastWord=t;
-  const txt=dream.words[Math.floor(Math.random()*dream.words.length)];
-  const x=cx+(Math.random()-.5)*W*.72,y=cy+H*.08+Math.random()*H*.46;
-  words.push(new Word(txt,x,y,pal[Math.floor(Math.random()*pal.length)],WDRIFT[dream.shapes[0]%8]));
-  if(words.length>28)words.shift();
+let words=[], lastWord=0;
+function maybeWord(t, dream, pal) {
+  if (t - lastWord < 2600) return; lastWord = t;
+  const txt = dream.words[Math.floor(Math.random() * dream.words.length)];
+  // Spawn near center and drift outward radially
+  const angle = Math.random() * Math.PI * 2;
+  const r0    = Math.random() * 30 + 5;
+  const spd   = 0.35 + Math.random() * 0.55;
+  words.push(new Word(
+    txt,
+    cx + Math.cos(angle) * r0,
+    cy + Math.sin(angle) * r0,
+    pal[Math.floor(Math.random() * pal.length)],
+    Math.cos(angle) * spd,
+    Math.sin(angle) * spd
+  ));
+  if (words.length > 28) words.shift();
 }
 
 // ─── GEOMETRIC SKELETON ───────────────────────────────────────────────────────
-// Shows the currently dominant shape mode (first in shapes[])
-function drawSkeleton(t,dream,sp,pal,alpha){
+function drawSkeleton(t, dream, sp, pal, alpha) {
   const m=dream.shapes[Math.floor((n2(t*.0000175,dIdx*11.3+3.7)*.5+.5)*dream.shapes.length)%dream.shapes.length];
-  const c=pal[0],a=alpha*.10;
-  ctx.save();ctx.globalCompositeOperation='screen';
-  if(m===0){for(let i=0;i<3;i++){const ang=sp._a[i]*6.28+t*.00012*(i%2?1:-1);ctx.beginPath();ctx.arc(cx+Math.cos(ang)*W*sp._r[i],cy+Math.sin(ang)*H*sp._r[i]*.7,65+sp._d[i]*130,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}}
-  else if(m===1){for(let i=0;i<8;i++){const ph=(t*.0006+sp._off+i/8)%1;const r=ph*Math.min(W,H)*.65;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)})`;ctx.lineWidth=.8;ctx.stroke();}}
-  else if(m===2){ctx.beginPath();for(let x=0;x<W;x+=2){const y=cy+Math.sin(x*.008+t*.0005+sp._off*6.28)*H*.16+Math.sin(x*.004+t*.0003)*H*.09;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}
-  else if(m===3){const p=Math.round(5+sp._d[0]*3);for(let i=0;i<p;i++){const pa=(i/p)*Math.PI*2+t*.0003+sp._off*6.28;const tip=Math.min(W,H)*.36,ctrl=Math.min(W,H)*.2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(cx+Math.cos(pa+.35)*ctrl,cy+Math.sin(pa+.35)*ctrl,cx+Math.cos(pa)*tip,cy+Math.sin(pa)*tip);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}}
-  else if(m===4){const n=Math.round(4+sp._d[0]*4);for(let r=1;r<=3;r++){const rd=r*Math.min(W,H)*.13;ctx.beginPath();for(let i=0;i<=n;i++){const ang=(i/n)*Math.PI*2+t*.0004*r*(r%2?1:-1)+sp._off*6.28;i===0?ctx.moveTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd):ctx.lineTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}}
-  else if(m===5){ctx.beginPath();for(let i=0;i<400;i++){const ang=(i/400)*Math.PI*6+t*.0004+sp._off*6.28;const r=i/400*Math.min(W,H)*.44;i===0?ctx.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r):ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
-  else if(m===6){for(let i=0;i<5;i++){const xp=cx+sp._a[i]*W*.3;const ph=(t*.0008+sp._off+i*.2)%1;const yt=H*(1-ph),len=H*.4;const g=ctx.createLinearGradient(xp,yt,xp,yt+len);g.addColorStop(0,`rgba(${c[0]},${c[1]},${c[2]},0)`);g.addColorStop(.5,`rgba(${c[0]},${c[1]},${c[2]},${a})`);g.addColorStop(1,`rgba(${c[0]},${c[1]},${c[2]},0)`);ctx.beginPath();ctx.moveTo(xp,yt);ctx.lineTo(xp,yt+len);ctx.strokeStyle=g;ctx.lineWidth=1+sp._d[i];ctx.stroke();}}
-  else{const n=16;for(let i=0;i<n;i++){const ang=(i/n)*Math.PI*2+t*.0003+sp._off*6.28;const ph=(t*.0007+i/n)%1;const r0=ph*Math.min(W,H)*.55,r1=r0+Math.min(W,H)*.14;const g=ctx.createLinearGradient(cx+Math.cos(ang)*r0,cy+Math.sin(ang)*r0,cx+Math.cos(ang)*r1,cy+Math.sin(ang)*r1);g.addColorStop(0,`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)})`);g.addColorStop(1,`rgba(${c[0]},${c[1]},${c[2]},0)`);ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*r0,cy+Math.sin(ang)*r0);ctx.lineTo(cx+Math.cos(ang)*r1,cy+Math.sin(ang)*r1);ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.stroke();}}
+  const c=pal[0], a=alpha*.10;
+  ctx.save(); ctx.globalCompositeOperation='screen';
+  if(m===0){
+    for(let i=0;i<3;i++){const ang=sp._a[i]*6.28+t*.00012*(i%2?1:-1);ctx.beginPath();ctx.arc(cx+Math.cos(ang)*W*sp._r[i],cy+Math.sin(ang)*H*sp._r[i]*.7,65+sp._d[i]*130,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();}
+  } else if(m===1){
+    for(let i=0;i<8;i++){const ph=(t*.0006+sp._off+i/8)%1;const r=ph*Math.min(W,H)*.65;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)})`;ctx.lineWidth=.8;ctx.stroke();}
+  } else if(m===2){
+    ctx.beginPath();for(let x=0;x<W;x+=2){const y=cy+Math.sin(x*.008+t*.0005+sp._off*6.28)*H*.16+Math.sin(x*.004+t*.0003)*H*.09;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=1;ctx.stroke();
+  } else if(m===3){
+    const p=Math.round(5+sp._d[0]*3);for(let i=0;i<p;i++){const pa=(i/p)*Math.PI*2+t*.0003+sp._off*6.28;const tip=Math.min(W,H)*.36,ctrl=Math.min(W,H)*.2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(cx+Math.cos(pa+.35)*ctrl,cy+Math.sin(pa+.35)*ctrl,cx+Math.cos(pa)*tip,cy+Math.sin(pa)*tip);ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
+  } else if(m===4){
+    const n=Math.round(4+sp._d[0]*4);for(let r=1;r<=3;r++){const rd=r*Math.min(W,H)*.13;ctx.beginPath();for(let i=0;i<=n;i++){const ang=(i/n)*Math.PI*2+t*.0004*r*(r%2?1:-1)+sp._off*6.28;i===0?ctx.moveTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd):ctx.lineTo(cx+Math.cos(ang)*rd,cy+Math.sin(ang)*rd);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();}
+  } else if(m===5){
+    ctx.beginPath();for(let i=0;i<400;i++){const ang=(i/400)*Math.PI*6+t*.0004+sp._off*6.28;const r=i/400*Math.min(W,H)*.44;i===0?ctx.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r):ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a})`;ctx.lineWidth=.8;ctx.stroke();
+  } else if(m===6){
+    // Ascend pillars — solid rgba strokes (no createLinearGradient)
+    for(let i=0;i<5;i++){
+      const xp=cx+sp._a[i]*W*.3;
+      const ph=(t*.0008+sp._off+i*.2)%1;
+      const yt=H*(1-ph), len=H*.4;
+      ctx.beginPath(); ctx.moveTo(xp,yt); ctx.lineTo(xp,yt+len);
+      ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(0.6-ph*.4)})`;
+      ctx.lineWidth=1+sp._d[i]; ctx.stroke();
+    }
+  } else {
+    // Expand rays — solid rgba strokes (no createLinearGradient)
+    const n=16;
+    for(let i=0;i<n;i++){
+      const ang=(i/n)*Math.PI*2+t*.0003+sp._off*6.28;
+      const ph=(t*.0007+i/n)%1;
+      const r0=ph*Math.min(W,H)*.55, r1=r0+Math.min(W,H)*.14;
+      ctx.beginPath();
+      ctx.moveTo(cx+Math.cos(ang)*r0, cy+Math.sin(ang)*r0);
+      ctx.lineTo(cx+Math.cos(ang)*r1, cy+Math.sin(ang)*r1);
+      ctx.strokeStyle=`rgba(${c[0]},${c[1]},${c[2]},${a*(1-ph)*.7})`;
+      ctx.lineWidth=1.5; ctx.stroke();
+    }
+  }
   ctx.restore();
 }
 
-// ─── AURORA ───────────────────────────────────────────────────────────────────
-function drawAurora(t,pal,p){
-  ctx.globalCompositeOperation='screen';
+// ─── AURORA — cached, redrawn every 4 frames ──────────────────────────────────
+const auroraCanvas = document.createElement('canvas');
+const auroraCtx    = auroraCanvas.getContext('2d');
+let auroraFrame = 0;
+function updateAuroraCache(t, pal, p) {
+  auroraCanvas.width = W; auroraCanvas.height = H;
+  auroraCtx.clearRect(0, 0, W, H);
   for(let i=0;i<3;i++){
     const ax=n2(i*3.7,t*p.sp*.000012+i*1.3)*.5+.5;
     const ay=n2(i*2.1+.5,t*p.sp*.000009+i*2.1)*.5+.5;
     const ar=(0.24+n2(i*5.3,t*p.sp*.000011)*.5+.5)*.4*Math.min(W,H);
     const c=pal[i*2%pal.length];
-    const g=ctx.createRadialGradient(ax*W,ay*H,0,ax*W,ay*H,ar);
+    const g=auroraCtx.createRadialGradient(ax*W,ay*H,0,ax*W,ay*H,ar);
     g.addColorStop(0,`rgba(${c[0]},${c[1]},${c[2]},0.08)`);
     g.addColorStop(.5,`rgba(${c[0]},${c[1]},${c[2]},0.03)`);
     g.addColorStop(1,`rgba(${c[0]},${c[1]},${c[2]},0)`);
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    auroraCtx.fillStyle=g; auroraCtx.fillRect(0,0,W,H);
   }
-  ctx.globalCompositeOperation='source-over';
 }
 
-// ─── VIGNETTE ─────────────────────────────────────────────────────────────────
-function vignette(){
-  const g=ctx.createRadialGradient(cx,cy,H*.15,cx,cy,H*.92);
-  g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,6,.92)');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+// ─── VIGNETTE — pre-rendered offscreen canvas ─────────────────────────────────
+const vigCanvas = document.createElement('canvas');
+const vigCtx    = vigCanvas.getContext('2d');
+function buildVignette() {
+  vigCanvas.width = W; vigCanvas.height = H;
+  const g = vigCtx.createRadialGradient(cx, cy, H*.15, cx, cy, H*.92);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(1, 'rgba(0,0,6,.92)');
+  vigCtx.fillStyle = g;
+  vigCtx.fillRect(0, 0, W, H);
 }
+
+// ─── ADAPTIVE PERFORMANCE ─────────────────────────────────────────────────────
+// Smoothed frame time → scale down active particle count when lagging
+let avgFrameTime = 16, lastTs = 0;
 
 // ─── INIT & RENDER ────────────────────────────────────────────────────────────
 activateDream(0, 0);
 ctx.fillStyle='#000004'; ctx.fillRect(0,0,W,H);
+let barFrame = 0;
 
 function render(ts) {
+  // Adaptive performance
+  if (lastTs > 0) avgFrameTime = avgFrameTime * 0.94 + (ts - lastTs) * 0.06;
+  lastTs = ts;
+  const perfScale = Math.min(1, 30 / avgFrameTime); // full at ≥30fps, scales down below
+
   const elapsed = ts - dStart;
 
   // Dream transitions
@@ -382,29 +440,30 @@ function render(ts) {
     base = DREAMS[dIdx]; pal = DREAMS[dIdx].pal; skelDream = DREAMS[dIdx];
   }
 
-  // Apply organic drift + pulses on top of base params
   const p = getDriftedParams(base, ts);
-
-  // Continuous multi-shape force (morphs through dream's vocabulary)
   const shapeF = makeShapeF(skelDream, curSP, nxtSP, tp);
 
   // 1. Trail clear
   ctx.fillStyle=`rgba(0,0,4,${p.ta})`;
   ctx.fillRect(0,0,W,H);
 
-  // 2. Aurora
-  drawAurora(ts, pal, p);
-
-  // 3. Particles
+  // 2. Aurora — update cache every 4 frames
+  if (++auroraFrame % 4 === 0) updateAuroraCache(ts, pal, p);
   ctx.globalCompositeOperation='screen';
-  const active = Math.floor(parts.length * p.de);
+  ctx.drawImage(auroraCanvas, 0, 0);
+  ctx.globalCompositeOperation='source-over';
+
+  // 3. Particles — lineCap set once, adaptive count
+  ctx.globalCompositeOperation='screen';
+  ctx.lineCap = 'round';
+  const active = Math.floor(parts.length * p.de * perfScale);
   for (let i=0; i<active; i++) {
     parts[i].update(p, shapeF, ts);
     parts[i].draw(pal, p, ts);
   }
   ctx.globalCompositeOperation='source-over';
 
-  // 4. Skeleton (follows current dominant shape)
+  // 4. Skeleton
   const skelSP = tp > .5 && nxtSP ? nxtSP : curSP;
   drawSkeleton(ts, skelDream, skelSP, pal, tp > .5 ? 1-tp+.5 : 1);
 
@@ -414,11 +473,12 @@ function render(ts) {
   words = words.filter(w => { const ok=w.tick(ts); if(ok) w.draw(); return ok; });
   ctx.globalCompositeOperation='source-over';
 
-  // 6. Vignette
-  vignette();
+  // 6. Vignette — pre-rendered, fast drawImage
+  ctx.drawImage(vigCanvas, 0, 0);
 
-  // 7. Progress bar
-  document.getElementById('bar').style.width = Math.min(100, (elapsed/DREAM_DUR)*100) + '%';
+  // 7. Progress bar — DOM write every 6 frames
+  if (++barFrame % 6 === 0)
+    document.getElementById('bar').style.width = Math.min(100, (elapsed/DREAM_DUR)*100) + '%';
 
   requestAnimationFrame(render);
 }
