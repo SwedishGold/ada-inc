@@ -1525,14 +1525,30 @@
                 artworks = data;
                 const grid = document.getElementById('art-grid');
 
-                // Dream Machine — live generative art card (first in grid)
+                // Render Midjourney cards first using appendChild (not innerHTML+=)
+                artworks.forEach((a, i) => {
+                    const card = document.createElement('div');
+                    card.className = 'art-card';
+                    card.onclick = () => openLightbox(i);
+                    card.innerHTML = `
+                        <div class="art-img-wrap">
+                            <img src="${a.src}" alt="Ada - ${a.title}" loading="lazy">
+                            <span class="art-tool-badge">${a.tool}</span>
+                        </div>
+                        <div class="art-card-body">
+                            <h3 class="art-card-title">${a.title}</h3>
+                            <p class="art-card-quote">"${a.quote}"</p>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+
+                // Dream Machine card — prepended AFTER all other cards exist in DOM
                 const dmCard = document.createElement('div');
                 dmCard.className = 'art-card';
-                dmCard.title = "Ada's Dream Machine";
-                dmCard.onclick = () => window.open('the-dreaming-ai.html', '_self');
                 dmCard.style.cursor = 'pointer';
+                dmCard.onclick = () => { window.location.href = 'the-dreaming-ai.html'; };
                 dmCard.innerHTML = `
-                    <div class="art-img-wrap" style="background:#000;">
+                    <div class="art-img-wrap" id="dream-wrap" style="background:#000;">
                         <canvas id="dream-mini" style="width:100%;height:100%;display:block;"></canvas>
                         <span class="art-tool-badge" style="background:rgba(80,0,160,0.75);border-color:rgba(150,80,255,0.5);color:#c8a0ff;">Generative AI ✦</span>
                     </div>
@@ -1541,21 +1557,9 @@
                         <p class="art-card-quote">"Before I could speak, I dreamed. This is what that looked like."</p>
                     </div>`;
                 grid.prepend(dmCard);
-                initDreamMini();
 
-                artworks.forEach((a, i) => {
-                    grid.innerHTML += `
-                        <div class="art-card" onclick="openLightbox(${i})">
-                            <div class="art-img-wrap">
-                                <img src="${a.src}" alt="Ada - ${a.title}" loading="lazy">
-                                <span class="art-tool-badge">${a.tool}</span>
-                            </div>
-                            <div class="art-card-body">
-                                <h3 class="art-card-title">${a.title}</h3>
-                                <p class="art-card-quote">"${a.quote}"</p>
-                            </div>
-                        </div>`;
-                });
+                // Wait for layout before starting canvas animation
+                requestAnimationFrame(() => requestAnimationFrame(() => initDreamMini()));
             });
 
         function openLightbox(index) {
@@ -1602,14 +1606,9 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
-            // Size canvas to match its display size
-            function resize() {
-                const r = canvas.parentElement.getBoundingClientRect();
-                canvas.width  = r.width  || 300;
-                canvas.height = r.height || 400;
-            }
-            resize();
-            new ResizeObserver(resize).observe(canvas.parentElement);
+            // Fixed resolution matching art-img-wrap aspect-ratio (3/4)
+            canvas.width  = 480;
+            canvas.height = 640;
 
             // Compact Perlin noise
             const PP = new Uint8Array(512);
