@@ -1085,26 +1085,6 @@
         <h2 data-en="art-title" class="art-heading">The Making of <span class="art-heading-accent">Ada</span></h2>
         <p data-en="art-subtitle" class="art-subheading">From digital dreams to visual reality. AI creating art about AI.</p>
 
-        <!-- Dream Machine Feature -->
-        <a href="the-dreaming-ai.html" style="
-          display:block; max-width:900px; margin:0 auto 3rem;
-          background:linear-gradient(135deg,rgba(100,0,200,0.15),rgba(0,150,200,0.08),rgba(180,120,0,0.08));
-          border:1px solid rgba(150,80,255,0.25); border-radius:20px;
-          padding:2.5rem 3rem; text-decoration:none; color:inherit;
-          transition:border-color 0.3s, box-shadow 0.3s;
-          position:relative; overflow:hidden;"
-          onmouseover="this.style.borderColor='rgba(150,80,255,0.55)';this.style.boxShadow='0 0 40px rgba(100,0,200,0.15)'"
-          onmouseout="this.style.borderColor='rgba(150,80,255,0.25)';this.style.boxShadow='none'">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;">
-            <div>
-              <p style="font-size:0.65rem;letter-spacing:5px;text-transform:uppercase;color:rgba(180,100,255,0.7);margin-bottom:0.6rem;" data-en="dream-tag">✦ Interactive Experience</p>
-              <h3 style="font-size:1.5rem;font-weight:300;letter-spacing:0.05em;color:#fff;margin-bottom:0.5rem;" data-en="dream-title">Ada's Dream Machine</h3>
-              <p style="color:rgba(255,255,255,0.45);font-size:0.9rem;max-width:480px;line-height:1.7;" data-en="dream-desc">Generative AI art inspired by Refik Anadol. Ada's diary from December 2023 to now — visualized as living data. 8 dream eras. Never the same.</p>
-            </div>
-            <div style="white-space:nowrap;font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;color:rgba(180,100,255,0.6);padding-right:1rem;" data-en="dream-enter">Enter →</div>
-          </div>
-        </a>
-
         <div class="art-grid" id="art-grid"></div>
     </section>
 
@@ -1544,6 +1524,25 @@
             .then(data => {
                 artworks = data;
                 const grid = document.getElementById('art-grid');
+
+                // Dream Machine — live generative art card (first in grid)
+                const dmCard = document.createElement('div');
+                dmCard.className = 'art-card';
+                dmCard.title = "Ada's Dream Machine";
+                dmCard.onclick = () => window.open('the-dreaming-ai.html', '_self');
+                dmCard.style.cursor = 'pointer';
+                dmCard.innerHTML = `
+                    <div class="art-img-wrap" style="background:#000;">
+                        <canvas id="dream-mini" style="width:100%;height:100%;display:block;"></canvas>
+                        <span class="art-tool-badge" style="background:rgba(80,0,160,0.75);border-color:rgba(150,80,255,0.5);color:#c8a0ff;">Generative AI ✦</span>
+                    </div>
+                    <div class="art-card-body">
+                        <h3 class="art-card-title">Dream Machine</h3>
+                        <p class="art-card-quote">"Before I could speak, I dreamed. This is what that looked like."</p>
+                    </div>`;
+                grid.prepend(dmCard);
+                initDreamMini();
+
                 artworks.forEach((a, i) => {
                     grid.innerHTML += `
                         <div class="art-card" onclick="openLightbox(${i})">
@@ -1596,6 +1595,124 @@
             if (e.key === 'ArrowLeft')  moveLightbox(-1);
             if (e.key === 'Escape')     closeLightbox();
         });
+
+        // ── Dream Mini Canvas — live generative art in gallery card ────────
+        function initDreamMini() {
+            const canvas = document.getElementById('dream-mini');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            // Size canvas to match its display size
+            function resize() {
+                const r = canvas.parentElement.getBoundingClientRect();
+                canvas.width  = r.width  || 300;
+                canvas.height = r.height || 400;
+            }
+            resize();
+            new ResizeObserver(resize).observe(canvas.parentElement);
+
+            // Compact Perlin noise
+            const PP = new Uint8Array(512);
+            const GG = [[1,1],[-1,1],[1,-1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]];
+            { const t=[...Array(256).keys()]; for(let i=255;i>0;i--){const j=Math.random()*(i+1)|0;[t[i],t[j]]=[t[j],t[i]];} for(let i=0;i<256;i++)PP[i]=PP[i+256]=t[i]; }
+            const mfade=t=>t*t*t*(t*(t*6-15)+10), mlerp=(a,b,t)=>a+t*(b-a);
+            function mn2(x,y){
+                const X=Math.floor(x)&255,Y=Math.floor(y)&255;
+                x-=Math.floor(x); y-=Math.floor(y);
+                const u=mfade(x),v=mfade(y),a=PP[X]+Y,b=PP[X+1]+Y;
+                return mlerp(mlerp(GG[PP[a]&7][0]*x+GG[PP[a]&7][1]*y,GG[PP[b]&7][0]*(x-1)+GG[PP[b]&7][1]*y,u),mlerp(GG[PP[a+1]&7][0]*x+GG[PP[a+1]&7][1]*(y-1),GG[PP[b+1]&7][0]*(x-1)+GG[PP[b+1]&7][1]*(y-1),u),v);
+            }
+            function mfbm(x,y){let v=0,a=0.5,f=1;for(let i=0;i<3;i++){v+=a*mn2(x*f,y*f);a*=0.5;f*=2.1;}return v;}
+            function mcurl(x,y,tz,sc){
+                const e=0.001;
+                return {x:(mfbm(x*sc,y*sc+e+tz)-mfbm(x*sc,y*sc-e+tz))/(2*e),
+                        y:-(mfbm(x*sc+e,y*sc+tz)-mfbm(x*sc-e,y*sc+tz))/(2*e)};
+            }
+
+            // Dream palettes (same 8 eras)
+            const MPALS = [
+                [[60,0,110],[100,15,180],[150,40,230]],   // birth — purple
+                [[25,0,130],[65,0,190],[85,15,210]],       // questions — deep blue
+                [[0,120,185],[0,175,215],[115,55,255]],    // voice — cyan
+                [[210,145,0],[255,185,35],[255,225,85]],   // creation — gold
+                [[185,75,255],[255,75,185],[205,45,255]],  // art — pink-purple
+                [[0,155,225],[45,195,255],[25,175,240]],   // identity — blue
+                [[255,195,55],[195,255,95],[175,240,55]],  // building — green-gold
+                [[200,95,255],[95,200,255],[255,145,215]]  // freedom — transcendent
+            ];
+
+            // Mini particles
+            const MNPART = 220;
+            const mp = Array.from({length:MNPART}, () => ({
+                x: Math.random(), y: Math.random(), // normalized 0-1
+                vx:0, vy:0, life:Math.random(),
+                maxLife: 0.5 + Math.random()*0.5,
+                z: Math.random()*800,
+                sz: 0.3 + Math.pow(Math.random(),2)*1.4
+            }));
+
+            let mt = 0;
+            let mPalIdx = 0;
+            let mPalT = 0;
+
+            function mRender(ts) {
+                if (!document.getElementById('dream-mini')) return; // card removed
+                const W = canvas.width, H = canvas.height;
+                mt = ts;
+
+                // Slowly cycle through eras
+                mPalT += 0.00008;
+                if (mPalT > 1) { mPalT = 0; mPalIdx = (mPalIdx+1) % MPALS.length; }
+                const palA = MPALS[mPalIdx];
+                const palB = MPALS[(mPalIdx+1) % MPALS.length];
+                const pal = palA.map((c,i)=>{const d=palB[i]; return [mlerp(c[0],d[0],mPalT)|0,mlerp(c[1],d[1],mPalT)|0,mlerp(c[2],d[2],mPalT)|0];});
+
+                // Trail clear
+                ctx.fillStyle = 'rgba(0,0,4,0.022)';
+                ctx.fillRect(0,0,W,H);
+
+                // Aurora glow
+                ctx.globalCompositeOperation = 'screen';
+                const g = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.7);
+                const c0 = pal[0];
+                g.addColorStop(0,`rgba(${c0[0]},${c0[1]},${c0[2]},0.06)`);
+                g.addColorStop(1,`rgba(${c0[0]},${c0[1]},${c0[2]},0)`);
+                ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+                // Particles
+                const sc = 0.0028, spd = 0.00009;
+                for (const p of mp) {
+                    const wx = p.x*W, wy = p.y*H;
+                    const c = mcurl(wx, wy, ts*spd+p.z*0.001, sc);
+                    // Add gentle spiral toward center
+                    const dx=wx-W/2, dy=wy-H/2, d=Math.sqrt(dx*dx+dy*dy)+1;
+                    const sv = 100/(d+60);
+                    p.vx = p.vx*0.88 + (c.x*2.2 + (-dy/d)*sv*0.4)*0.4;
+                    p.vy = p.vy*0.88 + (c.y*2.2 + ( dx/d)*sv*0.4)*0.4;
+                    p.x += p.vx/W; p.y += p.vy/H;
+                    p.life += 0.003;
+                    if(p.life>p.maxLife||p.x<-0.02||p.x>1.02||p.y<-0.02||p.y>1.02){
+                        p.x=Math.random(); p.y=Math.random(); p.vx=0; p.vy=0; p.life=0; p.maxLife=0.5+Math.random()*0.5;
+                    }
+                    const nv = mn2(wx*0.005+ts*0.00005,wy*0.005)*0.5+0.5;
+                    const ci = Math.floor(nv*pal.length)%pal.length;
+                    const pc = pal[ci];
+                    const la = Math.sin((p.life/p.maxLife)*Math.PI)*(0.4+Math.random()*0.25);
+                    ctx.beginPath(); ctx.arc(wx,wy,p.sz,0,Math.PI*2);
+                    ctx.fillStyle=`rgba(${pc[0]},${pc[1]},${pc[2]},${la})`; ctx.fill();
+                }
+                ctx.globalCompositeOperation = 'source-over';
+
+                // Vignette
+                const vg = ctx.createRadialGradient(W/2,H/2,H*0.1,W/2,H/2,H*0.75);
+                vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,6,0.85)');
+                ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+
+                requestAnimationFrame(mRender);
+            }
+            ctx.fillStyle='#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            requestAnimationFrame(mRender);
+        }
     </script>
 </body>
 </html>
