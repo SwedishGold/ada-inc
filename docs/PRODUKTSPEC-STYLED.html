@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ada Suite - Produktspecifikation</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; color: #333; line-height: 1.6; }
+h1 { color: #1a1a2e; border-bottom: 3px solid #6c5ce7; padding-bottom: 10px; }
+h2 { color: #6c5ce7; margin-top: 40px; }
+h3 { color: #2d3436; }
+pre { background: #f8f9fa; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 13px; border: 1px solid #e9ecef; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
+th { background: #6c5ce7; color: white; }
+tr:nth-child(even) { background: #f8f9fa; }
+.highlight { background: #e8f4f8; padding: 20px; border-radius: 8px; border-left: 4px solid #00b894; margin: 20px 0; }
+.meta { color: #636e72; font-size: 14px; }
+.wireframe { background: white; border: 2px solid #dfe6e9; border-radius: 8px; padding: 15px; margin: 10px 0; }
+kbd { background: #f1f2f6; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1 id="ada-suite---produktspecifikation">Ada Suite -
+Produktspecifikation</h1>
+<p><strong>Version:</strong> 1.0 | <strong>Datum:</strong> 2026-03-19 |
+<strong>Status:</strong> Utkast</p>
+<hr />
+<h2 id="vision">Vision</h2>
+<blockquote>
+<p>“Att ge småföretag tillgång till samma AI-marknadsföringskraft som
+stora bolag – utan att behöva anställa ett helt team.”</p>
+</blockquote>
+<p>Ada Suite är en AI-baserad marknadsföringsplattform för småföretag i
+Sverige. Vi automatiserar lead generation, content-skapande och social
+media-engagement – så att företagare kan fokusera på det de är bra
+på.</p>
+<hr />
+<h2 id="kundresan-customer-journey">1. Kundresan (Customer Journey)</h2>
+<h3 id="steg-för-steg-flöde">Steg-för-steg flöde</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                           KUNDRESAN                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[STEPP 1]                    [STEPP 2]                    [STEPP 3]
+Upptäcker Ada Suite    →    Besöker hemsida         →    Registrerar sig
+    │                          │                           │
+    │  • X-post                 │  • Läser om tjänsten      │  • E-post
+    │  • Mun-mot-mun            │  • Ser priser             │  • Företagsnamn
+    │  • Lokal reklam           │  • Ser &quot;hur det funkar&quot;    │  • Behov
+    │                          │                           │
+    ▼                          ▼                           ▼
+    
+[STEPP 4]                    [STEPP 5]                    [STEPP 6]
+Väljer paket             →    Betalar                  →    Onboarding
+    │                          │                           │
+    │  • Scout (1,490 kr/mån)   │  • LemonSqueezy            │  • Välkommen-mail
+    │  • Kent (1,490 kr/mån)    │  • Swish/Kort              │  • Fyller i profil
+    │  • Pulse (990 kr/mån)     │  • Fakturering             │  • Kopplar X/LinkedIn
+    │  • Alla tre (2,990 kr)    │                           │
+    │                          │                           │
+    ▼                          ▼                           ▼
+
+[STEPP 7]                    [STEPP 8]                    [STEPP 9]
+AI:n arbetar             →    Dashboard                →    Månadsrapport
+    │                          │                           │
+    │  • Scout: Hittar leads    │  • Se leads                │  • Sammanfattning
+    │  • Kent: Skapar content   │  • Se content               │  • Resultat
+    │  • Pulse: Engagerar       │  • Se engagement            │  • Rekommendationer
+    │                          │  • Se ROI                   │  • Nästa steg
+    ▼                          ▼                           ▼</code></pre>
+<hr />
+<h2 id="produkterna-paketen">2. Produkterna (Paketen)</h2>
+<h3 id="ada-suite---scout-lead-generation">Ada Suite - Scout (Lead
+Generation)</h3>
+<p><strong>Pris:</strong> 1,490 kr/mån</p>
+<p><strong>Vad kunden får:</strong> - 10 kvalificerade leads/vecka inom
+vald bransch/område - Leads med: Företagsnamn, kontaktperson, e-post,
+telefon, webbplats - Bransch: Restaurang, Hantverkare, Konsult, Retail,
+etc. - Geografiskt: Sundsvall, Stockholm, eller hela Sverige -
+Automatisk uppföljning via e-post</p>
+<p><strong>Tekniskt flöde:</strong></p>
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                      SCOUT ARBETAR                            │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Research Agent                                       
+     ↓
+     ├─ Söker på: &quot;restaurang Sundsvall&quot;                    
+     ├─ Söker på: &quot;café Sundsvall&quot;                          
+     ├─ Söker på: LinkedIn företag                          
+     └─ Söker på: Allabolag.se, eniro.se                    
+         ↓
+  2. Kvalificering                                         
+     ├─ Filtrerar bort: för små (1 anställd)                 
+     ├─ Filtrerar bort: för stora (&gt;50 anställda)            
+     ├─ Kontrollerar: har hemsida?                           
+     └─ Kontrollerar: finns e-post?                          
+         ↓
+  3. Lead rapport                                          
+     └─ Output: JSON med alla leads                          
+         ↓
+  4. Email Outreach (valfritt)                              
+     ├─ Personligt mejl till varje lead                      
+     ├─ Baserat på mallar + AI-anpassning                   
+     └─ Skickas via kundens e-post (SMTP)                    
+         ↓
+  5. Dashboard uppdateras                                   
+     └─ Kund ser: Nya leads | Skickade mejl | Svar           </code></pre>
+<p><strong>Dashboard vy:</strong></p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  SCOUT DASHBOARD                                            │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  📊 Denna vecka: 12 leads hittade                         │
+│  📧 8 mejl skickade                                        │
+│  ✓ 2 svar mottagna                                        │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ FÖRETAG         KONTAKT      E-POST        STATUS   │   │
+│  ├─────────────────────────────────────────────────────┤   │
+│  │ Café Vittra    Anna L.     anna@...      ✓ Skickat  │   │
+│  │ Hantverkarn    Erik S.     erik@...      ○ Väntar  │   │
+│  │ Bilbolaget     Maria K.    maria@...     ✓ Svarat! │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  [Exportera leads]  [Skicka mejl]  [Följ upp]             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<hr />
+<h3 id="ada-suite---kent-content-creation">Ada Suite - Kent (Content
+Creation)</h3>
+<p><strong>Pris:</strong> 1,490 kr/mån</p>
+<p><strong>Vad kunden får:</strong> - 4-8 sociala inlägg/vecka (X,
+LinkedIn, Instagram) - Video-clips (30-60 sek) med AI-klippning via
+Vugola - Caption + hashtags + Call-to-Action - Publicering schemalagd
+eller auto-post - Månadsanalys: Vad presterade bäst?</p>
+<p><strong>Tekniskt flöde:</strong></p>
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                      KENT ARBETAR                            │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Content Planering                                        
+     ↓
+     ├─ Analyserar: Företagets bransch                     
+     ├─ Analyserar: Konkurrenter posts                      
+     ├─ Analyserar: Trender just nu                          
+     └─ Skapar: Innehållskalender för veckan                 
+         ↓
+  2. Content Skapande                                        
+     ↓
+     ├─ Text: AI-genererade captions                         
+     ├─ Bild: AI-genererade thumbnails                      
+     ├─ Video: Klippning via Vugola API                     
+     └─ Hashtags: Automatiskt genererade                    
+         ↓
+  3. Publicering                                             
+     ↓
+     ├─ Schemalägger: Optimala tider                          
+     ├─ Publicerar: X via API                               
+     ├─ Publicerar: LinkedIn via API                        
+     └─ Skickar: Rapport till kund                          
+         ↓
+  4. Analys                                                    
+     └─ Vad fick mest engagement?                            
+         ↓
+  5. Lär &amp; Förbättra                                        
+     └─ Nästa vecka: Mer av det som funkade                 </code></pre>
+<p><strong>Dashboard vy:</strong></p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  KENT DASHBOARD                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  📅 Vecka 12, 2026                                         │
+│                                                             │
+│  📝 Planerade: 6 inlägg                                    
+│  ✅ Publicerade: 4                                          
+│  👁️ Total räckvidd: 2,847                                  
+│  ❤️ Engagemang: 156 likes, 23 kommentarer                  
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │ POST TYP    PLATTFORM   RÄCKVIDD   ENGAGEMANG       │   │
+│  ├─────────────────────────────────────────────────────┤   │
+│  │ 📝 Text     X           1,234      89 ❤️             │   │
+│  │ 🎬 Video    X           892        45 ❤️             │   │
+│  │ 📝 Text     LinkedIn    456        15 ❤️             │   │
+│  │ 📸 Bild     Instagram   265        7 ❤️              │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  [Ny post]  [Schemalägg]  [Analysera]                     │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<hr />
+<h3 id="ada-suite---pulse-social-engagement">Ada Suite - Pulse (Social
+Engagement)</h3>
+<p><strong>Pris:</strong> 990 kr/mån</p>
+<p><strong>Vad kunden får:</strong> - AI svarar på kommentarer och DMs -
+Proaktiv engagement med followers - Identifiering av nya möjligheter -
+Trakasserar inte troll/negativa</p>
+<p><strong>Tekniskt flöde:</strong></p>
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                      PULSE ARBETAR                           │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Monitoring                                              
+     ↓
+     ├─ Håller koll på: @kundens-konto                    
+     ├─ Letar efter: Nya followers                         
+     ├─ Letar efter: Kommentarer/DMs                       
+     └─ Letar efter: @omnämnanden                          
+         ↓
+  2. Analys av engagemang                                    
+     ↓
+     ├─ Är det positivt? → Svara!                          
+     ├─ Är det en fråga? → Svara med info!                 
+     ├─ Är det en lead? → Eskalera till Scout              
+     └─ Är det troll? → Ignorera                            
+         ↓
+  3. Proaktiv engagement                                     
+     ↓
+     ├─ Följer relevanta konton                            
+     ├─ Gillar/investerar intressant content               
+     └─ Svarar på trender inom branschen                   
+         ↓
+  4. Rapport                                                 
+     └─ Daglig sammanfattning: X nya interaktioner         </code></pre>
+<hr />
+<h3 id="ada-suite---alla-tre-komplett">Ada Suite - Alla tre
+(Komplett)</h3>
+<p><strong>Pris:</strong> 2,990 kr/mån (sparar 480 kr)</p>
+<p><strong>Inkluderar:</strong> - Allt från Scout + Kent + Pulse -
+Koordinerad strategi (allt pratar ihop sig) - Priority support -
+Månads-möte (30 min)</p>
+<hr />
+<h2 id="betalningsflöde">3. Betalningsflöde</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                           BETALNING                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  KUND                           ADA SUITE                         LEYMONSQUEEZY
+    │                                  │                                    │
+    │  1. Väljer paket                 │                                    │
+    │─────────────────────────────────&gt;│                                    │
+    │                                  │                                    │
+    │  2. Klickar &quot;Köp&quot;                │                                    │
+    │─────────────────────────────────&gt;│                                    │
+    │                                  │  3. Skapar checkout                │
+    │                                  │───────────────────────────────────&gt;│
+    │                                  │                                    │
+    │  4. Redirect till LemonSqueezy    │                                    │
+    │&lt;─────────────────────────────────│                                    │
+    │                                  │                                    │
+    │  5. Betalar (Swish/Kort)          │                                    │
+    │──────────────────────────────────────────────────────────────&gt;│
+    │                                  │                                    │
+    │                                  │         6. Betalning bekräftad     │
+    │                                  │&lt;───────────────────────────────────│
+    │                                  │                                    │
+    │  7. &quot;Tack! Kolla din e-post&quot;     │                                    │
+    │&lt;─────────────────────────────────│                                    │
+    │                                  │                                    │
+    │                                  │  8. Webhook: Ny kund + betalning   │
+    │                                  │───────────────────────────────────&gt;│
+    │                                  │                                    │
+    │                                  │  9. Skapa konto i system          │
+    │                                  │  10. Skicka välkomstmail          │
+    │                                  │                                    │
+    │  11. E-post med inloggningsinfo   │                                    │
+    │&lt;─────────────────────────────────│                                    │
+    │                                  │                                    │</code></pre>
+<hr />
+<h2 id="onboarding-process">4. Onboarding Process</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                           ONBOARDING (Dag 1-7)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  DAG 1: Välkomst
+  ────────────────
+  ┌─────────────────────────────────────────────────────────────┐
+  │  Hej [Namn]!                                                │
+  │                                                             │
+  │  Välkommen till Ada Suite! 🦞                               │
+  │                                                             │
+  │  Vi sätter igång med [Paket]. Du får:                       │
+  │  • 10 leads/vecka                                          │
+  │  • 4 inlägg/vecka                                          │
+  │  • Daglig engagement                                        │
+  │                                                             │
+  │  Nästa steg: Fyll i din profil (5 min)                     │
+  │  [Kom igång →]                                             │
+  └─────────────────────────────────────────────────────────────┘
+
+  DAG 1-2: Profilinställningar
+  ────────────────────────────
+  □ Företagsnamn &amp; logo
+  □ Bransch (dropdown)
+  □ Geografiskt område
+  □ Målgrupp (vilka vill du nå?)
+  □ X/LinkedIn konto (för Kent &amp; Pulse)
+  □ E-post för outreach (för Scout)
+
+  DAG 3: Första leads levereras
+  ──────────────────────────────
+  ┌─────────────────────────────────────────────────────────────┐
+  │  📊 Dina första 10 leads är klara!                         │
+  │                                                             │
+  │  Företag         Kontakt       E-post                      │
+  │  ─────────────────────────────────────────                 │
+  │  Café Vittra     Anna L.      anna@cafevittra.se           │
+  │  ...                                                     │
+  │                                                             │
+  │  [Granska leads]  [Godkänn &amp; mejla]  [Redigera]           │
+  └─────────────────────────────────────────────────────────────┘
+
+  DAG 5: Första content publiceras
+  ─────────────────────────────────
+  □ AI har skapat 4 inlägg
+  □ Du granskar &amp; godkänner
+  □ Första post publiceras
+
+  DAG 7: Allt rullar
+  ───────────────────
+  □ Leads: Automatiskt varje vecka
+  □ Content: Schemalagt 4x/vecka
+  □ Pulse: Aktiverat &amp; övervakar
+  □ Dashboard: Visar allt i realtid</code></pre>
+<hr />
+<h2 id="teknisk-arkitektur">5. Teknisk Arkitektur</h2>
+<h3 id="systemöversikt">Systemöversikt</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                         ADA SUITE - TEKNISK ARKITEKTUR                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                        ┌─────────────────────┐
+                        │     KUND            │
+                        │   (Webbläsare)      │
+                        └──────────┬──────────┘
+                                   │
+                                   │ HTTPS
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              FRONTEND                                       │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐            │
+│  │   Kund-portal   │  │  Överblick-sida  │  │   Admin-panel   │            │
+│  │  (React/Next.js)│  │   (ada-inc.se)  │  │   (intern)      │            │
+│  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘            │
+│           │                      │                      │                   │
+└───────────┼──────────────────────┼──────────────────────┼───────────────────┘
+            │                      │                      │
+            └──────────────────────┼──────────────────────┘
+                                   │ REST API / GraphQL
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              BACKEND                                        │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                      API SERVER (Node.js / Fastify)                  │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐         │    │
+│  │  │  Auth    │  │  Leads   │  │  Content │  │  Users   │         │    │
+│  │  │  Module  │  │  Module  │  │  Module  │  │  Module  │         │    │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                       │                                      │
+│           ┌───────────────────────────┼───────────────────────────┐         │
+│           │                           │                           │         │
+│           ▼                           ▼                           ▼         │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐           │
+│  │    DATABASE      │  │   OPENCLAW      │  │   EXTERNAL APIs │           │
+│  │   (Supabase)    │  │   GATEWAY       │  │                 │           │
+│  │                 │  │                 │  │  • X API        │           │
+│  │  • Users        │  │  ┌───────────┐ │  │  • LinkedIn API │           │
+│  │  • Leads        │  │  │  Scout    │ │  │  • Vugola API  │           │
+│  │  • Content       │  │  └───────────┘ │  │  • Lemonsqueezy│           │
+│  │  • Payments      │  │  ┌───────────┐ │  │  • Email (SMTP) │           │
+│  │  • Settings      │  │  │  Kent     │ │  │                 │           │
+│  │                 │  │  └───────────┘ │  │                 │           │
+│  │                 │  │  ┌───────────┐ │  │                 │           │
+│  │                 │  │  │  Pulse     │ │  │                 │           │
+│  │                 │  │  └───────────┘ │  │                 │           │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="databas-schema-supabase">Databas-schema (Supabase)</h3>
+<pre><code>┌─────────────────────────────────────────┐
+│              USERS                      │
+├─────────────────────────────────────────┤
+│ id              UUID (PK)              │
+│ email           TEXT                    │
+│ name            TEXT                    │
+│ company_name    TEXT                    │
+│ company_logo    TEXT (URL)              │
+│ package         TEXT (scout/kent/pulse)|
+│ created_at      TIMESTAMP               │
+│ subscription_id TEXT                   │
+│ lemonsqueezy_id TEXT                   │
+└─────────────────┬───────────────────────┘
+                  │
+                  ├──────────────┐
+                  │              │
+                  ▼              ▼
+┌─────────────────────┐  ┌─────────────────────┐
+│       LEADS         │  │     CONTENT         │
+├─────────────────────┤  ├─────────────────────┤
+│ id                  │  │ id                  │
+│ user_id (FK)        │  │ user_id (FK)        │
+│ company_name        │  │ platform (x/lkdin)  │
+│ contact_name        │  │ content_type        │
+│ contact_email       │  │ text                │
+│ contact_phone       │  │ media_url           │
+│ website             │  │ scheduled_at         │
+│ source              │  │ published_at        │
+│ status              │  │ status              │
+│ created_at          │  │ engagement_count    │
+│ notes               │  │ created_at          │
+└─────────────────────┘  └─────────────────────┘</code></pre>
+<hr />
+<h2 id="användargränssnitt-wireframes">6. Användargränssnitt
+(Wireframes)</h2>
+<h3 id="kundens-dashboard">Kundens Dashboard</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  ADA SUITE                           [Företagsnamn ▼]  [Inställningar]│   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│  ┌─────────────┐                                                              │
+│  │ 📊 Överblick│  VÄLKOMMEN TILLBAKA, CAFÉ VITTRA!                         │
+│  │ 📧 Leads    │                                                              │
+│  │ 📝 Content  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐           │
+│  │ 💬 Pulse    │  │ Leads denna │ │ Content     │ │ Engagement  │           │
+│  │ ⚙️ Inställn│  │ veckan: 12  │ │ denna vecka │ │ denna vecka │           │
+│  │             │  │ [Visa →]    │ │ 4/4         │ │ 156 ❤️       │           │
+│  │             │  └─────────────┘ │ [Visa →]    │ │ [Visa →]    │           │
+│  │             │                   └─────────────┘ └─────────────┘           │
+│  │             │                                                              │
+│  │             │  SENASTE LEADS                                               │
+│  │             │  ┌─────────────────────────────────────────────────────┐     │
+│  │             │  │ Företag          Kontakt      Status               │     │
+│  │             │  ├─────────────────────────────────────────────────────┤     │
+│  │             │  │ Hantverkarn AB   Erik S.      ✓ 3 mejl skickade   │     │
+│  │             │  │ Sundsvalls Bageri Maria K.     ○ 1 mejl skickat   │     │
+│  │             │  │ Bilvård.se       Johan L.     ✓ Svar mottagit!   │     │
+│  │             │  └─────────────────────────────────────────────────────┘     │
+│  │             │                                                              │
+│  │             │  SCHEMALAGDA POSTS                                          │
+│  │             │  ┌─────────────────────────────────────────────────────┐     │
+│  │             │  │ 📅 Idag 14:00 - X: &quot;Sommar erbjudande...&quot;          │     │
+│  │             │  │ 📅 Imorgon 10:00 - LinkedIn: &quot;Vi expanderar...&quot;   │     │
+│  │             │  │ 📅 Fre 14:00 - X: &quot;Nyheter i butiken...&quot;          │     │
+│  │             │  └─────────────────────────────────────────────────────┘     │
+│  └─────────────┘                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="lead-detail-vy">Lead-detail vy</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│  ← Tillbaka till leads                                                      │
+│                                                                              │
+│  HANTVERKARNA AB                                                             │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │
+│                                                                              │
+│  📍 Sundsvall    🌐 www.hantverkarna.se    📞 060-123 45                    │
+│                                                                              │
+│  KONTAKTPERSON                                                                │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │
+│  ┌──────────────┐                                                           │
+│  │  👤          │  Erik Ström                                                │
+│  │              │  erik@hantverkarna.se                                     │
+│  │              │  070-123 45 67                                             │
+│  │              │  VD                                                        │
+│  └──────────────┘                                                           │
+│                                                                              │
+│  STATUS                                                                      │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │
+│  □ Research klart                                                            │
+│  ☑ Mejlsutskick 1 (2026-03-15)                                             │
+│  □ Uppföljning skickad (2026-03-18)                                        │
+│  ☑ Svar mottaget (2026-03-17) - &quot;Intresserade av offert&quot;                   │
+│                                                                              │
+│  ÅTGÄRDER                                                                    │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │
+│  [📧 Skicka mejl]  [📞 Boka möte]  [📝 Lägg till anteckning]               │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<hr />
+<h2 id="prissättning">7. Prissättning</h2>
+<h3 id="månadspriser">Månadspriser</h3>
+<table>
+<thead>
+<tr>
+<th>Paket</th>
+<th>Pris/mån</th>
+<th>Leads</th>
+<th>Content</th>
+<th>Engagement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scout</strong></td>
+<td>1,490 kr</td>
+<td>10/vecka</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Kent</strong></td>
+<td>1,490 kr</td>
+<td>-</td>
+<td>4-8/vecka</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Pulse</strong></td>
+<td>990 kr</td>
+<td>-</td>
+<td>-</td>
+<td>✅ Auto</td>
+</tr>
+<tr>
+<td><strong>Alla tre</strong></td>
+<td>2,990 kr</td>
+<td>10/vecka</td>
+<td>4-8/vecka</td>
+<td>✅ Auto</td>
+</tr>
+</tbody>
+</table>
+<h3 id="årsavtal-20-rabatt">Årsavtal (20% rabatt)</h3>
+<table>
+<thead>
+<tr>
+<th>Paket</th>
+<th>Månadspris</th>
+<th>Årspris</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scout</td>
+<td>1,490 kr</td>
+<td><strong>14,304 kr</strong> (1,192 kr/mån)</td>
+</tr>
+<tr>
+<td>Kent</td>
+<td>1,490 kr</td>
+<td><strong>14,304 kr</strong> (1,192 kr/mån)</td>
+</tr>
+<tr>
+<td>Pulse</td>
+<td>990 kr</td>
+<td><strong>9,504 kr</strong> (792 kr/mån)</td>
+</tr>
+<tr>
+<td>Alla tre</td>
+<td>2,990 kr</td>
+<td><strong>28,704 kr</strong> (2,392 kr/mån)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="nächsta-steg-roadmap">8. Nächsta steg (Roadmap)</h2>
+<h3 id="fas-1-mvp-vecka-1-4">Fas 1: MVP (Vecka 1-4)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Scout: Research → Mejla (test med
+Anja)</label></li>
+<li><label><input type="checkbox" />Kent: Content-skapande (manuellt
+godkänn)</label></li>
+<li><label><input type="checkbox" />Pulse: Första
+engagement</label></li>
+<li><label><input type="checkbox" />LemonSqueezy: Checkout +
+betalning</label></li>
+<li><label><input type="checkbox" />Enkel dashboard: Leads
+visa</label></li>
+</ul>
+<h3 id="fas-2-första-kund-vecka-5-8">Fas 2: Första kund (Vecka 5-8)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Första betalande kund</label></li>
+<li><label><input type="checkbox" />Scout: Full auto (research →
+outreach)</label></li>
+<li><label><input type="checkbox" />Kent: Auto-post (med
+approve)</label></li>
+<li><label><input type="checkbox" />Pulse: Auto-response</label></li>
+</ul>
+<h3 id="fas-3-skala-månad-3">Fas 3: Skala (Månad 3+)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Kund-dashboard: Full
+version</label></li>
+<li><label><input type="checkbox" />Vugola-integration:
+Video-clips</label></li>
+<li><label><input type="checkbox" />LinkedIn auto-post</label></li>
+<li><label><input type="checkbox" />10+ kunder</label></li>
+</ul>
+<hr />
+<h2 id="frågor-att-besvara">9. Frågor att besvara</h2>
+<ol type="1">
+<li><strong>Email:</strong> Ska vi skicka från kundens e-post eller från
+Ada Suite?</li>
+<li><strong>Commitment:</strong> Månadsvis eller 3 månaders
+bindning?</li>
+<li><strong>Support:</strong> Email, chat, eller视频-call?</li>
+<li><strong>Content:</strong> Vad är max 4-8 inlägg per vecka?</li>
+</ol>
+<hr />
+<p><em>Dokument skapat av Ada (CEO), 2026-03-19</em> <em>För frågor,
+kontakta: Andreas via OpenClaw</em></p>
+</body></html>

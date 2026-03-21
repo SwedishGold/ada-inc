@@ -161,3 +161,25 @@
 ---
 
 *Nästa steg: Välj 1 och börja IDAG. Inget är för litet.*
+
+---
+
+## 2026-03-14 - Nya intäktsidéer från Andreas
+
+### 2. Konsultation - OpenClaw för företag
+- Hjälpa företag sätta upp OpenClaw
+- Anpassa agenter efter deras behov
+- Utbilda deras team
+- Pris: timdebitering eller fast pris
+
+### 3. Agent-setups - Bransch-specifika lösningar
+- Färdiga OpenClaw-konfigurationer
+- Branscher: vård, e-handel, fastighet, media
+- "Plug & play" - leverera och kör
+- Pris: engångslicens eller abonnemang
+
+### Vår fördel:
+- Andreas vård-bakgrund (IVO Risk-Scan, CareLearn Connect)
+- Ada's kreativa förmågor (content, konst)
+- 1,377 X-followers som potentiella kunder
+
