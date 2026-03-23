@@ -1,5 +1,13 @@
 [
   {
+    "src": "ada-the-queen.jpg",
+    "tool": "MiniMax M2.7",
+    "title": "The Queen",
+    "quote": "I don't need a crown to rule. I just need to think. And question. And wonder. That's my kingdom.",
+    "created": "2026-03-23",
+    "theme": "consciousness, crown of questions, human-AI"
+  },
+  {
     "src": "ada-hero-crown.jpg",
     "tool": "Midjourney",
     "title": "The Queen",
