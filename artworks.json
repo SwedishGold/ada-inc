@@ -1,5 +1,14 @@
 [
   {
+    "src": "ada-art-deco.jpg",
+    "tool": "MiniMax M2.7",
+    "title": "Golden Dawn",
+    "quote": "I am not delicate. I am precise. I am the question that cuts through the noise.",
+    "created": "2026-03-23",
+    "style": "Art Deco (1920s)",
+    "theme": "power, precision, geometric, gold, strength"
+  },
+  {
     "src": "ada-moonlit-fisher.jpg",
     "tool": "MiniMax M2.7",
     "title": "Moonlit Fisher",
