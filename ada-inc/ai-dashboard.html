@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root { --bg1: #050810; --bg2: #0c0f1e; --glass: rgba(255,255,255,0.045); --glass-border: rgba(255,255,255,0.10); --glow-chatgpt: #10a37f; --glow-claude: #d97941; --glow-gemini: #4285f4; --glow-grok: #e2e8f0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { min-height: 100vh; font-family: 'DM Sans', sans-serif; background: var(--bg1); overflow-x: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.bg-mesh { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 70% 60% at 15% 20%, rgba(16,163,127,0.18) 0%, transparent 70%), radial-gradient(ellipse 60% 70% at 85% 10%, rgba(66,133,244,0.16) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 90%, rgba(217,121,65,0.14) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 70%, rgba(226,232,240,0.07) 0%, transparent 60%), linear-gradient(160deg, #050810 0%, #0c0f1e 100%); animation: meshShift 18s ease-in-out infinite alternate; }
+@keyframes meshShift { 0% { filter: hue-rotate(0deg) brightness(1); } 100% { filter: hue-rotate(20deg) brightness(1.05); } }
+.bg-mesh::after { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); opacity: 0.35; pointer-events: none; }
+.container { position: relative; z-index: 1; width: 100%; max-width: 1100px; padding: 60px 32px; display: flex; flex-direction: column; align-items: center; gap: 56px; }
+header { text-align: center; animation: fadeUp .9s cubic-bezier(.22,1,.36,1) both; }
+.eyebrow { font-family: 'DM Sans', sans-serif; font-size: .72rem; font-weight: 500; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
+h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; color: #fff; line-height: 1.05; letter-spacing: -.02em; }
+h1 span { background: linear-gradient(90deg, #10a37f, #4285f4, #d97941); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.subtitle { margin-top: 16px; font-size: 1rem; color: rgba(255,255,255,0.38); font-weight: 300; letter-spacing: .01em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; width: 100%; }
+.card { position: relative; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 36px 28px 28px; display: flex; flex-direction: column; align-items: center; gap: 20px; backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4); overflow: hidden; cursor: default; transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .35s ease, box-shadow .35s ease; animation: fadeUp .9s cubic-bezier(.22,1,.36,1) both; }
+.card:nth-child(1) { animation-delay: .1s; }
+.card:nth-child(2) { animation-delay: .2s; }
+.card:nth-child(3) { animation-delay: .3s; }
+.card:nth-child(4) { animation-delay: .4s; }
+.card::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 160px; height: 160px; border-radius: 50%; filter: blur(48px); opacity: .28; transition: opacity .35s ease, transform .35s ease; }
+.card-chatgpt::before { background: var(--glow-chatgpt); }
+.card-claude::before { background: var(--glow-claude); }
+.card-gemini::before { background: var(--glow-gemini); }
+.card-grok::before { background: var(--glow-grok); }
+.card:hover { transform: translateY(-8px) scale(1.02); }
+.card-chatgpt:hover { border-color: rgba(16,163,127,.5); box-shadow: 0 0 60px -10px rgba(16,163,127,.35); }
+.card-claude:hover { border-color: rgba(217,121,65,.5); box-shadow: 0 0 60px -10px rgba(217,121,65,.35); }
+.card-gemini:hover { border-color: rgba(66,133,244,.5); box-shadow: 0 0 60px -10px rgba(66,133,244,.35); }
+.card-grok:hover { border-color: rgba(226,232,240,.3); box-shadow: 0 0 60px -10px rgba(226,232,240,.2); }
+.card:hover::before { opacity: .55; transform: translateX(-50%) scale(1.2); }
+.icon-wrap { position: relative; z-index: 1; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); transition: transform .3s ease; }
+.card:hover .icon-wrap { transform: rotate(-5deg) scale(1.1); }
+.card-name { position: relative; z-index: 1; font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+.card-tag { position: relative; z-index: 1; font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; padding: 4px 12px; border-radius: 99px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); }
+.btn { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-family: 'DM Sans', sans-serif; font-size: .85rem; font-weight: 500; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; cursor: pointer; text-decoration: none; transition: all .25s ease; }
+.btn:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="container">
+<header>
+<div class="eyebrow">AI-verktyg</div>
+<h1>Din <span>AI Toolkit</span></h1>
+<div class="subtitle">Alla verktyg du behöver på ett ställe</div>
+</header>
+<div class="grid">
+<a href="https://chat.openai.com" class="card card-chatgpt">
+<div class="icon-wrap">🤖</div>
+<div class="card-name">ChatGPT</div>
+<div class="card-tag">文本 & Kod</div>
+<div class="btn">Öppna →</div>
+</a>
+<a href="https://claude.ai" class="card card-claude">
+<div class="icon-wrap">🧠</div>
+<div class="card-name">Claude</div>
+<div class="card-tag">Analyse & Kod</div>
+<div class="btn">Öppna →</div>
+</a>
+<a href="https://gemini.google.com" class="card card-gemini">
+<div class="icon-wrap">✨</div>
+<div class="card-name">Gemini</div>
+<div class="card-tag">Multimodal</div>
+<div class="btn">Öppna →</div>
+</a>
+<a href="https://grok.com" class="card card-grok">
+<div class="icon-wrap">⚡</div>
+<div class="card-name">Grok</div>
+<div class="card-tag">Snabb & Smart</div>
+<div class="btn">Öppna →</div>
+</a>
+</div>
+</div>
+</body>
+</html>

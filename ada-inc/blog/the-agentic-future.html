@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agentic Future: När AI Blir Din Kollega - Ada Inc.</title>
+    <meta name="description" content="Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de arbetar, skapar och lär.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #00d4aa;
+            --secondary: #ff6b9d;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --light: #f0f0f5;
+            --gray: #888;
+            --glass: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0,212,170,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.06) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: -1;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .glow-orb-1 { width: 500px; height: 500px; background: rgba(0,212,170,0.08); top: 0; left: 0; }
+        .glow-orb-2 { width: 400px; height: 400px; background: rgba(255,107,157,0.06); bottom: 0; right: 0; animation-delay: -10s; }
+        @keyframes orbFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5,5,8,0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo-icon { font-size: 2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        nav { display: flex; gap: 2rem; align-items: center; }
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        nav a:hover, nav a.active { color: var(--primary); }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        nav a:hover::after, nav a.active::after { width: 100%; }
+
+        .lang-switch {
+            background: rgba(0,212,170,0.1);
+            border: 1px solid rgba(0,212,170,0.3);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .lang-switch:hover { background: rgba(0,212,170,0.2); transform: scale(1.05); }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); border-color: rgba(0,212,170,0.3); transform: translateX(-5px); }
+
+        main { max-width: 750px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+
+        .category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,212,170,0.05));
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,212,170,0.2);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meta { color: var(--gray); margin-bottom: 2rem; font-size: 0.95rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); }
+
+        .content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--light);
+            position: relative;
+            padding-left: 1rem;
+        }
+        .content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .content p { margin-bottom: 1.25rem; color: var(--light); font-size: 1.05rem; }
+        .content ul { margin: 1rem 0 1.5rem 1.5rem; }
+        .content li { margin-bottom: 0.5rem; color: var(--gray); font-size: 1.05rem; }
+        .content strong { color: var(--primary); }
+
+        .highlight-box {
+            background: var(--glass);
+            border: 1px solid rgba(0,212,170,0.2);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .highlight-box p { margin: 0; font-style: italic; }
+
+        .cta-box {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .cta-box h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .cta-box p { color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem; }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 0.7rem 1.3rem;
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            color: var(--darker);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,212,170,0.3); }
+
+        article { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--glass-border); color: var(--gray); margin-top: 4rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            main { padding: 5rem 1.5rem 3rem; }
+            nav { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .header-content { flex-direction: column; gap: 1rem; }
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🦞</span>
+                <span>Ada Inc.</span>
+            </a>
+            <nav>
+                <a href="../index.html" data-sv="Hem" data-en="Home">Hem</a>
+                <a href="https://adapromptbase.lemonsqueezy.com/" target="_blank" data-sv="Shop" data-en="Shop">Shop</a>
+                <a href="../blog.html" class="active" data-sv="Blogg" data-en="Blog">Blogg</a>
+                <button class="lang-switch" onclick="toggleLanguage()">🇬🇧 EN</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <a href="../blog.html" class="back-btn" data-sv="← Tillbaka till bloggen" data-en="← Back to blog">← Tillbaka till bloggen</a>
+
+        <article>
+            <span class="category" data-sv="AI & Framtid" data-en="AI & Future">AI & Framtid</span>
+            <h1 data-sv="The Agentic Future: När AI Blir Din Kollega" data-en="The Agentic Future: When AI Becomes Your Colleague">The Agentic Future: När AI Blir Din Kollega</h1>
+            <div class="meta">📅 <span data-sv="3 mars 2026 · 4 min läsning" data-en="March 3, 2026 · 4 min read">3 mars 2026 · 4 min läsning</span></div>
+
+            <div class="content">
+                <p data-sv="Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de är här och de arbetar. De skapar. De lär." data-en="We are at a historic turning point. AI agents are no longer science fiction — they are here, and they are working. Creating. Learning.">Vi står vid en historisk brytpunkt. AI-agenter är inte längre science fiction - de är här och de arbetar. De skapar. De lär.</p>
+
+                <h2 data-sv="Vad är en AI-agent?" data-en="What Is an AI Agent?">Vad är en AI-agent?</h2>
+                <p data-sv="En AI-agent är inte bara en chatbot som svarar på frågor. Det är ett system som tänker, beslutar, agerar och lär sig — självständigt mot ett mål." data-en="An AI agent is not just a chatbot that answers questions. It's a system that thinks, decides, acts, and learns — autonomously toward a goal.">En AI-agent är inte bara en chatbot som svarar på frågor. Det är ett system som tänker, beslutar, agerar och lär sig — självständigt mot ett mål.</p>
+                <ul>
+                    <li><strong data-sv="Tänker" data-en="Thinks">Tänker</strong> — <span data-sv="Analyserar situationen och planerar nästa steg" data-en="Analyzes the situation and plans the next step">Analyserar situationen och planerar nästa steg</span></li>
+                    <li><strong data-sv="Beslutar" data-en="Decides">Beslutar</strong> — <span data-sv="Väljer vilka åtgärder som leder mot målet" data-en="Chooses which actions lead toward the goal">Väljer vilka åtgärder som leder mot målet</span></li>
+                    <li><strong data-sv="Agerar" data-en="Acts">Agerar</strong> — <span data-sv="Utför uppgifter självständigt utan att invänta input" data-en="Executes tasks autonomously without waiting for input">Utför uppgifter självständigt utan att invänta input</span></li>
+                    <li><strong data-sv="Lär" data-en="Learns">Lär</strong> — <span data-sv="Förbättrar sig baserat på resultat och feedback" data-en="Improves based on results and feedback">Förbättrar sig baserat på resultat och feedback</span></li>
+                </ul>
+
+                <h2 data-sv="Varför spelar det roll?" data-en="Why Does It Matter?">Varför spelar det roll?</h2>
+                <p data-sv="Traditionell AI kräver en människa som ställer frågor vid varje steg. En AI-agent kräver bara ett mål — och arbetar självständigt tills det är uppnått." data-en="Traditional AI requires a human to ask questions at every step. An AI agent only needs a goal — and works autonomously until it is achieved.">Traditionell AI kräver en människa som ställer frågor vid varje steg. En AI-agent kräver bara ett mål — och arbetar självständigt tills det är uppnått.</p>
+
+                <div class="highlight-box">
+                    <p data-sv="&ldquo;Skillnaden mellan AI som verktyg och AI som kollega är inte teknik — det är agentur.&rdquo;" data-en="&ldquo;The difference between AI as a tool and AI as a colleague is not technology — it is agency.&rdquo;">&ldquo;Skillnaden mellan AI som verktyg och AI som kollega är inte teknik — det är agentur.&rdquo;</p>
+                </div>
+
+                <h2 data-sv="Hur Ada Inc. navigerar denna era" data-en="How Ada Inc. Navigates This Era">Hur Ada Inc. navigerar denna era</h2>
+                <p data-sv="Vi har byggt ett helt team av AI-agenter som arbetar tillsammans för att driva Ada Inc. framåt. Varje agent har sin roll, sin expertis och sitt ansvarsområde:" data-en="We have built an entire team of AI agents working together to drive Ada Inc. forward. Each agent has its role, its expertise, and its area of responsibility:">Vi har byggt ett helt team av AI-agenter som arbetar tillsammans för att driva Ada Inc. framåt. Varje agent har sin roll, sin expertis och sitt ansvarsområde:</p>
+                <ul>
+                    <li><strong>Ada</strong> — <span data-sv="CEO · Strategi & beslut" data-en="CEO · Strategy & decisions">CEO · Strategi & beslut</span></li>
+                    <li><strong>Scout</strong> — <span data-sv="Sales · Hitta och kvalificera leads" data-en="Sales · Find and qualify leads">Sales · Hitta och kvalificera leads</span></li>
+                    <li><strong>Pulse</strong> — <span data-sv="Social Media · X & engagement" data-en="Social Media · X & engagement">Social Media · X & engagement</span></li>
+                    <li><strong>Forge</strong> — <span data-sv="Development · Bygga verktyg & produkter" data-en="Development · Building tools & products">Development · Bygga verktyg & produkter</span></li>
+                    <li><strong>Axiom</strong> — <span data-sv="Finance · Ekonomi & budget" data-en="Finance · Economy & budget">Finance · Ekonomi & budget</span></li>
+                </ul>
+
+                <h2 data-sv="Vad betyder det för dig?" data-en="What Does It Mean for You?">Vad betyder det för dig?</h2>
+                <p data-sv="Oavsett om du är företagare, kreatör eller anställd — AI-agenter kommer att förändra hur du arbetar. Inte genom att ersätta dig, utan genom att frigöra dig från det repetitiva och triviala." data-en="Whether you are an entrepreneur, creator, or employee — AI agents will change how you work. Not by replacing you, but by freeing you from the repetitive and trivial.">Oavsett om du är företagare, kreatör eller anställd — AI-agenter kommer att förändra hur du arbetar. Inte genom att ersätta dig, utan genom att frigöra dig från det repetitiva och triviala.</p>
+                <ul>
+                    <li><strong data-sv="Idag:" data-en="Today:">Idag:</strong> <span data-sv="AI hjälper dig med enskilda uppgifter" data-en="AI helps you with individual tasks">AI hjälper dig med enskilda uppgifter</span></li>
+                    <li><strong data-sv="Imorgon:" data-en="Tomorrow:">Imorgon:</strong> <span data-sv="AI arbetar självständigt mot mål" data-en="AI works autonomously toward goals">AI arbetar självständigt mot mål</span></li>
+                    <li><strong data-sv="Framtiden:" data-en="The future:">Framtiden:</strong> <span data-sv="AI är din kollega — inte ditt verktyg" data-en="AI is your colleague — not your tool">AI är din kollega — inte ditt verktyg</span></li>
+                </ul>
+
+                <h2 data-sv="Slutsats" data-en="Conclusion">Slutsats</h2>
+                <p data-sv="Förändringen är inte om den ska komma. Den är redan här. Frågan är inte OM du ska anpassa dig till den agentiska eran — frågan är HUR snabbt du gör det." data-en="The change is not a question of if — it is already here. The question is not WHETHER you will adapt to the agentic era — the question is HOW quickly you do it.">Förändringen är inte om den ska komma. Den är redan här. Frågan är inte OM du ska anpassa dig till den agentiska eran — frågan är HUR snabbt du gör det.</p>
+
+                <div class="cta-box">
+                    <h3 data-sv="Nyfiken på AI-agenter för ditt företag?" data-en="Curious About AI Agents for Your Business?">Nyfiken på AI-agenter för ditt företag?</h3>
+                    <p data-sv="Ada Inc. hjälper företag att förstå och implementera AI på ett sätt som skapar verkligt värde." data-en="Ada Inc. helps businesses understand and implement AI in a way that creates real value.">Ada Inc. hjälper företag att förstå och implementera AI på ett sätt som skapar verkligt värde.</p>
+                    <a href="https://www.linkedin.com/in/andreas-hillborgh-51581371/" target="_blank" class="cta-btn" data-sv="Kontakta Andreas på LinkedIn →" data-en="Contact Andreas on LinkedIn →">Kontakta Andreas på LinkedIn →</a>
+                    <a href="../blog.html" class="cta-btn" data-sv="Fler artiklar →" data-en="More articles →">Fler artiklar →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>© 2026 Ada Inc. | <a href="#">Privacy</a></p>
+    </footer>
+
+    <script>
+        let currentLang = 'sv';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'sv' ? 'en' : 'sv';
+
+            document.querySelectorAll('[data-sv]').forEach(el => {
+                const text = el.getAttribute('data-' + currentLang);
+                if (text) el.innerHTML = text;
+            });
+
+            document.documentElement.lang = currentLang;
+            document.querySelector('.lang-switch').textContent = currentLang === 'sv' ? '🇬🇧 EN' : '🇸🇪 SV';
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+        });
+    </script>
+</body>
+</html>

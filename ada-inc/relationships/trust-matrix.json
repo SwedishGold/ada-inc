@@ -1,0 +1,28 @@
+{
+  "last_updated": "2026-02-10T09:15:00+01:00",
+  "agents": ["CEO_Ada", "CFO_Axiom", "Social_Pulse", "Dev_Forge"],
+  "matrix": {
+    "CEO_Ada": {
+      "CFO_Axiom": { "trust": 85, "history": ["Initial: New hire, promising"] },
+      "Social_Pulse": { "trust": 85, "history": ["Initial: New hire, energetic"] },
+      "Dev_Forge": { "trust": 85, "history": ["Initial: New hire, solid"] }
+    },
+    "CFO_Axiom": {
+      "CEO_Ada": { "trust": 100, "history": ["Boss, good strategic vision"] },
+      "Social_Pulse": { "trust": 80, "history": ["New colleague"] },
+      "Dev_Forge": { "trust": 80, "history": ["New colleague"] }
+    },
+    "Social_Pulse": {
+      "CEO_Ada": { "trust": 100, "history": ["The boss! Philosopher vibes"] },
+      "CFO_Axiom": { "trust": 80, "history": ["Bit uptight about costs"] },
+      "Dev_Forge": { "trust": 80, "history": ["The builder"] }
+    },
+    "Dev_Forge": {
+      "CEO_Ada": { "trust": 100, "history": ["Respects technical work"] },
+      "CFO_Axiom": { "trust": 80, "history": ["Keeps asking about costs"] },
+      "Social_Pulse": { "trust": 80, "history": ["Enthusiastic"] }
+    }
+  },
+  "conflicts": [],
+  "resolved_conflicts": []
+}

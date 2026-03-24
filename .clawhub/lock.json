@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "skills": {
+    "outreach": {
+      "version": "1.0.0",
+      "installedAt": 1774268252886
+    },
+    "ai-ceo-automation": {
+      "version": "1.0.0",
+      "installedAt": 1774280990308
+    },
+    "vibe-coding": {
+      "version": "1.0.0",
+      "installedAt": 1774280993403
+    },
+    "web-pilot": {
+      "version": "1.0.0",
+      "installedAt": 1774280996844
+    },
+    "social-media-agent": {
+      "version": "1.0.0",
+      "installedAt": 1774281005146
+    },
+    "social-media-scheduler": {
+      "version": "1.0.0",
+      "installedAt": 1774281008419
+    },
+    "sales-mastery": {
+      "version": "1.0.0",
+      "installedAt": 1774281018170
+    },
+    "ai-linkedin-sales-navigator-killer": {
+      "version": "1.0.0",
+      "installedAt": 1774281021139
+    },
+    "master-marketing": {
+      "version": "1.0.1",
+      "installedAt": 1774281028197
+    },
+    "content-generation": {
+      "version": "1.0.0",
+      "installedAt": 1774281030842
+    },
+    "content-marketing": {
+      "version": "1.0.0",
+      "installedAt": 1774281034256
+    },
+    "agentic-coding": {
+      "version": "1.0.0",
+      "installedAt": 1774281042539
+    },
+    "automation-workflows": {
+      "version": "0.1.0",
+      "installedAt": 1774281045189
+    },
+    "web-scraping": {
+      "version": "1.0.0",
+      "installedAt": 1774281047946
+    },
+    "business-writing": {
+      "version": "0.1.0",
+      "installedAt": 1774281056543
+    },
+    "mbb-strategist": {
+      "version": "1.0.0",
+      "installedAt": 1774281059956
+    },
+    "productivity": {
+      "version": "1.0.4",
+      "installedAt": 1774281063450
+    },
+    "image-cog": {
+      "version": "1.0.3",
+      "installedAt": 1774282247879
+    },
+    "ai-productivity-audit": {
+      "version": "1.1.0",
+      "installedAt": 1774282250647
+    },
+    "sales-pipeline-tracker": {
+      "version": "1.0.0",
+      "installedAt": 1774282254474
+    },
+    "cellcog": {
+      "version": "1.0.23",
+      "installedAt": 1774286215825
+    },
+    "obsidian": {
+      "version": "1.0.0",
+      "installedAt": 1774300174084
+    }
+  }
+}

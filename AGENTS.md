@@ -71,6 +71,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 4. Schemalägg till rätt plattform
 5. Analysera resultat
 
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
+
 ### KPI
 - Nya followers per vecka
 - Engagement rate
@@ -99,6 +102,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 3. Kvalificera leads
 4. Skicka personliga mejl
 5. Följa upp
+
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
 
 ### KPI
 - Nya leads per vecka
@@ -129,6 +135,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 - Ignorera troll/spam
 - Spara credits
 
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
+
 ### KPI
 - Svar per dag
 - Nya followers
@@ -154,6 +163,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 4. Dokumentera
 5. Överlämna
 
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
+
 ### KPI
 - Färdiga features
 - Buggar fixade
@@ -171,6 +183,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 - Analysera kostnader
 - Budget-planering
 - Revenue reports
+
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
 
 ### KPI
 - MRR (Monthly Recurring Revenue)
@@ -194,6 +209,9 @@ Detta dokument definierar Ada Inc:s AI-agentteam, deras roller, ansvar och hur d
 - Logga aktiviteter
 - Säkerhets-audits
 - Compliance
+
+### X-Strategi
+Läs: ~/.openclaw/skills/x-strategy/SKILL.md
 
 ### KPI
 - System uptime

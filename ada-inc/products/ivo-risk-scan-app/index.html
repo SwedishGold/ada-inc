@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVO Risk-Scan - AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <h1>🏥 IVO Risk-Scan</h1>
+                <span class="tagline">AI-driven riskanalys för svensk vård</span>
+            </div>
+            <div class="credits-info">
+                <span id="credits-display">5 credits</span>
+                <button id="upgrade-btn" class="btn-secondary">Uppgradera</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Input Section -->
+            <section class="input-section">
+                <h2>📝 Ange journalanteckning</h2>
+                <textarea 
+                    id="journal-input" 
+                    placeholder="Klistra in journalanteckning här...
+
+Exempel:
+Patienten kommer in med bröstsmärta. AT: Utseende blek, adekvat. BT: 145/90, P: 88. ECG visar ST-sänkning V4-V6. Bedömning: Misstänkt ACS. Rekommendation: Troponin, övervakning, kardiologkontakt."
+                    rows="8"
+                ></textarea>
+                <div class="input-actions">
+                    <button id="analyze-btn" class="btn-primary">
+                        🔍 Analysera (1 credit)
+                    </button>
+                    <button id="clear-btn" class="btn-secondary">Rensa</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results" style="display: none;">
+                <h2>📊 Analysresultat</h2>
+                
+                <!-- Risk Level -->
+                <div class="risk-card" id="risk-level">
+                    <h3>Risknivå</h3>
+                    <span class="risk-badge medium">MEDEL</span>
+                </div>
+
+                <!-- SBAR Analysis -->
+                <div class="analysis-card">
+                    <h3>📋 SBAR-analys</h3>
+                    <div id="sbar-output"></div>
+                </div>
+
+                <!-- Risk Words -->
+                <div class="analysis-card">
+                    <h3>⚠️ Identifierade riskord</h3>
+                    <div id="risk-words" class="tags"></div>
+                </div>
+
+                <!-- IVO Comparison -->
+                <div class="analysis-card">
+                    <h3>📋 IVO-kravjämförelse</h3>
+                    <div id="ivo-comparison"></div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="analysis-card">
+                    <h3>💡 Rekommendationer</h3>
+                    <div id="recommendations"></div>
+                </div>
+
+                <!-- Auto-Fix Section -->
+                <div class="analysis-card" id="auto-fix-section">
+                    <h3>🔧 Auto-fix</h3>
+                    <p>Klicka för att omskriva journalen enligt IVO-krav:</p>
+                    <button id="auto-fix-btn" class="btn-primary">✨ Omskriv journal</button>
+                    <div id="auto-fix-result" style="display: none; margin-top: 16px;">
+                        <textarea id="fixed-journal" rows="6" placeholder="Här kommer den omskrivna journalen..."></textarea>
+                        <button id="use-fixed-btn" class="btn-secondary">Använd denna version</button>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="result-actions">
+                    <button id="export-pdf" class="btn-primary">📄 Exportera PDF</button>
+                    <button id="copy-clipboard" class="btn-secondary">📋 Kopiera</button>
+                </div>
+            </section>
+
+            <!-- Loading -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyserar...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error" id="error" style="display: none;"></div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside>
+            <div class="stats-card">
+                <h3>📈 Statistik</h3>
+                <div class="stat">
+                    <span>Analyserade idag:</span>
+                    <strong id="today-count">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Credits kvar:</span>
+                    <strong id="sidebar-credits">5</strong>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>ℹ️ Om IVO Risk-Scan</h3>
+                <p>Denna app hjälper dig att:</p>
+                <ul>
+                    <li>Identifiera risker i journalanteckningar</li>
+                    <li>Strukturera enligt SBAR-metoden</li>
+                    <li>Förbereda för IVO-inspektion</li>
+                </ul>
+                <p class="privacy">🔒 Din data stannar i din webbläsare</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div class="modal" id="upgrade-modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Uppgradera plan</h2>
+            <div class="plans">
+                <div class="plan">
+                    <h3>Pro</h3>
+                    <p class="price">149 kr/mån</p>
+                    <ul>
+                        <li>50 credits/mån</li>
+                        <li>Obegränsade analyser</li>
+                        <li>PDF-export</li>
+                    </ul>
+                    <button class="btn-primary">Välj Pro</button>
+                </div>
+                <div class="plan">
+                    <h3>Enterprise</h3>
+                    <p class="price">499 kr/mån</p>
+                    <ul>
+                        <li>200 credits/mån</li>
+                        <li>Prioritetssupport</li>
+                        <li>API-åtkomst</li>
+                    </ul>
+                    <button class="btn-primary">Välj Enterprise</button>
+                </div>
+            </div>
+            <button class="btn-close" id="close-modal">Stäng</button>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

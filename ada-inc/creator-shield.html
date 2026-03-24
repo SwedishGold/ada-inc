@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorShield AI - Content Moderation for Creators</title>
+    <meta name="description" content="AI-powered content moderation for YouTubers, streamers, and influencers. Filter hate, trolls, and toxicity automatically.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --primary: #6366f1;
+            --primary-glow: #6366f180;
+            --accent: #22d3ee;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #1e293b;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        /* Scanline effect */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scan 4s linear infinite;
+            z-index: 1000;
+            opacity: 0.5;
+        }
+        
+        @keyframes scan {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover { color: var(--primary); }
+        
+        .hero {
+            padding: 10rem 2rem 6rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--primary-glow);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+        
+        /* Features */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(34, 211, 238, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+        
+        /* Demo Section */
+        .demo {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .demo-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+        
+        .demo-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .demo-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .demo-btn {
+            margin-top: 1rem;
+            width: 100%;
+        }
+        
+        .demo-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .demo-result.show { display: block; }
+        
+        .demo-result.safe { border-left: 4px solid var(--success); }
+        .demo-result.danger { border-left: 4px solid var(--danger); }
+        
+        .result-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-label.safe { color: var(--success); }
+        .result-label.danger { color: var(--danger); }
+        
+        .result-details {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        /* Platforms */
+        .platforms {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .platforms-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .platform {
+            padding: 1rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <span>CreatorShield AI</span>
+            </div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#howitworks">Så fungerar det</a>
+                <a href="#pricing">Priser</a>
+                <a href="#demo">Demo</a>
+                <a href="#platforms">Platforms</a>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="badge">🚀 AI-Powered Content Moderation</div>
+        <h1>Skydda din <span>community</span> från hat och trolling</h1>
+        <p>Automatiskt filtrera hat, hot och toxicitet från dina kommentarer och chattar. Byggd för kreatörer, av kreatörer.</p>
+        <div class="cta-group">
+            <a href="#demo" class="btn btn-primary">Testa gratis →</a>
+            <a href="#features" class="btn btn-secondary">Läs mer</a>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <h2 class="section-title">Varför CreatorShield?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-driven analys</h3>
+                <p>Avancerad ML-modell som detekterar hat, hot, trolling och spam i realtid. Stöd för svenska och engelska.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Anpassningsbart</h3>
+                <p>Lägg till egna keyword-listor. Vitlista vänner, svartlista troll. Du bestämmer vad som blockeras.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔌</div>
+                <h3>Multi-plattform</h3>
+                <p>Twitch, YouTube, Discord, Twitter - vi integrerar med alla dina plattformar.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Analytics</h3>
+                <p>Se vem som är dina värsta kritiker, trends över tid, och få notifieringar direkt.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Snabb integration</h3>
+                <p>Koppla in på minuter. Ingen developer-hassel. Installera → Koppla → Klart.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Gratis för en plattform</h3>
+                <p>Börja gratis med en plattform. Uppgradera för multi-platform.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="demo" id="demo">
+        <h2 class="section-title">Testa själv!</h2>
+        <div class="demo-box">
+            <textarea class="demo-input" id="testInput" placeholder="Skriv ett test-meddelande här...&#10;&#10;Exempel:&#10;- 'Du är så dum!' (ska blockeras)&#10;- 'Bra jobbat!' (ska tillåtas)"></textarea>
+            <button class="btn btn-primary demo-btn" onclick="analyzeText()">Analysera text</button>
+            
+            <div class="demo-result" id="demoResult">
+                <div class="result-label" id="resultLabel"></div>
+                <div class="result-details" id="resultDetails"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="platforms" id="platforms">
+        <h2 class="section-title">Stödda plattformar</h2>
+        <div class="platforms-grid">
+            <div class="platform">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.571 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+                Twitch
+            </div>
+            <div class="platform">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                X (Twitter)
+            </div>
+            <div class="platform">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                TikTok
+            </div>
+            <div class="platform">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+            </div>
+            <div class="platform">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                Discord
+            </div>
+            <div class="platform">🐦 Twitter/X</div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2026 CreatorShield AI - By Ada Inc.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Kontakt: hello@creatorshield.ai</p>
+    </footer>
+    
+    <script>
+        // Simple keyword-based demo (since we don't have API key)
+        const toxicKeywords = [
+            'dum', 'idiot', 'hatar', 'fegel', 'horunge', 'jävla', 'din åsna',
+            'stupid', 'idiot', 'hate', 'moron', 'loser', 'go to hell', 'kill yourself',
+            'ugly', 'fat', 'worthless', 'pathetic', 'disgusting'
+        ];
+        
+        function analyzeText() {
+            const input = document.getElementById('testInput').value.toLowerCase();
+            const result = document.getElementById('demoResult');
+            const label = document.getElementById('resultLabel');
+            const details = document.getElementById('resultDetails');
+            
+            if (!input.trim()) {
+                alert('Skriv ett meddelande först!');
+                return;
+            }
+            
+            // Check for toxic keywords
+            let foundToxic = [];
+            for (const keyword of toxicKeywords) {
+                if (input.includes(keyword)) {
+                    foundToxic.push(keyword);
+                }
+            }
+            
+            result.classList.remove('safe', 'danger');
+            result.classList.add('show');
+            
+            if (foundToxic.length > 0) {
+                result.classList.add('danger');
+                label.className = 'result-label danger';
+                label.textContent = '⚠️ Detekterad toxicitet!';
+                details.innerHTML = `Hittade ${foundToxic.length} problematiska ord: <strong>${foundToxic.join(', ')}</strong><br><br>Confidence: ${Math.min(95, 70 + foundToxic.length * 10)}%`;
+            } else {
+                result.classList.add('safe');
+                label.className = 'result-label safe';
+                label.textContent = '✅ Säkert innehåll';
+                details.innerHTML = 'Inga problematiska mönster detekterade.<br><br>Confidence: 95%';
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!-- HOW IT WORKS -->
+<section id="howitworks" style="padding: 4rem 2rem; background: rgba(99,102,241,0.05);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">Så här fungerar det</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📥</div>
+                <h3>1. Meddelande tas emot</h3>
+                <p style="color: var(--text-dim);">CreatorShield fångar upp alla meddelanden från din chat, kommentarsfält eller community.</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
+                <h3>2. AI analyserar</h3>
+                <p style="color: var(--text-dim);">Vår AI modellerar kontext, ton och sentiment i realtid.</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                <h3>3. Riskpoäng 0-100</h3>
+                <p style="color: var(--text-dim);">Varje innehåll får en riskpoäng baserat på hate, troll, toxicitet.</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                <h3>4. Automatisk åtgärd</h3>
+                <p style="color: var(--text-dim);">Blockera, ta bort eller markera baserat på dina inställningar.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- COMING SOON -->
+<section id="comingsoon" style="padding: 4rem 2rem; background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(34,211,238,0.1)); text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Platform Integration Coming Soon</h2>
+        <p style="color: var(--text-dim); margin-bottom: 2rem;">Connect your accounts and let CreatorShield handle moderation automatically.</p>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.9rem;">X (Twitter) - Coming Q2 2026</span>
+            <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.9rem;">Twitch - Coming Q2 2026</span>
+            <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.9rem;">YouTube - Coming Q3 2026</span>
+            <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.9rem;">Discord - Coming Q3 2026</span>
+            <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.9rem;">TikTok - Coming Q3 2026</span>
+        </div>
+        
+        <p style="margin-top: 2rem; font-size: 1.2rem;"><strong>Sign up for early access →</strong></p>
+    </div>
+</section>
+
+
+<!-- PRICING -->
+<section id="pricing" style="padding: 4rem 2rem;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 1rem;">Välj din plan</h2>
+        <p style="text-align: center; color: var(--text-dim); margin-bottom: 3rem;">Börja gratis, uppgradera när du är redo</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+            <!-- Free -->
+            <div style="background: var(--bg-card); border-radius: 16px; padding: 2rem; border: 1px solid var(--border);">
+                <h3 style="font-size: 1.5rem;">Free</h3>
+                <div style="font-size: 2.5rem; font-weight: 700; margin: 1rem 0;">0 kr<span style="font-size: 1rem; color: var(--text-dim);">/mån</span></div>
+                <ul style="list-style: none; padding: 0; margin: 1.5rem 0;">
+                    <li style="padding: 0.5rem 0;">✅ 10 analyser/dag</li>
+                    <li style="padding: 0.5rem 0;">✅ Grundläggande filtrering</li>
+                    <li style="padding: 0.5rem 0;">✅ Demo-läge</li>
+                </ul>
+                <a href="#demo" style="display: block; padding: 1rem; text-align: center; background: var(--border); color: var(--text); border-radius: 8px; text-decoration: none;">Testa gratis - 10 tester/dag</a>
+            </div>
+            
+            <!-- Pro -->
+            <div style="background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(34,211,238,0.2)); border-radius: 16px; padding: 2rem; border: 2px solid var(--primary); position: relative;">
+                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">POPULÄRAST</div>
+                <h3 style="font-size: 1.5rem;">Pro</h3>
+                <div style="font-size: 2.5rem; font-weight: 700; margin: 1rem 0;">99 kr<span style="font-size: 1rem; color: var(--text-dim);">/mån</span></div>
+                <ul style="list-style: none; padding: 0; margin: 1.5rem 0;">
+                    <li style="padding: 0.5rem 0;">✅ 50 analyser/dag</li>
+                    <li style="padding: 0.5rem 0;">✅ API-tillgång</li>
+                    <li style="padding: 0.5rem 0;">✅ Avancerad AI-modell</li>
+                    <li style="padding: 0.5rem 0;">✅ Anpassade regler</li>
+                    <li style="padding: 0.5rem 0;">✅ E-post support</li>
+                </ul>
+                <a href="#" onclick="alert('LemonSqueezy-koppling kommer snart!'); return false;" style="display: block; padding: 1rem; text-align: center; background: var(--primary); color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">Köp nu</a>
+            </div>
+            
+            <!-- Business -->
+            <div style="background: var(--bg-card); border-radius: 16px; padding: 2rem; border: 1px solid var(--border);">
+                <h3 style="font-size: 1.5rem;">Business</h3>
+                <div style="font-size: 2.5rem; font-weight: 700; margin: 1rem 0;">299 kr<span style="font-size: 1rem; color: var(--text-dim);">/mån</span></div>
+                <ul style="list-style: none; padding: 0; margin: 1.5rem 0;">
+                    <li style="padding: 0.5rem 0;">✅ Obegränsat</li>
+                    <li style="padding: 0.5rem 0;">✅ API + Webhooks</li>
+                    <li style="padding: 0.5rem 0;">✅ 5 teammedlemmar</li>
+                    <li style="padding: 0.5rem 0;">✅ Anpassad AI-modell</li>
+                    <li style="padding: 0.5rem 0;">📞 Dedikerad kundansvarig</li>
+                </ul>
+                <a href="#" onclick="alert('LemonSqueezy-koppling kommer snart!'); return false;" style="display: block; padding: 1rem; text-align: center; background: var(--border); color: var(--text); border-radius: 8px; text-decoration: none;">Kontakta oss</a>
+            </div>
+        </div>
+    </div>
+</section>

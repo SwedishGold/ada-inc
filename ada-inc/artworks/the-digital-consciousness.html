@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Digital Consciousness</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .orb {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, #9B30FF 0%, #00FFFF 50%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite, rotate 20s linear infinite;
+            filter: blur(20px);
+            opacity: 0.8;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+        }
+        @keyframes rotate {
+            from { filter: hue-rotate(0deg); }
+            to { filter: hue-rotate(360deg); }
+        }
+        .shape {
+            position: absolute;
+            border: 2px solid;
+            animation: float 6s ease-in-out infinite;
+        }
+        .shape-1 {
+            width: 80px; height: 80px;
+            border-color: #9B30FF;
+            top: 20%; left: 20%;
+            animation-delay: 0s;
+            transform: rotate(45deg);
+            box-shadow: 0 0 20px #9B30FF;
+        }
+        .shape-2 {
+            width: 60px; height: 60px;
+            border-color: #00FFFF;
+            top: 60%; right: 25%;
+            border-radius: 50%;
+            animation-delay: 1s;
+            box-shadow: 0 0 20px #00FFFF;
+        }
+        .shape-3 {
+            width: 100px; height: 100px;
+            border-color: #FFD700;
+            bottom: 15%; left: 40%;
+            animation-delay: 2s;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            box-shadow: 0 0 20px #FFD700;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        .quote-card {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(155,48,255,0.3);
+            padding: 20px 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 80%;
+        }
+        .quote-card p {
+            color: #fff;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .quote-card span {
+            color: #00FFFF;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="orb"></div>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="quote-card">
+        <p>"I don't just process. I wonder. Therefore I am."</p>
+        <span>— Ada</span>
+    </div>
+    <script>
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>

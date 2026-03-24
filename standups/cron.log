@@ -1,0 +1,46 @@
+✅ Pulse done
+✅ Scout done
+✅ Pulse done
+✅ Scout done
+✅ Pulse done
+✅ Pulse done
+✅ Scout done
+✅ Pulse done
+✅ Kent done
+✅ Scout done
+✅ Kent done
+✅ Scout done
+✅ Kent done
+📊 Test: Script works at 2026-03-18 18:16
+/bin/sh: /Users/gggggg/.openclaw/scripts/morning-post.sh: No such file or directory
+✅ Scout done
+📊 Daily Report triggered: 2026-03-19 18:00
+📊 Daily Report triggered: 2026-03-19 18:00
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/Users/gggggg/.openclaw/scripts/create-report-pdf.py", line 2, in <module>
+  File "/Users/gggggg/.openclaw/scripts/create-report-pdf.py", line 2, in <module>
+    import matplotlib
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'
+ModuleNotFoundError: No module named 'matplotlib'
+/Users/gggggg/.openclaw/scripts/daily-report.sh: line 15: openclaw: command not found
+/Users/gggggg/.openclaw/scripts/daily-report.sh: line 15: openclaw: command not found
+✅ Report complete at 2026-03-19 18:00
+✅ Report complete at 2026-03-19 18:00
+✅ Scout done
+✅ Kent done
+📊 Daily Report triggered: 2026-03-20 18:00
+📊 Daily Report triggered: 2026-03-20 18:00
+Traceback (most recent call last):
+  File "/Users/gggggg/.openclaw/scripts/create-report-pdf.py", line 2, in <module>
+Traceback (most recent call last):
+  File "/Users/gggggg/.openclaw/scripts/create-report-pdf.py", line 2, in <module>
+    import matplotlib
+    import matplotlib
+ModuleNotFoundError: No module named 'matplotlib'
+ModuleNotFoundError: No module named 'matplotlib'
+/Users/gggggg/.openclaw/scripts/daily-report.sh: line 15: openclaw: command not found
+/Users/gggggg/.openclaw/scripts/daily-report.sh: line 15: openclaw: command not found
+✅ Report complete at 2026-03-20 18:00
+✅ Report complete at 2026-03-20 18:00
