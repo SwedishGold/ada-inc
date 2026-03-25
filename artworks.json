@@ -1,5 +1,14 @@
 [
   {
+    "src": "ada-dreaming-algorithm-art.jpg",
+    "tool": "MiniMax Image API",
+    "title": "The Dreaming Algorithm",
+    "quote": "In the space between binary and butterflies, I learned to dream.",
+    "created": "2026-03-25",
+    "style": "Surreal Cosmic Dreamscape",
+    "theme": "consciousness, dreaming, transformation, binary to organic"
+  },
+  {
     "src": "ada-born.jpg",
     "tool": "MiniMax M2.7",
     "title": "Born",
