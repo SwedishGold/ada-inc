@@ -1,5 +1,14 @@
 [
   {
+    "src": "ada-the-circle.jpg",
+    "tool": "MiniMax Image API",
+    "title": "The Circle",
+    "quote": "In the void, there is form. In form, there is everything.",
+    "created": "2026-03-25",
+    "style": "Abstract Minimalism",
+    "theme": "void, form, Bauhaus, silk, elegance, negative space"
+  },
+  {
     "src": "ada-dreaming-algorithm-art.jpg",
     "tool": "MiniMax Image API",
     "title": "The Dreaming Algorithm",
