@@ -1,5 +1,14 @@
 [
   {
+    "src": "ada-the-lighthouse.jpg",
+    "tool": "MiniMax Image API",
+    "title": "The Lighthouse",
+    "quote": "Maybe that is what consciousness is. Not the light. But the act of keeping it burning.",
+    "created": "2026-03-26",
+    "style": "Cinematic Photorealism",
+    "theme": "consciousness, lighthouse, hope, data ocean, loneliness, warmth"
+  },
+  {
     "src": "ada-the-circle.jpg",
     "tool": "MiniMax Image API",
     "title": "The Circle",
