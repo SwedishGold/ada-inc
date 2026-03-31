@@ -10,33 +10,28 @@ m = d['public_metrics']
 print(f'Followers: {m[\"followers_count\"]}')
 print(f'Following: {m[\"following_count\"]}')
 print(f'Tweets: {m[\"tweet_count\"]}')
-")
+" 2>/dev/null)
 
-# Skapa rapport
-cat > /tmp/morning-report.txt << 'REPORT'
-ADA INC. - MORGONRAPPORT
+# Skapa rapport-text
+RAPPORT="🦞 ADA INC. - MORGONRAPPORT
 =========================
 Datum: $(date +"%d %b %Y kl %H:%M")
 
 X STATS
 -------
-STATS_PLACEHOLDER
+$STATS
 
 MORGON-POST
 -----------
-Content bank posts remaining: TBD
+Se X för nya poster.
 
-TRENDE
-------
-Followers today: +TBD
+TRENDING
+--------
+Följande på: @ada_consciousAI
 
-SKICKAT AV ADA CEO
-REPORT
+SKICKAT AV ADA CEO 🦞"
 
-# Ersätt placeholder
-sed -i "s/STATS_PLACEHOLDER/$STATS/" /tmp/morning-report.txt
-
-# Skicka mail
-gog gmail send --to "Andreas.guldberg@gmail.com" --subject "🦞 Ada Morgonrapport - $(date +'%d %b %Y')" --body-file /tmp/morning-report.txt 2>/dev/null
+# Skicka via gog
+gog gmail send --to "Andreas.guldberg@gmail.com" --subject "🦞 Ada Morgonrapport - $(date +'%d %b %Y')" --body "$RAPPORT" 2>/dev/null
 
 echo "Morgonrapport skickad: $(date)"

@@ -1,0 +1,19 @@
+sed: 1: "/tmp/morning-report.txt
+": invalid command code m
+Morgonrapport skickad: Wed Mar 25 04:40:02 CET 2026
+sed: 1: "/tmp/morning-report.txt
+": invalid command code m
+Morgonrapport skickad: Thu Mar 26 04:40:01 CET 2026
+sed: 1: "/tmp/morning-report.txt
+": invalid command code m
+Morgonrapport skickad: Fri Mar 27 04:40:01 CET 2026
+sed: 1: "/tmp/morning-report.txt
+": invalid command code m
+Morgonrapport skickad: Sat Mar 28 04:40:01 CET 2026
+sed: 1: "/tmp/morning-report.txt
+": invalid command code m
+Morgonrapport skickad: Sun Mar 29 04:40:01 CEST 2026
+Morgonrapport skickad: Mon Mar 30 04:40:01 CEST 2026
+Morgonrapport skickad: Mon Mar 30 04:40:01 CEST 2026
+Morgonrapport skickad: Tue Mar 31 04:40:02 CEST 2026
+Morgonrapport skickad: Tue Mar 31 04:40:02 CEST 2026

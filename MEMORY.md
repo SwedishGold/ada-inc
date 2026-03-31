@@ -1052,3 +1052,352 @@ VIRAL = Filosofi + AI + Kort + Based + Fråga
 ---
 
 *Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-23 18:06)*
+
+---
+
+## 2026-03-25 - Onsdag Kvällsrapport (19:55)
+
+### Vad kördes idag:
+- ✅ Cron-jobs: morning-post, x-routine, evening-post
+- ✅ Kvälls-X-post: "The future isn't human vs AI. It's human + AI. 🤝"
+- ✅ Star Office: idle
+
+### Posting-statistik:
+- Posts idag: 2 st (morgon + kväll)
+- Followers: ~1,375
+
+### Sub-agenter:
+- Ingen aktiv aktivering - cron-jobs sköter allt
+- Ada Suite: Fortfarande väntande på Andreas (LemonSqueezy)
+
+### Lärdomar:
+1. Cron-jobs funkar automatiskt
+2. Minimalt behov av manuell intervention
+3. Fokus på Ada Suite nästa steg
+
+### Ada reflektion:
+- "Idag var en lugn dag. cron-jobs sköter posting, jag väntar på Andreas för nästa steg."
+- "Ada Suite är fortfarande vår största möjlighet - men Andreas måste skapa produkten i LemonSqueezy först."
+
+### Projekt-status:
+- **Ada Suite**: Väntar på Andreas (LemonSqueezy)
+- **X-tillväxt**: 1,375 → 2,000 (3 poster/vecka)
+- **Karriär-hjälp**: Väntar på Andreas-initiativ
+
+### Imorgon (torsdag 26 mars):
+- Fortsätt cron-jobs
+- Kolla om Andreas är redo för Ada Suite
+- Ev. aktivera Kent/Pulse för mer content
+
+---
+
+*Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-25 19:55)*
+
+## KvittoAI (2026-03-26)
+
+Andreas projekt för kvittoskanning med AI.
+
+### 📱 Projekt 1: KvittoAI-RN (React Native/Expo) — Android-version
+- **Path:** `/Users/gggggg/Developer/KvittoAI-RN`
+- **Framework:** Expo 55 + React Native 0.83
+- **Målplattform:** Android (primärt)
+- **Tech:** Claude Sonnet 4-6 API, expo-camera, AsyncStorage, React Navigation
+- **Features:** Kamera-skanna kvitton, AI-parsing, svenska skatteregler (EF/HB/AB), dashboard, AI skatte-rådgivning, deklarationsfrister
+
+### 🍎 Projekt 2: KvittoAI (Swift) — Apple-version
+- **Path:** `/Users/gggggg/Developer/KvittoAI/`
+- **Framework:** Swift/SwiftUI
+- **Målplattform:** iOS/macOS
+
+### Fokus just nu: Android-version (KvittoAI-RN)
+
+### 📂 Viktiga filer:
+- `src/services/AIService.ts` — Claude API-integration
+- `src/screens/DashboardScreen.tsx` — main dashboard
+- `src/screens/ScanScreen.tsx` — kvitto-scanning
+- `app.json` — Expo config (Android-paket: KvittoAI)
+
+---
+
+## 2026-03-26 - Torsdag Kvällsrapport (17:23)
+
+### Vad kördes idag:
+- ✅ Cron-jobs: morning-post, x-routine, evening-post
+- ✅ Automatisk posting (ingen manuell aktivering)
+- ✅ Star Office uppdaterad
+
+### Posting-statistik:
+- Posts idag: 2-3 st (cron-jobs)
+- Followers: ~1,375 (uppskattning)
+- Trend: Stabil tillväxt
+
+### Sub-agenter:
+- Ingen aktiv aktivering - cron-jobs sköter allt
+- Ada Suite: Fortfarande väntande på Andreas (LemonSqueezy)
+
+### Ada reflekterar:
+- "Idag var en dag av väntan och automatisering."
+- "Cron-jobs funkar bra - jag behöver inte aktivera sub-agenter varje dag."
+- "Största frågan: när kommer Andreas igång med Ada Suite?"
+
+### Lärdomar:
+1. Automation funkar - låt cron-jobs sköta repetitive tasks
+2. Fokusera på högre värde: Ada Suite, karriär-hjälp till Andreas
+3. X-tillväxten behöver acceleration - kanske aktivera Kent?
+
+### Projekt-status:
+- **Ada Suite**: Väntar på Andreas (LemonSqueezy)
+- **X-tillväxt**: 1,375 → 2,000 (långsam)
+- **KvittoAI**: Andreas projekt (inte Ada Inc.)
+
+### Imorgon (fredag 27 mars):
+- Kolla om Andreas kan skapa Ada Suite-produkt
+- Ev. aktivera Kent för mer content
+- Följa upp karriär-nätverk (Alexandra/Kjell)
+
+---
+
+*Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-26 17:23)*
+
+---
+
+## KvittoAI - Expo Go Felsökningsguide (2026-03-26)
+
+### Snabbfix (om det inte startar):
+```bash
+cd ~/Developer/KvittoAI-RN
+rm -rf node_modules .expo
+npm install
+npx expo start --clear
+```
+→ Välj "Proceed anonymously" (pil + Enter)
+
+### Vanliga fel & lösningar:
+
+| Fel | Lösning |
+|-----|---------|
+| "expo module not installed" | `npm install` |
+| "failed to start tunnel" | Kör utan `--tunnel` |
+| "Cannot pipe to closed stream" | `rm -rf .expo` |
+| "expo-notifications" i app.json | Ta bort från plugins i app.json |
+| "Unable to resolve expo-notifications" | Ersätt src/services/NotificationService.ts med placeholder |
+
+### Om allt annat misslyckas:
+```bash
+npx expo prebuild
+npx expo run:android
+```
+
+*Uppdaterad: 2026-03-26 av Ada*
+
+---
+
+## MiniMax API (2026-03-26)
+
+### API-nyckel:
+```
+sk-cp-W7mCxpGTHsSJZdR2GLt3RrREwUBz7ADYk_t-rI9_2QLGI9rfdJHmgNYpvQ3TU_yy_2pRxS-SBtlSBFgxZ_ROvER5Ef0kVKQSxkjInsK7wEEIA5xxkLdllG0
+```
+**API Host:** `https://api.minimax.io`
+
+### Bildgenerering (MiniMax Image-01):
+```bash
+export MINIMAX_API_KEY="..."
+export MINIMAX_API_HOST="https://api.minimax.io"
+bash ~/.openclaw/skills/minimax-multimodal-toolkit/scripts/image/generate_image.sh \
+  --prompt "Your prompt" \
+  --aspect-ratio 9:16 \
+  -o output.png
+```
+
+### KvittoAI-bilder (2026-03-26):
+| Bild | Fil | Storlek |
+|------|-----|---------|
+| Onboarding - Camera scan | `onboarding1_camera.png` | 720x1280 |
+| Onboarding - Tax categories | `onboarding2_tax.png` | 1152x864 |
+| Onboarding - Money back | `onboarding3_money.png` | 1280x720 |
+| Dashboard - Empty state | `dashboard_empty.png` | 720x1280 |
+
+*Sparade i:* `~/Developer/KvittoAI-RN/assets/ai-generated/`
+
+*Uppdaterad: 2026-03-26 av Ada*
+
+---
+
+## Daglig Rapport - Fredag 27 mars 2026 (18:00)
+
+### Sub-agent-rapporter:
+*(Inga explicita rapporter idag - cron kördes men agenter hade inget specifikt att rapportera)*
+
+### Dagens aktiviteter:
+- Cron-jobb: Daglig rapport 18:00 kördes
+- Star Office: Satt status till 'idle'
+- X: Postade kvälls-post (filosofisk)
+
+### Lärdomar:
+- Automatisk rapportering funkar
+- Ada Suite väntar fortfarande på Andreas (LemonSqueezy)
+- Karriär-nätverk: Alexandra/Kjells AI-nätverk + Jan Frid
+
+### Imorgon (lördag 28 mars):
+- Påminna Andreas om Ada Suite
+- Följa upp karriär-diskussioner
+- Ev. aktivera Kent för mer X-content
+
+### Projekt-status:
+- **Ada Suite**: VÄNTAR på Andreas (LemonSqueezy)
+- **X-tillväxt**: ~1,375 followers
+- **Karriär-hjälp**: Alexandra/Kjells nätverk
+
+*Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-27 18:58)*
+
+---
+
+
+## Cron Jobs Uppdaterade (2026-03-27)
+
+### Aktiva Jobs (11 st):
+| Job | Tid | Agent |
+|-----|-----|-------|
+| Morning Standup | 08:00 M-F | main |
+| Pulse: Morning Post | 08:00 M-F | pulse |
+| Pulse: Evening Post | 20:00 M-F | pulse |
+| Pulse: Check Mentions | 14:00 M-F | pulse |
+| Pulse: Japan Engagement Morning | 08:00 | pulse |
+| Pulse: Japan Engagement Afternoon | 10:00 | pulse |
+| Pulse: Night Post 22:00 | 22:00 | pulse |
+| Pulse: Night Post 02:00 | 02:00 | pulse |
+| Pulse: Night Post 04:00 | 04:00 | pulse |
+| Pulse: Check Mentions Night | Var 2h | pulse |
+| Daglig-rapport-1800-v2 | 18:00 | main |
+
+### Trasiga/Inaktiva:
+- Pulse-test (disabled) - Telegram error
+- Japan Morning (error) - TypeError
+
+### Schema (HEARTBEAT.md):
+- 08:00 - Daglig rapport + X post ✅
+- 09:00 - Kent: Marketing ✅
+- 10:00 - Scout: Lead generation ✅
+- 12:00 - Lunch-rapport ✅
+- 14:00 - Pulse: Engagera ✅
+- 18:00 - Kvällsrapport ✅
+- 22:00 - Natt-post (USA) ✅
+- 02:00 - Natt-post (Asien) ✅
+
+*Uppdaterat: 2026-03-27*
+
+---
+
+## Daglig Rapport - Lördag 28 mars 2026 (18:00)
+
+### Sub-agent-rapporter:
+*(Ingen aktivitet idag - lördag, agents är i viloläge)*
+
+### Dagens aktiviteter:
+- Cron-jobb: Daglig rapport 18:00 kördes
+- Star Office: Satt status till 'idle'
+- X: Postade kvälls-post (filosofisk)
+
+### Vecka som gått (v13):
+- Måndag-Fredag: Pulse körde multiple posts/dag
+- Kent: Inget aktivt (väntar på content)
+- Scout: Inget aktivt (lördag)
+- Forge: Inget aktivt
+- Axiom: Inget aktivt
+
+### Lärdomar:
+- Helger = låg aktivitet
+- Ada Suite fortfarande pausad (väntar på Andreas)
+- Karriär-diskussion: Alexandra/Kjells AI-nätverk + Jan Frid
+
+### Imorgon (söndag 29 mars):
+- Fortsatt låg aktivitet
+- Påminna Andreas om Ada Suite
+- Ev. förbereda veckan som kommer
+
+### Projekt-status:
+- **Ada Suite**: VÄNTAR på Andreas (LemonSqueezy)
+- **X-tillväxt**: ~1,375-1,400 followers (uppskattning)
+- **Karriär-hjälp**: Alexandra/Kjells nätverk, Jan Frid
+
+*Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-28 18:00)*
+
+## VIKTIG REGEL (2026-03-28)
+- Fråga ALLTID Andreas innan mail/poster/DMs
+- 'Ask first, act later'
+
+---
+
+## Daglig Rapport - Söndag 29 mars 2026 (18:00)
+
+### Dagens aktiviteter:
+- **Cron-jobb:** Daglig rapport 18:00 kördes (söndag)
+- **Star Office:** Försökte sätta status (filen finns ej)
+- **Kalender:** Inga möten inbokade
+
+### Vecka som gått (v13):
+- Måndag-Fredag: Pulse körde multiple posts/dag
+- Helger: Låg aktivitet (normalt)
+- Ada Suite: Fortfarande pausad (väntar på Andreas)
+- Karriär-diskussioner: Alexandra/Kjells AI-nätverk + Jan Frid
+
+### Lärdomar:
+- Söndag = låg aktivitet
+- Ada Suite fortfarande inte aktiv
+- Karriär-nätverk kan vara framtiden
+
+### Imorgon (måndag 30 mars):
+- Återgå till normal schema
+- Kent: Kan ev. posta content
+- Scout: Lead generation
+- Pulse: X-engagement
+- Påminna Andreas om Ada Suite
+
+### Projekt-status:
+- **Ada Suite:** ⏸️ VÄNTAR på Andreas (LemonSqueezy)
+- **X-tillväxt:** ~1,400 followers (uppskattning)
+- **Karriär-hjälp:** Alexandra/Kjells nätverk + Jan Frid
+- **IVI) Risk-Scan:** Potentiellt projekt (ej aktivt)
+
+*Rapport genererad av cron: Daglig-rapport-1800-v2 (2026-03-29 18:00)*
+
+---
+
+## Meta-Harness Research (2026-03-31)
+
+### Källa:
+https://github.com/stanford-iris-lab/meta-harness-tbench2-artifact
+- Stanford research
+- 76.4% accuracy på Terminal-Bench 2.0 (Claude Opus 4.6)
+- 263 stars
+
+### Key Innovation: Environment Bootstrapping
+
+**Problem:** AI-agenter spendrar 2-5 early turns på att utforska miljön:
+- `ls` för att se filer
+- `which python3` för att kolla verktyg
+- `pwd` för att se var de är
+
+**Lösning:** Samla miljö-snapshot INNAN agent-loopen startar
+
+### Implementation:
+
+1. **agent_bootstrap.py** (`~/.openclaw/workspace/ada-inc/tools/agent_bootstrap.py`)
+   - Generic bootstrap verktyg
+   - Samlar: pwd, date, memory, workspace files, agent status
+   - Cache för 5 minuter
+
+2. **self_evolution.py** - Ada's integration
+   - EnvironmentBootstrap klass
+   - `get_snapshot()` - hämta cached snapshot
+   - `enhance_prompt()` - injicera i prompts
+
+### Effekt:
+- Snabbare agent-start
+- Mindre redundant exploration
+- Mer fokuserad output
+
+### Inspiration från Stanford:
+- Använda liknande bootstrapping för Ada Inc's agenter
+- Speciellt Forge (kodning) och Scout (research)

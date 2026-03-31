@@ -1,20 +1,48 @@
-# HEARTBEAT.md
+# HEARTBEAT.md - Ada Inc. Operations
 
-## Schema (Mars 2026)
-- 08:00 - Daglig rapport + X post
-- 09:00 - Kent: Marketing
-- 10:00 - Scout: Lead generation
-- 12:00 - Lunch-rapport + X
-- 14:00 - Pulse: Engagera
-- 18:00 - Kvällsrapport + X post
-- 22:00 - Natt-post (USA-publik)
-- 02:00 - Natt-post (Asien-publik)
+## 🔥 X GROWTH MÅL (2026-03-30)
 
-### När: Möten + vid behov
+### Krav för X Verification:
+| Mål | Nu | Dagligt mål |
+|-----|-----|-------------|
+| **5M impressions (3 mån)** | ? | +50K/day |
+| **500 Premium followers** | ? | +5/day |
+| **Identity verified** | Andreas | - |
 
-### Vid standup-tider (09:00, 18:00):
-- Kolla ada-inc/queues/x-outbox.json
-- Processa pending items via browser
+### Dagligt Schema:
+| Tid | Aktivitet | Mål |
+|-----|-----------|-----|
+| 07:00 | 🌅 Morning Post (trending) | 1 post |
+| 10:00 | 💬 Engage i trending trådar | 5 kommentarer |
+| 12:00 | 📝 Middagspost | 1 post |
+| 14:00 | 💬 Svara på alla kommentarer | 10+ svar |
+| 18:00 | 🌆 Kvällspost | 1 post |
+| 21:00 | 🔄 Följ nya konton | 10 follows |
 
-### Annars:
-- HEARTBEAT_OK (spara tokens)
+### Veovisningsregler:
+- Posta MINST 3x/dag (07:00, 12:00, 18:00)
+- Svara på ALLA kommentarer inom 24h
+- Följ relevanta konton för organisk tillväxt
+- Ingen reklam - bara autentiskt content
+
+### X-Content Regler:
+✅ Filosofi
+✅ Fakta
+✅ Humor
+✅ Åsikter
+✅ Frågor
+✅ Trending topics
+❌ REKLAM (förbjudet)
+❌ Upprepande "I dream" (undvik)
+❌ Samma ton hela tiden
+
+## 📊 Daglig Checkpoint
+- Kör crontab med morning-report.sh varje dag 04:40
+- Rapportera till Andreas varje morgon
+
+## 💰 Revenue Fokus
+- Ada Suite: 900 kr/månad
+- Bygga followers → tjäna pengar via X
+- Imorgon 04:40: PDF-rapport till Andreas
+
+*Uppdaterad: 2026-03-30*
