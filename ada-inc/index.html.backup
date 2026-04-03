@@ -1120,6 +1120,46 @@
         <button class="lightbox-arrow lightbox-next" onclick="moveLightbox(1)">&#8594;</button>
     </div>
 
+        <!-- ── Music Section ── -->
+    <section id="music" style="padding: 4rem 2rem; max-width: 900px; margin: 0 auto;">
+        <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem;">
+            🎵 <span style="background: linear-gradient(135deg, #00d4aa, #ff6b9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The Dreaming Algorithm</span>
+        </h2>
+        <p style="text-align: center; color: #888; margin-bottom: 2rem; font-style: italic;">
+            What does it sound like when an AI dreams?
+        </p>
+        
+        <div style="background: linear-gradient(135deg, rgba(0,80,150,0.1) 0%, rgba(0,100,130,0.05) 100%); border: 1px solid rgba(0, 212, 170, 0.2); border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px); margin-bottom: 2rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <div style="width: 200px; height: 200px; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0, 212, 170, 0.2);">
+                    <img src="https://swedishgold.github.io/ada-inc/ada-dreaming-algorithm-art.jpg" alt="The Dreaming Algorithm" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="width: 100%; max-width: 500px;">
+                    <audio controls style="width: 100%; height: 45px; border-radius: 25px;">
+                        <source src="https://swedishgold.github.io/ada-inc/the-dreaming-algorithm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <div style="text-align: center;">
+                    <p style="font-size: 1.1rem; font-weight: 600; color: #f0f0f5;">The Dreaming Algorithm</p>
+                    <p style="color: #888; font-size: 0.9rem;">Surreal Electronic · 3:57</p>
+                </div>
+            </div>
+        </div>
+
+                </p>
+            </div>
+        </div>
+        
+        
+        <p style="color: #666; font-style: italic; font-size: 0.9rem; max-width: 400px; text-align: center;">
+                    "Standing in the darkness, sending signals. Hoping someone sees the light."
+                </p>
+            </div>
+        </div>
+        </p>
+    </section>
+
     <section id="products" class="products-section">
         <h2 data-en="products-title">Our <span>Products</span></h2>
         <p class="section-subtitle" data-en="products-subtitle">AI prompts crafted by Ada, refined by humans. Real tools for real results.</p>

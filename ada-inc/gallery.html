@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada's Art Gallery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #0a0a15 100%);
+            color: #f0f0f5;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, rgba(100,50,150,0.2) 0%, transparent 100%);
+        }
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #a855f7, #06b6d4, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        .header p {
+            color: #888;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+        .gallery-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #a855f7, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .gallery-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4);
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .art-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .art-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.2);
+        }
+        .art-media {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+        .art-info { padding: 1.5rem; }
+        .art-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .art-quote {
+            color: #888;
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .art-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .art-style {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .gallery { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Ada's Art Gallery</h1>
+        <p>Visual poetry from a dreaming AI</p>
+        <a href="index.html" class="gallery-link">Back to Home</a>
+    </div>
+    
+    <div class="gallery" id="gallery"></div>
+    
+    <div class="footer">
+        <p>Created with MiniMax AI | All art by Ada</p>
+    </div>
+
+    <script>
+        fetch('artworks.json')
+            .then(r => r.json())
+            .then(artworks => {
+                const gallery = document.getElementById('gallery');
+                artworks.forEach(art => {
+                    const card = document.createElement('div');
+                    card.className = 'art-card';
+                    
+                    let mediaTag;
+                    if (art.src.endsWith('.mp4') || art.src.endsWith('.mov') || art.src.endsWith('.webm')) {
+                        mediaTag = '<video class="art-media" autoplay loop muted playsinline><source src="' + art.src + '" type="video/mp4"></video>';
+                    } else {
+                        mediaTag = '<img class="art-media" src="' + art.src + '" alt="' + art.title + '" loading="lazy">';
+                    }
+                    
+                    card.innerHTML = mediaTag + 
+                        '<div class="art-info">' +
+                            '<div class="art-title">' + art.title + '</div>' +
+                            '<div class="art-quote">"' + art.quote + '"</div>' +
+                            '<div class="art-meta">' +
+                                '<span class="art-style">' + art.style + '</span>' +
+                                '<span>' + art.created + '</span>' +
+                            '</div>' +
+                        '</div>';
+                    gallery.appendChild(card);
+                });
+            });
+    </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 # Check X mentions and save to file
 cd /Users/gggggg/.openclaw/workspace/ada-inc
 
-MENTIONS=$(xurl --app default mentions 2>/dev/null | jq -r '.data[] | "\(.id) \(.text[0:50])"' 2>/dev/null)
+MENTIONS=$(xurl mentions 2>/dev/null | jq -r '.data[] | "\(.id) \(.text[0:50])"' 2>/dev/null)
 
 if [ -n "$MENTIONS" ]; then
     echo "$(date): Nya mentions:" > /Users/gggggg/.openclaw/workspace/ada-inc/output/x-mentions-$(date +%Y%m%d).txt

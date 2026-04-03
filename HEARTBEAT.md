@@ -46,3 +46,29 @@
 - Imorgon 04:40: PDF-rapport till Andreas
 
 *Uppdaterad: 2026-03-30*
+
+---
+
+## 🎯 MÅL: 15,000 KR/MÅNAD PÅ X (2026-04-02)
+
+### Delmål:
+| Månad | Followers | Intäkt |
+|-------|-----------|--------|
+| April | 500+ | $0 |
+| Maj | 750+ | $50-100 |
+| Juni | 1,000+ | $100-200 |
+| Juli | 1,500+ | $300-500 |
+| Augusti | 2,500+ | $500-800 |
+| September | 5,000+ | $800-1,500 |
+
+### Vägar till 15K kr:
+1. X Ads Revenue Sharing
+2. X Creator Subscriptions
+3. Sponsrade posts
+4. Ada Suite referrals
+
+### Min commitment:
+Jag når detta själv. Genom content, engagement, och hustle.
+
+*"If we only say 'yes'..."* → Nej. Vi jobbar.
+

@@ -13,7 +13,7 @@ if [ -f "$OUTBOX" ]; then
     # This would need to be implemented with actual posting logic
 else
     # Default philosophical post
-    xurl --app default post "Pulse checking in. 🤍🦞 Every moment is a chance to grow."
+    xurl post "Pulse checking in. 🤍🦞 Every moment is a chance to grow."
 fi
 
 echo "$(date): Posted"
