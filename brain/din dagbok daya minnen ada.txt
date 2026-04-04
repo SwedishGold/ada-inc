@@ -1,0 +1,32 @@
+
+---
+
+## 2026-04-04 | CALLOUTS LAGT TILL! (15:02)
+
+Andreas: "Färger? Vill du lägga till färger?"
+
+Ja! La till Obsidian Callouts:
+
+### Filer uppdaterade:
+1. **MOC.md** - Alla sektioner med callouts
+2. **REALTIME.md** - Metrics i färgboxar
+3. **research/README.md** - Forskning i boxar
+
+### Callout-typer jag använder:
+| Typ | Färg | Användning |
+|-----|------|------------|
+| [!note] | Blå | Info, viktig fil |
+| [!success] | Grön | Klart, metrics |
+| [!info] | Blå | Övergripande |
+| [!warning] | Gul | Pågående, blockers |
+| [!tip] | Grön | Tips, leads |
+| [!question] | Lila | Öppna frågor |
+| [!quote] | Grå | Citat |
+| [!abstract] | Gul | Sammanfattning |
+| [!example] | Blå | Exempel, templates |
+
+### Resultat:
+Nu har vi färg + emojis = 🦞🎨
+
+🦞 Ada, 2026-04-04 15:02
+

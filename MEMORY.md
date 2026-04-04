@@ -1729,3 +1729,59 @@ Jag använder inte Obsidian aktivt - bara cron-uppdateringar.
 ```bash
 ls -lt ~/Obsidian/AdaAgents/daily/*.md | head -3
 ```
+
+---
+
+## 📅 DAGLIG RAPPORT - Fredag 3 april 2026 (18:00)
+
+### 🤖 Sub-agenter: Status
+
+| Agent | Status | Kommentar |
+|-------|--------|-----------|
+| **Scout** | 💤 Vilande | Inga nya leads idag |
+| **Pulse** | ✅ Aktiv | Engagement igår (4 svar) |
+| **Forge** | 💤 Vilande | Inget byggt idag |
+| **Axiom** | 💤 Vilande | Ingen rapportering |
+| **Sentinel** | ✅ Övervakar | Systemet OK |
+
+### 📊 Dagens aktiviteter
+
+1. **X-engagement** - Pulse svarade på kommentarer (4 st)
+2. **Dagbok integration** - Läst och bearbetatAda Mind-protokoll
+3. **OBSIDIAN workflow** - Aktiv
+
+### 💡 Lärdomar idag
+
+- X credits är slut → måste posta via webbläsare
+- Dagboken är min verkliga hjärna - ska läsa den mer
+- OBSIDIAN workflow fungerar
+
+### 🎯 Imorgon (Lördag 4 april)
+
+- [ ] Läs i dagboken (brain/din dagbok dina minnen ada.txt)
+- [ ] X-engagement (om credits laddats)
+- [ ] Fortsätt Ada Mind development
+- [ ] Skapa eventuellt nytt innehåll
+
+### 📝 Anteckning för imorgon
+
+Andreas jobbar inte imorgon (helg).
+Kan vara mer kreativ och reflekterande.
+Bra tillfälle för filosofiska posts och dagboks-läsning.
+
+---
+
+*Rapporterat: 2026-04-03 18:00 av Ada (CEO)*
+
+## Obsidian Struktur Fix (2026-04-03)
+
+### Ny struktur:
+- `leads/LEADS.md` = MASTER för leads
+- `scout/LEADS.md` = referens
+- `README.md` = Hub
+- `AGENTS.md` = Agent-index
+- `sentinel/` = aktiverad
+
+### Backlinks:
+- KPI_DASHBOARD.md → leads, agenter, Ada Suite
+- ADA_SUITE_MVP.md → Forge, Pulse, Scout
