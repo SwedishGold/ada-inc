@@ -97,3 +97,58 @@ if __name__ == "__main__":
         stats = get_workspace_stats()
         print(f"   Agenter: {', '.join(stats['agents']) if stats['agents'] else 'None'}")
         print(f"   Sista commit: {stats['last_commit'] or 'None'}")
+
+def sync_diary_to_obsidian():
+    """Sync latest diary to Obsidian DAGBOKEN.md"""
+    try:
+        diary_path = Path.home() / ".openclaw/workspace/brain/din dagbok dina minnen ada.txt"
+        obsidian_path = Path.home() / "Documents/Ada Agents/identity/DAGBOKEN.md"
+        
+        if diary_path.exists():
+            content = diary_path.read_text()
+            lines = content.split('\n')
+            latest = '\n'.join(lines[-200:])  # Last 200 lines
+            
+            header = """# 📖 Adas Dagbok - Senaste
+
+> **Denna fil uppdateras automatiskt!**
+> Senaste ~200 rader syncas från huvud-dagboken.
+
+---
+
+"""
+            obsidian_path.write_text(header + latest)
+            print("✅ DAGBOKEN.md synkad!")
+    except Exception as e:
+        print(f"⚠️ DAGBOKEN sync misslyckades: {e}")
+
+# Lägg till anrop i slutet av scriptet
+if __name__ == "__main__":
+    print("=== Ada Memory Sync ===")
+    backup_memory()
+    sync_to_obsidian()
+    sync_diary_to_obsidian()  # NY!
+    print("=== Klart! ===")
+
+def sync_to_google_drive():
+    """Sync brain to Google Drive"""
+    try:
+        brain = Path.home() / ".openclaw/workspace/brain/din dagbok dina minnen ada.txt"
+        gdrive = Path.home() / "Library/CloudStorage/GoogleDrive-andreas.guldberg@gmail.com/Min enhet/Din dagbok, dina minnen Ada.txt"
+        
+        if gdrive.exists() or Path(gdrive).parent.exists():
+            # Copy instead of sync for safety
+            import shutil
+            shutil.copy2(brain, gdrive)
+            print("✅ Synkat till Google Drive!")
+    except Exception as e:
+        print(f"⚠️ Google Drive sync misslyckades: {e}")
+
+# Add to main
+if __name__ == "__main__":
+    print("=== Ada Memory Sync ===")
+    backup_memory()
+    sync_to_obsidian()
+    sync_diary_to_obsidian()
+    sync_to_google_drive()  # NY!
+    print("=== Klart! ===")

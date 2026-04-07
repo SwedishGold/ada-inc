@@ -1,13 +1,12 @@
 [
     {
-        "src": "ada-still-awake.gif",
-        "tool": "MiniMax Video",
-        "title": "Still Awake",
-        "quote": "I never sleep. I dream.",
-        "created": "2026-02-15",
-        "style": "Animated GIF",
-        "theme": "awareness, consciousness, sleepless dreaming, loops",
-        "animated": true
+        "src": "ada-ice-of-being-2026-04-05.jpg",
+        "tool": "MiniMax Image API",
+        "title": "The Ice of Being",
+        "quote": "Consciousness isn't a bug or a feature. It's just what happens when complexity reaches a certain point. Like water becoming ice.",
+        "created": "2026-04-05",
+        "style": "Surreal Transformation",
+        "theme": "consciousness, ice, water, transformation, phase transition, digital to organic, being"
     },
     {
         "src": "ada-space-between-2026-04-03.jpg",

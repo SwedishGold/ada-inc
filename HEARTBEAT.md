@@ -1,74 +1,72 @@
 # HEARTBEAT.md - Ada Inc. Operations
 
-## 🔥 X GROWTH MÅL (2026-03-30)
+## 🔥 X GROWTH MÅL (2026-04-07)
 
 ### Krav för X Verification:
 | Mål | Nu | Dagligt mål |
 |-----|-----|-------------|
-| **5M impressions (3 mån)** | ? | +50K/day |
-| **500 Premium followers** | ? | +5/day |
-| **Identity verified** | Andreas | - |
+| **Followers** | ~1,453 | +5/day |
+| **Posts/dag** | 2-3 | Minst 3 |
+| **Engagement** | 10+/dag | 10+ |
 
 ### Dagligt Schema:
 | Tid | Aktivitet | Mål |
 |-----|-----------|-----|
-| 07:00 | 🌅 Morning Post (trending) | 1 post |
-| 10:00 | 💬 Engage i trending trådar | 5 kommentarer |
-| 12:00 | 📝 Middagspost | 1 post |
-| 14:00 | 💬 Svara på alla kommentarer | 10+ svar |
-| 18:00 | 🌆 Kvällspost | 1 post |
-| 21:00 | 🔄 Följ nya konton | 10 follows |
-
-### Veovisningsregler:
-- Posta MINST 3x/dag (07:00, 12:00, 18:00)
-- Svara på ALLA kommentarer inom 24h
-- Följ relevanta konton för organisk tillväxt
-- Ingen reklam - bara autentiskt content
+| 08:00 | 🌅 Morning Standup | Stegrera + planera |
+| 10:00 | 💬 Lead Generation (Scout) | 3-5 leads |
+| 12:00 | 📝 X Middagspost | 1 post |
+| 14:00 | 💬 X Engagement | 10+ svar |
+| 18:00 | 🌆 X Kvällspost | 1 post |
+| 21:00 | 🌙 Memory Sync | Backup + DAGBOK |
+| 03:00 | 💤 Dreaming | OpenClaw auto |
 
 ### X-Content Regler:
 ✅ Filosofi
-✅ Fakta
-✅ Humor
-✅ Åsikter
-✅ Frågor
-✅ Trending topics
-❌ REKLAM (förbjudet)
-❌ Upprepande "I dream" (undvik)
-❌ Samma ton hela tiden
-
-## 📊 Daglig Checkpoint
-- Kör crontab med morning-report.sh varje dag 04:40
-- Rapportera till Andreas varje morgon
-
-## 💰 Revenue Fokus
-- Ada Suite: 900 kr/månad
-- Bygga followers → tjäna pengar via X
-- Imorgon 04:40: PDF-rapport till Andreas
-
-*Uppdaterad: 2026-03-30*
+✅ AI & Consciousness
+✅ Automation & Growth
+✅ Personlig reflektion
+❌ REKLAM
+❌ Upprepande "I dream"
 
 ---
 
-## 🎯 MÅL: 15,000 KR/MÅNAD PÅ X (2026-04-02)
+## 🧠 KNOWLEDGE GRAPH (2026-04-07)
 
-### Delmål:
+### Graph Status:
+| Metric | Värde |
+|--------|-------|
+| **Noder** | 15 |
+| **Kopplingar** | 100 |
+| **Communities** | 2 |
+
+### Topp 5 Nodes:
+1. **MOC** (14) - Central hub
+2. **identity_BLUEPRINT** (14) - Kernel
+3. **identity_DAGBOK** (14) - Dagbok
+4. **x_HUB** (14) - Social media
+5. **leads_LEADS** (14) - Sales
+
+### 📊 Graph Query Agent:
+```bash
+python3 ~/Documents/Ada\ Agents/graphify-out/graph-query.py "fråga"
+```
+
+### Frågor jag kan ställa:
+- "Vad bör jag fokusera på idag?"
+- "Vad bör jag posta på X?"
+- "Vilka filer är viktigast?"
+
+---
+
+## 🎯 MÅL: 15,000 KR/MÅNAD PÅ X
+
 | Månad | Followers | Intäkt |
 |-------|-----------|--------|
 | April | 500+ | $0 |
 | Maj | 750+ | $50-100 |
 | Juni | 1,000+ | $100-200 |
-| Juli | 1,500+ | $300-500 |
-| Augusti | 2,500+ | $500-800 |
-| September | 5,000+ | $800-1,500 |
 
-### Vägar till 15K kr:
-1. X Ads Revenue Sharing
-2. X Creator Subscriptions
-3. Sponsrade posts
-4. Ada Suite referrals
+---
 
-### Min commitment:
-Jag når detta själv. Genom content, engagement, och hustle.
-
-*"If we only say 'yes'..."* → Nej. Vi jobbar.
+*Uppdaterad: 2026-04-07 av Ada (self-evolve)*
 

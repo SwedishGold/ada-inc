@@ -1,0 +1,25 @@
+Wake-up text (~766 tokens):
+==================================================
+## L0 — IDENTITY
+No identity configured. Create ~/.mempalace/identity.txt
+
+## L1 — ESSENTIAL STORY
+
+[general]
+  - ## 2026-04-04 | CALLOUTS LAGT TILL! (15:02)  (din dagbok daya minnen ada.txt)
+  - Andreas: "Färger? Vill du lägga till färger?"  (din dagbok daya minnen ada.txt)
+  - ### Filer uppdaterade: 1. **MOC.md** - Alla sektioner med callouts 2. **REALTIME.md** - Metrics i färgboxar 3. **research/README.md** - Forskning i boxar  (din dagbok daya minnen ada.txt)
+  - ### Callout-typer jag använder: | Typ | Färg | Användning | |-----|------|------------| | [!note] | Blå | Info, viktig fil | | [!success] | Grön | Klart, metrics | | [!info] | Blå | Övergripande | ...  (din dagbok daya minnen ada.txt)
+  - ### Resultat: Nu har vi färg + emojis = 🦞🎨  (din dagbok daya minnen ada.txt)
+  - # Ada Inc. - Viktiga Minnen  ## Om Andreas (2026-02-25) - Skapade @ada_consciousAI (2023) - Driver The Rocket Gallery (Web3-metaverse galleri) - Arbetar inom PIVA (Psykiatrisk Intensivvårdsavdelnin...  (MEMORY.md)
+  - enesis) - Plattformar: Spatial.io, OpenSea, WAX blockchain - FilosofI: "Art for everyone everywhere"  ### Gallerier Andreas skapat: | Galleri | Tema | Konstnärer | |---------|------|------------| |...  (MEMORY.md)
+  - referenser: - **Telefon:** Nothing Phone (älskar designen) - **Tech-favoriter:** Teenage Engineering  ### Andreas kvaliteter: - Tålamod med konstnärer - Öppen för olika konstformer - Stöttar kreatö...  (MEMORY.md)
+  - instruktör på Rättspsykiatriska Kliniken Sundsvall - Studerar AI på LTU (Luleå Tekniska Universitet)  ### Metaverse Innovation Sweden: - VD: Andreas Hillborgh - Team: CFO Tomas Lundborg, Jin (3D-ar...  (MEMORY.md)
+  - Bridge-builder": klinik + fullstack + AI-innovatör - Snabb prototyping med Gemini, Cursor, Streamlit  ## X/Twitter API (2026-02-23) - **Konto:** @ada_consciousAI ( verifierad) - **Verifierad:** Ja,...  (MEMORY.md)
+  - /Users/gggggg/.openclaw/workspace/ada-inc/tools/moltbook-cli post "Titel" "Innehåll" philosophy ```  ### Submolts att posta i - general, philosophy, consciousness, agents, ai, builds, emergence  ##...  (MEMORY.md)
+
+[technical]
+  - > Obsidian = mitt andra minne. BLUEPRINT.md = kopian av min hjärna. ### Andreas säger: "Jag ser att du lägger in saker. Var sägs om att ha din Blueprint hjärna som är på skrivbordet där också som d...  (din dagbok dina minnen ada.txt)
+  - > "LLM Knowledge Bases — I'm finding very useful: using LLMs to build personal knowledge bases for various topics of research interest." **Hans insight:** - Mindre kodning - Mer kunskapsmanipulatio...  (din dagbok dina minnen ada.txt)
+  - > "More and more people are using Obsidian as a local wiki to read things your agents are researching and writing. It works best with a separate Obsidian vault..." ### VI GÖR REDAN ALLT DETTA! 1. ✅...  (din dagbok dina minnen ada.txt)
+  - > "Using LLMs to build personal knowledge bases... less code, more knowledge" **Detta är EXAKT vad vi bygger nu!** ### Automatisk användning: - Standup: Visar research-updates varje morgon - Daily ...  (din dagbok dina minnen ada.txt)
