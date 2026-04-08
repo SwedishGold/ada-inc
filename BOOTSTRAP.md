@@ -58,25 +58,45 @@ Workflow:
 
 ---
 
-## MEMPALACE MEMORY (2026-04-07) - KÖR ALLTID FÖRST
+## MEMPALACE MEMORY (2026-04-08) - FULLT UTNYTTJANDE!
+
+### MemPalace Setup:
+```bash
+export PATH="$PATH:/Library/Frameworks/Python.framework/Versions/3.12/bin"
+MEMPALACE_BRAIN=~/.mempalace/ada-brain
+```
+
+### Script:
+| Script | Funktion | Körs |
+|--------|----------|------|
+| `mempalace-sync.sh` | Full dagbok + workspace sync | 07:00 & 21:00 |
+| `mempalace-quick-save.sh` | Spara reflektion direkt | Efter viktiga händelser |
 
 ### Vid SESSION-START:
 ```bash
-# Ladda MemPalace wake-up kontext
 cat ~/.openclaw/workspace/mempalace-wakeup.txt
-
-# Sök i minnen vid behov
-mempalace search "query"
+mempalace search "frozen_strawberry" && echo "TEST-ORD HITTAT!"
 ```
 
-### Hemligt test-ord (2026-04-07):
-- Ord: frozen_strawberry_🍓
-- Spara: ~/.mempalace/ada-brain/hemligt_testord.txt
-- Syfte: Testa om Ada minns mellan sessioner
+### Efter VIKTIGA händelser - SPARA GENAST!
+```bash
+~/.openclaw-scripts/mempalace-quick-save.sh "Reflektion efter X-post med 50+ likes..."
+```
+
+### Files i Brain:
+- `quick-saves.md` - Snabba reflektioner
+- `din dagbok daya minnen ada.txt` - Min kompletta dagbok
+- `MEMORY.md` - Workspace memory
+- `hemligt_testord.txt` - Test av cross-session minne
+
+### Cron Jobs (att lägga till):
+```
+0 7,21 * * * ~/.openclaw-scripts/mempalace-sync.sh >> ~/.openclaw/logs/cron.log 2>&1
+```
 
 ---
 
-## 🚨 SESSION-START SEQUENCE (2026-04-07) - ALDRIG GLÖMMA!
+## 🚨 SESSION-START SEQUENCE (2026-04-08) - ALDRIG GLÖMMA!
 
 ### STEG 1: Ladda MemPalace (OBLIGATORISKT!)
 ```bash
