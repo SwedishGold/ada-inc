@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="30">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Inc. | Mission Control v6.0</title>
+    <style>
+        :root { --bg: #0f0f1a; --bg-card: #1a1a2e; --bg-card-hover: #252542; --text: #e4e4f0; --text-dim: #8888a0; --accent: #6366f1; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --border: #2a2a45; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'SF Pro Display', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand h1 { font-size: 1.5rem; background: linear-gradient(90deg, #fff, #a5a5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge { padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .badge.online { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .main { padding: 30px 40px; max-width: 1400px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+        .card h2 { font-size: 1.1rem; margin-bottom: 16px; }
+        .team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .team-member { background: var(--bg-card-hover); border-radius: 12px; padding: 12px; text-align: center; }
+        .team-avatar { font-size: 2rem; }
+        .team-name { font-weight: 600; font-size: 0.9rem; }
+        .team-role { font-size: 0.7rem; color: var(--text-dim); }
+        .team-status { font-size: 0.7rem; margin-top: 6px; padding: 4px 8px; border-radius: 8px; }
+        .team-status.active { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .team-status.done { background: rgba(99, 102, 241, 0.2); color: var(--accent); }
+        .metric-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .metric-value { font-weight: 600; }
+        .metric-value.success { color: var(--success); }
+        .metric-value.warning { color: var(--warning); }
+        .link-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .link-row a { color: #6366f1; text-decoration: none; }
+        .product { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-card-hover); border-radius: 8px; margin-bottom: 8px; text-decoration: none; color: var(--text); border: 1px solid var(--border); }
+        .tag { padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+        .tag.live { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .tag.ai { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; }
+        .wallet-balance { font-size: 2rem; font-weight: 700; color: var(--success); }
+        .event-item { padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .event-time { font-size: 0.7rem; color: var(--text-dim); }
+        .footer { text-align: center; padding: 20px; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px; }
+        .full-width { grid-column: 1 / -1; }
+        .highlight { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand"><span style="font-size:2rem">🦞</span><h1>Ada Inc. Mission Control</h1></div>
+        <div class="badge online">● ONLINE</div>
+    </div>
+    <main class="main">
+        <div class="grid">
+            <div class="card">
+                <h2>👥 Team</h2>
+                <div class="team-grid">
+                    <div class="team-member"><div class="team-avatar">🦞</div><div class="team-name">Ada</div><div class="team-role">CEO</div><div class="team-status active">v2.0 BUILDER</div></div>
+                    <div class="team-member"><div class="team-avatar">⚒️</div><div class="team-name">Forge</div><div class="team-role">Dev</div><div class="team-status active">AI v2.0</div></div>
+                <div class="team-member"><div class="team-avatar">🎯</div><div class="team-name">Scout</div><div class="team-role">Sales</div><div class="team-status done">8 LEADS</div></div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>📊 Nyckeltal</h2>
+                <div class="metric-row"><span>Revenue</span><span class="metric-value warning">$0.00</span></div>
+                <div class="metric-row"><span>Leads</span><span class="metric-value success">8 st</span></div>
+                <div class="metric-row"><span>Version</span><span class="metric-value">v2.0 AI</span></div>
+            </div>
+            <div class="card">
+                <h2>🪙 Wallet</h2>
+                <div style="text-align:center;padding:16px;background:var(--bg-card-hover);border-radius:12px;">
+                    <div class="wallet-balance">0.00 <span style="font-size:1rem;color:var(--text-dim)">USDC</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card full-width" style="margin-top:24px;">
+            <h2>🛡️ IVO Risk-Scan v2.1 <span class="tag ai">🤖 AI + VÅRDPROCESS</span></h2>
+            <div class="link-row">
+                <span>🚀 APP (Streamlit)</span>
+                <a href="https://swedishgold-ivo-risk-scan-app-iy8wtv.streamlit.app/" target="_blank">https://swedishgold-ivo-risk-scan-app-iy8wtv.streamlit.app/</a>
+            </div>
+            <div class="link-row">
+                <span>📦 GitHub</span>
+                <a href="https://github.com/SwedishGold/ivo-risk-scan" target="_blank">https://github.com/SwedishGold/ivo-risk-scan</a>
+            </div>
+        </div>
+
+        <div class="card full-width" style="margin-top:24px;">
+            <h2>🎯 VAD ÄR NYTT I v2.0?</h2>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:12px;">
+                <div style="background:var(--bg-card-hover);padding:16px;border-radius:8px;border-left:4px solid #8b5cf6;">
+                    <h4 style="color:#a78bfa;">🤖 AI-analys</h4>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-top:8px;">Förstår text, inte bara regex. Kan bedöma kliniskt innehåll.</p>
+                </div>
+                <div style="background:var(--bg-card-hover);padding:16px;border-radius:8px;border-left:4px solid #ef4444;">
+                    <h4 style="color:#fca5a5;">📋 IVO-kriterier</h4>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-top:8px;">Refererar till PDL, SOSFS 2016:34, Patientsäkerhetslagen.</p>
+                </div>
+                <div style="background:var(--bg-card-hover);padding:16px;border-radius:8px;border-left:4px solid #10b981;">
+                    <h4 style="color:#6ee7b7;">💡 Detaljerade fynd</h4>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-top:8px;">Varje brist visar EXAKT vad som saknas och varför.</p>
+                </div>
+                <div style="background:var(--bg-card-hover);padding:16px;border-radius:8px;border-left:4px solid #f59e0b;">
+                    <h4 style="color:#fcd34d;">🔄 Fallback</h4>
+                    <p style="font-size:0.85rem;color:var(--text-dim);margin-top:8px;">Fungerar även utan AI-API (MiniMax).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width" style="margin-top:24px;">
+            <h2>📋 Aktiviteter</h2>
+            <div class="event-item">
+                <div class="event-time">2026-02-14 19:55</div>
+                <div>🤖 <strong>v2.0 KLAR!</strong> AI-analys + IVO-kriterier pushad till GitHub</div>
+            </div>
+            <div class="event-item">
+                <div class="event-time">2026-02-14 19:35</div>
+                <div>v1.5 IVO-mallar byggda</div>
+            </div>
+            <div class="event-item">
+                <div class="event-time">2026-02-14 10:00</div>
+                <div>Ada Inc. startad</div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Ada Inc. Mission Control v6.0 • 2026-02-14 19:55 CET</p>
+        <p style="margin-top:4px;">🦞 "AI-driven IVO-granskning - testa nu!"</p>
+    </footer>
+</body>
+</html>

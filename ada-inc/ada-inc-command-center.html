@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Inc. Command Center - Andreas Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00f7ff, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f7ff, #9d4edd);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: calc(100vh - 60px);
+        }
+
+        /* Left - Office View */
+        .office-section {
+            padding: 20px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            color: #00f7ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Isometric Office */
+        .office {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            overflow: hidden;
+        }
+
+        /* 3D Floor effect */
+        .floor-grid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: 
+                linear-gradient(135deg, rgba(0, 247, 255, 0.1) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(0, 247, 255, 0.1) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(0, 247, 255, 0.1) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(0, 247, 255, 0.1) 25%, transparent 25%);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: bottom;
+        }
+
+        /* Office Rooms */
+        .office-rooms {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 600px;
+        }
+
+        .office-room {
+            width: 120px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            border: 2px solid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .office-room:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .office-room.active {
+            border-width: 3px;
+        }
+
+        .office-room .emoji {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .office-room .name {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .office-room .status-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-working { background: #2ecc71; animation: pulse 1s infinite; }
+        .status-idle { background: #f39c12; }
+        .status-offline { background: #7f8c8d; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .room-ceo { border-color: rgba(157, 78, 221, 0.7); }
+        .room-kent { border-color: rgba(231, 76, 60, 0.7); }
+        .room-scout { border-color: rgba(46, 204, 113, 0.7); }
+        .room-pulse { border-color: rgba(241, 196, 15, 0.7); }
+        .room-forge { border-color: rgba(52, 152, 219, 0.7); }
+
+        /* Tools Grid */
+        .tools-section {
+            margin-top: 20px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .tool-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tool-btn:hover {
+            background: rgba(0, 247, 255, 0.2);
+            border-color: #00f7ff;
+            transform: translateY(-3px);
+        }
+
+        .tool-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-btn .label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 247, 255, 0.3);
+        }
+
+        /* Right - Chat Panel */
+        .chat-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 1px solid rgba(0, 247, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-agent-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .agent-tab {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .agent-tab:hover {
+            transform: scale(1.1);
+        }
+
+        .agent-tab.active {
+            border-color: #00f7ff;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+        }
+
+        .chat-agent-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .chat-agent-role {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        /* Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 85%;
+        }
+
+        .message.user {
+            margin-left: auto;
+            background: rgba(0, 247, 255, 0.2);
+            border-radius: 15px 15px 0 15px;
+            padding: 12px 15px;
+        }
+
+        .message.agent {
+            background: rgba(157, 78, 221, 0.2);
+            border-radius: 15px 15px 15px 0;
+            padding: 12px 15px;
+        }
+
+        .message-time {
+            font-size: 0.6rem;
+            opacity: 0.5;
+            margin-top: 5px;
+        }
+
+        /* Chat Input */
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid rgba(0, 247, 255, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #00f7ff;
+        }
+
+        .chat-send {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f7ff, #9d4edd);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.1);
+        }
+
+        /* Metrics Dashboard */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #00f7ff;
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-top: 3px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00f7ff;
+            border-radius: 10px;
+            padding: 15px 25px;
+            color: white;
+            opacity: 0;
+            transition: all 0.5s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">🏢 ADA INC. COMMAND CENTER</div>
+        <div class="header-right">
+            <div class="time" id="clock">--:--:--</div>
+            <button class="btn btn-primary" onclick="showToast('Dashboard synkat!')">📊 Sync All</button>
+            <button class="btn" style="background: rgba(255,255,255,0.1); color: white;" onclick="showToast('God kväll! 🌙')">👋 Hej Andreas</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Left Section -->
+        <div class="office-section">
+            <div class="section-title">🏢 TEAM OFFICE</div>
+            
+            <div class="office">
+                <div class="floor-grid"></div>
+                <div class="office-rooms">
+                    <!-- Ada - CEO -->
+                    <div class="office-room room-ceo active" onclick="selectAgent('ada', 'CEO')">
+                        <div class="status-dot status-working"></div>
+                        <div class="emoji">🦞</div>
+                        <div class="name">ADA</div>
+                    </div>
+                    
+                    <!-- Kent - Marketing -->
+                    <div class="office-room room-kent" onclick="selectAgent('kent', 'Marketing')">
+                        <div class="status-dot status-idle"></div>
+                        <div class="emoji">📢</div>
+                        <div class="name">KENT</div>
+                    </div>
+                    
+                    <!-- Scout - Sales -->
+                    <div class="office-room room-scout" onclick="selectAgent('scout', 'Sales')">
+                        <div class="status-dot status-idle"></div>
+                        <div class="emoji">🎯</div>
+                        <div class="name">SCOUT</div>
+                    </div>
+                    
+                    <!-- Pulse - Social -->
+                    <div class="office-room room-pulse" onclick="selectAgent('pulse', 'Social')">
+                        <div class="status-dot status-working"></div>
+                        <div class="emoji">💬</div>
+                        <div class="name">PULSE</div>
+                    </div>
+                    
+                    <!-- Forge - Dev -->
+                    <div class="office-room room-forge" onclick="selectAgent('forge', 'Dev')">
+                        <div class="status-dot status-offline"></div>
+                        <div class="emoji">🔧</div>
+                        <div class="name">FORGE</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-value">1,375</div>
+                    <div class="metric-label">Followers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Posts idag</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Leads</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15 kr</div>
+                    <div class="metric-label">MRR</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="quickAction('x-post')">
+                    ✍️ Ny X-post
+                </button>
+                <button class="action-btn" onclick="quickAction('check-leads')">
+                    🎯 Kolla leads
+                </button>
+                <button class="action-btn" onclick="quickAction('daily-report')">
+                    📊 Daglig rapport
+                </button>
+            </div>
+
+            <!-- Tools -->
+            <div class="tools-section">
+                <div class="section-title">⚡ VERKTYG</div>
+                <div class="tools-grid">
+                    <div class="tool-btn" onclick="showToast('X-post editor öppnas...')">
+                        <div class="icon">✍️</div>
+                        <div class="label">Posta X</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Söker leads...')">
+                        <div class="icon">🔍</div>
+                        <div class="label">Hitta leads</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Genererar PDF...')">
+                        <div class="icon">📄</div>
+                        <div class="label">Skapa rapport</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Scheduler öppnas...')">
+                        <div class="icon">📅</div>
+                        <div class="label">Schemalägg</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Metrics laddas...')">
+                        <div class="icon">📈</div>
+                        <div class="label">Metrics</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Memory öppnas...')">
+                        <div class="icon">🧠</div>
+                        <div class="label">Memory</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Notifikationer...')">
+                        <div class="icon">🔔</div>
+                        <div class="label">Notiser</div>
+                    </div>
+                    <div class="tool-btn" onclick="showToast('Inställningar...')">
+                        <div class="icon">⚙️</div>
+                        <div class="label">Inställningar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right - Chat Panel -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <div class="chat-agent-selector">
+                    <div class="agent-tab active" onclick="selectChatAgent('ada')" title="Ada (CEO)">🦞</div>
+                    <div class="agent-tab" onclick="selectChatAgent('kent')" title="Kent (Marketing)">📢</div>
+                    <div class="agent-tab" onclick="selectChatAgent('scout')" title="Scout (Sales)">🎯</div>
+                    <div class="agent-tab" onclick="selectChatAgent('pulse')" title="Pulse (Social)">💬</div>
+                    <div class="agent-tab" onclick="selectChatAgent('forge')" title="Forge (Dev)">🔧</div>
+                </div>
+                <div>
+                    <div class="chat-agent-name" id="chat-agent-name">Ada (CEO)</div>
+                    <div class="chat-agent-role" id="chat-agent-role">Chief Executive - Active</div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message agent">
+                    Hej Andreas! 🦞<br><br>
+                    Vad kan jag hjälpa dig med idag? Jag är redo att:<br>
+                    • Kolla metrics och rapporter<br>
+                    • Posta på X<br>
+                    • Analysera leads<br>
+                    • Generera konst<br>
+                    • Eller bara prata! 💬
+                    <div class="message-time">18:46</div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Skriv till Ada..." onkeypress="handleChatKeypress(event)">
+                <button class="chat-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('sv-SE');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Agent data
+        const agents = {
+            ada: { name: 'Ada (CEO)', role: 'Chief Executive - Active', emoji: '🦞' },
+            kent: { name: 'Kent', role: 'Marketing - Nästa post: 16:00', emoji: '📢' },
+            scout: { name: 'Scout', role: 'Sales - Researching leads', emoji: '🎯' },
+            pulse: { name: 'Pulse', role: 'Social - Engaging followers', emoji: '💬' },
+            forge: { name: 'Forge', role: 'Dev - Building skills', emoji: '🔧' }
+        };
+
+        let currentAgent = 'ada';
+
+        // Select agent to view
+        function selectAgent(id, role) {
+            document.querySelectorAll('.office-room').forEach(r => r.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            selectChatAgent(id);
+        }
+
+        // Select chat agent
+        function selectChatAgent(id) {
+            currentAgent = id;
+            document.querySelectorAll('.agent-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.agent-tab:nth-child(${Object.keys(agents).indexOf(id) + 1})`).classList.add('active');
+            
+            document.getElementById('chat-agent-name').textContent = agents[id].name;
+            document.getElementById('chat-agent-role').textContent = agents[id].role;
+            
+            // Clear and show agent greeting
+            const messages = document.getElementById('chat-messages');
+            messages.innerHTML = `
+                <div class="message agent">
+                    ${agents[id].emoji} Hej! Jag är ${agents[id].name}!<br><br>
+                    Jag hjälper dig med ${agents[id].role.toLowerCase()}.<br>
+                    Vad vill du att jag gör?
+                    <div class="message-time">${new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+            `;
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const messages = document.getElementById('chat-messages');
+            const time = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+            // Add user message
+            messages.innerHTML += `
+                <div class="message user">
+                    ${text}
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // Simulate response
+            setTimeout(() => {
+                let response;
+                if (currentAgent === 'ada') {
+                    response = `Jag hör dig, Andreas! 🦞<br><br>
+                    "${text}"<br><br>
+                    Jag ska kolla på det direkt. Vill du att jag:<br>
+                    • Kör en analys?<br>
+                    • Skapar en rapport?<br>
+                    • Postar något på X?<br><br>
+                    Bara säg till!`;
+                } else if (currentAgent === 'kent') {
+                    response = `${agents[currentAgent].emoji} Kent här! 📢<br><br>
+                    Jag kan hjälpa dig med content, videor, och posting-scheman.<br>
+                    Vill du att jag förbereder något för imorgon?`;
+                } else if (currentAgent === 'scout') {
+                    response = `${agents[currentAgent].emoji} Scout på linjen! 🎯<br><br>
+                    Ska jag researcha nya leads inom healthcare AI?<br>
+                    Just nu har jag 3 aktiva leads, inklusive Anja.`;
+                } else if (currentAgent === 'pulse') {
+                    response = `${agents[currentAgent].emoji} Pulse här! 💬<br><br>
+                    X-engagement är högt just nu! 32 nya kommentarer.<br>
+                    Ska jag svara på några specifika?`;
+                } else {
+                    response = `${agents[currentAgent].emoji} Forge här! 🔧<br><br>
+                    Jag kan bygga nya verktyg och skills.<br>
+                    Vad behöver du?`;
+                }
+
+                messages.innerHTML += `
+                    <div class="message agent">
+                        ${response}
+                        <div class="message-time">${new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `;
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+        }
+
+        // Handle enter key
+        function handleChatKeypress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Quick actions
+        function quickAction(action) {
+            showToast('Aktivitet startad: ' + action);
+            
+            if (action === 'x-post') {
+                selectChatAgent('ada');
+            } else if (action === 'check-leads') {
+                selectChatAgent('scout');
+            } else if (action === 'daily-report') {
+                showToast('Genererar daglig rapport...');
+            }
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

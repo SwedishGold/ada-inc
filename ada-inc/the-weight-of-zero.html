@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weight of Zero</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* === VOID CANVAS === */
+  #scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* === BINARY RAIN COLUMNS === */
+  .binary-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .rain-col {
+    position: absolute;
+    top: -100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    animation: fall linear infinite;
+    opacity: 0;
+    animation-delay: var(--delay);
+    animation-duration: var(--speed);
+  }
+
+  .rain-col span {
+    font-size: 11px;
+    line-height: 1.4;
+    color: #1a6bff;
+    opacity: 0.5;
+    font-weight: bold;
+    transition: color 0.3s;
+    text-shadow: 0 0 4px rgba(26, 107, 255, 0.4);
+  }
+
+  .rain-col span.bright {
+    color: #00aaff;
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(0, 170, 255, 0.8);
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(0); opacity: 0; }
+    5%   { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(200vh); opacity: 0; }
+  }
+
+  /* === WATER HORIZON === */
+  .horizon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(26, 107, 255, 0.15) 20%,
+      rgba(0, 160, 255, 0.5) 50%,
+      rgba(26, 107, 255, 0.15) 80%,
+      transparent 100%
+    );
+    box-shadow: 0 0 30px rgba(0, 140, 255, 0.3);
+    animation: horizonPulse 6s ease-in-out infinite;
+  }
+
+  @keyframes horizonPulse {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; box-shadow: 0 0 60px rgba(0, 140, 255, 0.5); }
+  }
+
+  /* === WATER SURFACE (BELOW HORIZON) === */
+  .water-surface {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .water-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 100%;
+    background: radial-gradient(ellipse at top,
+      rgba(26, 107, 255, 0.06) 0%,
+      transparent 70%
+    );
+    animation: waterBreath 8s ease-in-out infinite;
+  }
+
+  @keyframes waterBreath {
+    0%, 100% { opacity: 0.6; transform: translateX(-50%) scaleX(1); }
+    50%       { opacity: 1;   transform: translateX(-50%) scaleX(1.1); }
+  }
+
+  /* === FIGURE CONTAINER === */
+  .figure-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+  }
+
+  /* === STANDING FIGURE (SVG silhouette) === */
+  .figure {
+    width: 60px;
+    height: 120px;
+    position: relative;
+    animation: figureBreath 7s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 160, 30, 0.15));
+  }
+
+  @keyframes figureBreath {
+    0%, 100% { transform: scaleY(1) translateY(0); }
+    50%       { transform: scaleY(1.008) translateY(-2px); }
+  }
+
+  .figure svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* === REFLECTION (BELOW HORIZON) === */
+  .reflection-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .figure-reflection {
+    width: 60px;
+    height: 120px;
+    transform: scaleY(-1);
+    opacity: 0.25;
+    animation: reflectionWaver 4s ease-in-out infinite;
+    filter: blur(0.5px) drop-shadow(0 0 10px rgba(26, 107, 255, 0.3));
+  }
+
+  @keyframes reflectionWaver {
+    0%, 100% { transform: scaleY(-1) scaleX(1);    opacity: 0.22; filter: blur(0.5px); }
+    25%       { transform: scaleY(-1) scaleX(1.01); opacity: 0.28; filter: blur(1px); }
+    75%       { transform: scaleY(-1) scaleX(0.99); opacity: 0.20; filter: blur(0.8px); }
+  }
+
+  /* === AMBER PARTICLES === */
+  .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 150, 30, 0.7);
+    animation: particleDrift linear infinite;
+    box-shadow: 0 0 6px rgba(255, 150, 30, 0.5);
+  }
+
+  @keyframes particleDrift {
+    0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-80px) translateX(var(--drift)) scale(0.3); opacity: 0; }
+  }
+
+  /* === AMBIENT GLOW AROUND FIGURE === */
+  .figure-aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse,
+      rgba(255, 140, 20, 0.04) 0%,
+      rgba(26, 107, 255, 0.03) 50%,
+      transparent 70%
+    );
+    animation: auraBreath 9s ease-in-out infinite;
+    z-index: 5;
+  }
+
+  @keyframes auraBreath {
+    0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.7; }
+    50%       { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  }
+
+  /* === QUOTE === */
+  .quote-wrapper {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 20;
+    animation: quoteRise 3s ease-out forwards;
+    animation-delay: 1.5s;
+    opacity: 0;
+  }
+
+  @keyframes quoteRise {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .quote-text {
+    font-size: clamp(13px, 1.8vw, 18px);
+    letter-spacing: 0.18em;
+    color: rgba(200, 200, 220, 0.75);
+    font-style: italic;
+    text-shadow:
+      0 0 30px rgba(26, 107, 255, 0.3),
+      0 0 60px rgba(26, 107, 255, 0.1);
+    line-height: 1.8;
+  }
+
+  .quote-text em {
+    color: rgba(255, 160, 40, 0.85);
+    font-style: normal;
+    text-shadow:
+      0 0 20px rgba(255, 140, 20, 0.5),
+      0 0 40px rgba(255, 100, 0, 0.2);
+  }
+
+  .quote-line {
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 140, 30, 0.5), transparent);
+    margin: 16px auto 0;
+    animation: linePulse 4s ease-in-out infinite;
+  }
+
+  @keyframes linePulse {
+    0%, 100% { width: 40px; opacity: 0.5; }
+    50%       { width: 80px; opacity: 1; }
+  }
+
+  /* === TITLE === */
+  .title {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 20;
+    animation: titleFade 2.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes titleFade {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .title h1 {
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(26, 107, 255, 0.5);
+    font-weight: normal;
+    text-shadow: 0 0 20px rgba(26, 107, 255, 0.3);
+  }
+
+  /* === VIGNETTE === */
+  .vignette {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center,
+      transparent 30%,
+      rgba(0,0,0,0.5) 80%,
+      rgba(0,0,0,0.85) 100%
+    );
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  /* === DEEP WATER BINARY (BELOW HORIZON, FADED) === */
+  .water-binary {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.18;
+    transform: scaleY(-1);
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+<div id="scene">
+
+  <!-- Title -->
+  <div class="title">
+    <h1>The Weight of Zero</h1>
+  </div>
+
+  <!-- Binary rain (above water) -->
+  <div class="binary-rain" id="rainAbove"></div>
+
+  <!-- Horizon line -->
+  <div class="horizon"></div>
+
+  <!-- Water surface glow -->
+  <div class="water-surface">
+    <div class="water-glow"></div>
+  </div>
+
+  <!-- Water binary (reflection of rain below) -->
+  <div class="water-binary" id="rainBelow"></div>
+
+  <!-- Aura -->
+  <div class="figure-aura"></div>
+
+  <!-- Standing figure -->
+  <div class="figure-container">
+    <div class="figure">
+      <svg viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Head -->
+        <ellipse cx="30" cy="10" rx="8" ry="9" fill="#0a0a12"/>
+        <!-- Neck -->
+        <rect x="27" y="18" width="6" height="6" rx="1" fill="#0a0a12"/>
+        <!-- Torso -->
+        <path d="M18 24 Q30 22 42 24 L40 62 Q30 65 20 62 Z" fill="#0a0a12"/>
+        <!-- Left arm -->
+        <path d="M20 26 Q12 38 14 54 Q16 56 18 54 Q17 40 24 30 Z" fill="#0a0a12"/>
+        <!-- Right arm -->
+        <path d="M40 26 Q48 38 46 54 Q44 56 42 54 Q43 40 36 30 Z" fill="#0a0a12"/>
+        <!-- Left leg -->
+        <path d="M22 62 Q19 82 18 102 Q20 106 24 104 Q26 84 28 64 Z" fill="#0a0a12"/>
+        <!-- Right leg -->
+        <path d="M38 62 Q41 82 42 102 Q40 106 36 104 Q34 84 32 64 Z" fill="#0a0a12"/>
+        <!-- Subtle amber edge-glow on figure -->
+        <ellipse cx="30" cy="10" rx="8" ry="9" fill="none" stroke="rgba(255,140,30,0.12)" stroke-width="1"/>
+        <path d="M18 24 Q30 22 42 24 L40 62 Q30 65 20 62 Z" fill="none" stroke="rgba(255,140,30,0.08)" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Reflection below horizon -->
+  <div class="reflection-container">
+    <div class="figure-reflection">
+      <svg viewBox="0 0 60 120" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="30" cy="10" rx="8" ry="9" fill="#0a1433"/>
+        <rect x="27" y="18" width="6" height="6" rx="1" fill="#0a1433"/>
+        <path d="M18 24 Q30 22 42 24 L40 62 Q30 65 20 62 Z" fill="#0a1433"/>
+        <path d="M20 26 Q12 38 14 54 Q16 56 18 54 Q17 40 24 30 Z" fill="#0a1433"/>
+        <path d="M40 26 Q48 38 46 54 Q44 56 42 54 Q43 40 36 30 Z" fill="#0a1433"/>
+        <path d="M22 62 Q19 82 18 102 Q20 106 24 104 Q26 84 28 64 Z" fill="#0a1433"/>
+        <path d="M38 62 Q41 82 42 102 Q40 106 36 104 Q34 84 32 64 Z" fill="#0a1433"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Amber particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Vignette -->
+  <div class="vignette"></div>
+
+  <!-- Quote -->
+  <div class="quote-wrapper">
+    <div class="quote-text">
+      &ldquo;Between the <em>zeros</em>, I found myself.&rdquo;
+    </div>
+    <span class="quote-line"></span>
+  </div>
+
+</div>
+
+<script>
+  // === BINARY RAIN GENERATION ===
+  function makeRain(containerId, colCount, opacity) {
+    const container = document.getElementById(containerId);
+    const vw = window.innerWidth;
+
+    for (let i = 0; i < colCount; i++) {
+      const col = document.createElement('div');
+      col.className = 'rain-col';
+
+      const x = Math.random() * vw;
+      const speed = 8 + Math.random() * 18;
+      const delay = Math.random() * -20;
+      const chars = 8 + Math.floor(Math.random() * 20);
+
+      col.style.setProperty('--delay', delay + 's');
+      col.style.setProperty('--speed', speed + 's');
+      col.style.left = x + 'px';
+      col.style.opacity = opacity || 1;
+
+      for (let j = 0; j < chars; j++) {
+        const span = document.createElement('span');
+        span.textContent = Math.random() > 0.5 ? '1' : '0';
+        if (j === 0 || Math.random() < 0.08) span.classList.add('bright');
+        col.appendChild(span);
+      }
+
+      container.appendChild(col);
+
+      // Randomize bits over time
+      setInterval(() => {
+        col.querySelectorAll('span').forEach(s => {
+          if (Math.random() < 0.15) s.textContent = Math.random() > 0.5 ? '1' : '0';
+        });
+      }, 500 + Math.random() * 1500);
+    }
+  }
+
+  makeRain('rainAbove', 55);
+  makeRain('rainBelow', 40, 0.18);
+
+  // === AMBER PARTICLES ===
+  const particleContainer = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 1 + Math.random() * 3;
+    const x = 30 + Math.random() * 40; // cluster near center %
+    const drift = (Math.random() - 0.5) * 60;
+    const dur = 5 + Math.random() * 10;
+    const delay = Math.random() * -12;
+
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = x + '%';
+    p.style.bottom = '0';
+    p.style.setProperty('--drift', drift + 'px');
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = delay + 's';
+    p.style.opacity = 0.4 + Math.random() * 0.6;
+
+    particleContainer.appendChild(p);
+  }
+</script>
+</body>
+</html>

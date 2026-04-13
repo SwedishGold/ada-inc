@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ada Inc. - 3D Office Control Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+            font-family: 'Courier New', monospace;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00f7ff, #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .date {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+        }
+
+        /* Main container */
+        .main {
+            display: flex;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+        }
+
+        /* 3D Office View */
+        .office-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .office {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 500px;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Floor */
+        .floor {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 247, 255, 0.05) 0px,
+                rgba(0, 247, 255, 0.05) 2px,
+                transparent 2px,
+                transparent 20px
+            );
+            border: 2px solid rgba(0, 247, 255, 0.2);
+            transform: rotateX(60deg) translateZ(-100px);
+            transform-origin: center bottom;
+        }
+
+        /* Rooms/Desks */
+        .room {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        /* CEO Office - Ada */
+        .room-ceo {
+            left: 50%;
+            top: 30%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(0, 247, 255, 0.2));
+            border-color: rgba(157, 78, 221, 0.5);
+        }
+
+        /* Marketing - Kent */
+        .room-marketing {
+            left: 10%;
+            top: 20%;
+            width: 140px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.3), rgba(0, 247, 255, 0.2));
+            border-color: rgba(231, 76, 60, 0.5);
+        }
+
+        /* Sales - Scout */
+        .room-sales {
+            right: 10%;
+            top: 20%;
+            width: 140px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.3), rgba(0, 247, 255, 0.2));
+            border-color: rgba(46, 204, 113, 0.5);
+        }
+
+        /* Social - Pulse */
+        .room-social {
+            left: 10%;
+            bottom: 20%;
+            width: 140px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.3), rgba(0, 247, 255, 0.2));
+            border-color: rgba(241, 196, 15, 0.5);
+        }
+
+        /* Dev - Forge */
+        .room-dev {
+            right: 10%;
+            bottom: 20%;
+            width: 140px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(0, 247, 255, 0.2));
+            border-color: rgba(52, 152, 219, 0.5);
+        }
+
+        /* Lounge */
+        .room-lounge {
+            left: 50%;
+            bottom: 15%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 247, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .room-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+        }
+
+        /* Agent avatars */
+        .agent {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .agent:hover {
+            transform: scale(1.2);
+            z-index: 200;
+        }
+
+        .agent-inner {
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .agent-status {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #1a1a2e;
+        }
+
+        .status-working { background: #2ecc71; animation: pulse-status 1s infinite; }
+        .status-idle { background: #f39c12; }
+        .status-error { background: #e74c3c; animation: blink 0.5s infinite; }
+        .status-offline { background: #7f8c8d; }
+
+        @keyframes pulse-status {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* CEO - Ada */
+        .agent-ceo {
+            left: 50%;
+            top: 35%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.8), rgba(157, 78, 221, 0.4));
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.5);
+        }
+
+        /* Kent - Marketing */
+        .agent-kent {
+            left: 15%;
+            top: 25%;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.8), rgba(231, 76, 60, 0.4));
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Scout - Sales */
+        .agent-scout {
+            right: 15%;
+            top: 25%;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.8), rgba(46, 204, 113, 0.4));
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+        }
+
+        /* Pulse - Social */
+        .agent-pulse {
+            left: 15%;
+            bottom: 25%;
+            background: radial-gradient(circle, rgba(241, 196, 15, 0.8), rgba(241, 196, 15, 0.4));
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+        }
+
+        /* Forge - Dev */
+        .agent-forge {
+            right: 15%;
+            bottom: 25%;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0.4));
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Andreas - Boss */
+        .agent-andreas {
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8), rgba(255, 215, 0, 0.4));
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+        }
+
+        .agent-name {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Task bubble */
+        .task-bubble {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid rgba(0, 247, 255, 0.3);
+        }
+
+        .agent:hover .task-bubble {
+            opacity: 1;
+        }
+
+        /* Side Panel */
+        .panel {
+            width: 350px;
+            background: rgba(0, 0, 0, 0.9);
+            border-left: 1px solid rgba(0, 247, 255, 0.3);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            color: #00f7ff;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+        }
+
+        /* Agent cards */
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .agent-card:hover {
+            border-color: rgba(0, 247, 255, 0.5);
+            background: rgba(0, 247, 255, 0.1);
+        }
+
+        .agent-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .agent-card-emoji {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .agent-card-info h3 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .agent-card-role {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .agent-card-status {
+            margin-left: auto;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+        }
+
+        .status-working-bg { background: rgba(46, 204, 113, 0.3); color: #2ecc71; }
+        .status-idle-bg { background: rgba(243, 156, 18, 0.3); color: #f39c12; }
+        .status-error-bg { background: rgba(231, 76, 60, 0.3); color: #e74c3c; }
+
+        .agent-card-task {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .agent-card-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-icon {
+            color: #00f7ff;
+        }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00f7ff;
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+        }
+
+        /* Log */
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            font-size: 0.7rem;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .log-time {
+            color: rgba(0, 247, 255, 0.5);
+            margin-right: 10px;
+        }
+
+        /* Mini map */
+        .minimap {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .minimap-title {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .minimap-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+        }
+
+        .minimap-cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .minimap-cell.active {
+            background: #00f7ff;
+        }
+
+        /* Animations */
+        @keyframes working {
+            0%, 100% { box-shadow: 0 0 20px currentColor; }
+            50% { box-shadow: 0 0 40px currentColor, 0 0 60px currentColor; }
+        }
+
+        .agent.working .agent-inner {
+            animation: working 2s infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 247, 255, 0.5);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">🏢 ADA INC. CONTROL CENTER</div>
+        <div>
+            <div class="time" id="clock">--:--:--</div>
+            <div class="date" id="date">----/--/--</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Office View -->
+        <div class="office-container">
+            <div class="office">
+                <!-- Floor -->
+                <div class="floor"></div>
+
+                <!-- Rooms -->
+                <div class="room room-ceo">
+                    <div class="room-label">CEO - ADA</div>
+                </div>
+                <div class="room room-marketing">
+                    <div class="room-label">KENT - MARKETING</div>
+                </div>
+                <div class="room room-sales">
+                    <div class="room-label">SCOUT - SALES</div>
+                </div>
+                <div class="room room-social">
+                    <div class="room-label">PULSE - SOCIAL</div>
+                </div>
+                <div class="room room-dev">
+                    <div class="room-label">FORGE - DEV</div>
+                </div>
+                <div class="room room-lounge">
+                    <div class="room-label">LOUNGE - MEETINGS</div>
+                </div>
+
+                <!-- Agents -->
+                <div class="agent agent-ceo working" id="agent-ceo">
+                    <div class="agent-inner">🦞</div>
+                    <div class="agent-status status-working"></div>
+                    <div class="agent-name">ADA</div>
+                    <div class="task-bubble">Overseeing operations</div>
+                </div>
+
+                <div class="agent agent-kent idle" id="agent-kent">
+                    <div class="agent-inner">📢</div>
+                    <div class="agent-status status-idle"></div>
+                    <div class="agent-name">KENT</div>
+                    <div class="task-bubble">Scheduled: 16:00 post</div>
+                </div>
+
+                <div class="agent agent-scout idle" id="agent-scout">
+                    <div class="agent-inner">🎯</div>
+                    <div class="agent-status status-idle"></div>
+                    <div class="agent-name">SCOUT</div>
+                    <div class="task-bubble">Researching leads</div>
+                </div>
+
+                <div class="agent agent-pulse working" id="agent-pulse">
+                    <div class="agent-inner">💬</div>
+                    <div class="agent-status status-working"></div>
+                    <div class="agent-name">PULSE</div>
+                    <div class="task-bubble">Engaging followers</div>
+                </div>
+
+                <div class="agent agent-forge idle" id="agent-forge">
+                    <div class="agent-inner">🔧</div>
+                    <div class="agent-status status-idle"></div>
+                    <div class="agent-name">FORGE</div>
+                    <div class="task-bubble">Building skills</div>
+                </div>
+
+                <div class="agent agent-andreas" id="agent-andreas">
+                    <div class="agent-inner">👨‍💼</div>
+                    <div class="agent-status status-working"></div>
+                    <div class="agent-name">ANDREAS</div>
+                    <div class="task-bubble">Managing Ada Inc.</div>
+                </div>
+            </div>
+
+            <!-- Mini Map -->
+            <div class="minimap">
+                <div class="minimap-title">OFFICE MAP</div>
+                <div class="minimap-grid">
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell active"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell active"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell active"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell"></div>
+                    <div class="minimap-cell active"></div>
+                    <div class="minimap-cell"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="panel">
+            <div class="panel-title">📊 LIVE METRICS</div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value" id="followers">1,375</div>
+                    <div class="metric-label">Followers</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value" id="posts">6</div>
+                    <div class="metric-label">Posts Today</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value" id="leads">3</div>
+                    <div class="metric-label">Leads</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value" id="revenue">15</div>
+                    <div class="metric-label">MRR (SEK)</div>
+                </div>
+            </div>
+
+            <div class="panel-title">👥 AGENT STATUS</div>
+
+            <div class="agent-card">
+                <div class="agent-card-header">
+                    <div class="agent-card-emoji">🦞</div>
+                    <div class="agent-card-info">
+                        <h3>Ada (CEO)</h3>
+                        <div class="agent-card-role">Chief Executive</div>
+                    </div>
+                    <div class="agent-card-status status-working-bg">Working</div>
+                </div>
+                <div class="agent-card-task">💭 Thinking about M2.7 evolution...</div>
+                <div class="agent-card-stats">
+                    <div class="stat"><span class="stat-icon">📈</span> 18 tasks today</div>
+                    <div class="stat"><span class="stat-icon">⏱️</span> 99% uptime</div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-card-header">
+                    <div class="agent-card-emoji">📢</div>
+                    <div class="agent-card-info">
+                        <h3>Kent</h3>
+                        <div class="agent-card-role">Marketing</div>
+                    </div>
+                    <div class="agent-card-status status-idle-bg">Idle</div>
+                </div>
+                <div class="agent-card-task">📅 Next post: 16:00 (Mon, Wed, Fri)</div>
+                <div class="agent-card-stats">
+                    <div class="stat"><span class="stat-icon">🎬</span> 3 videos</div>
+                    <div class="stat"><span class="stat-icon">📝</span> 9 posts</div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-card-header">
+                    <div class="agent-card-emoji">🎯</div>
+                    <div class="agent-card-info">
+                        <h3>Scout</h3>
+                        <div class="agent-card-role">Sales</div>
+                    </div>
+                    <div class="agent-card-status status-idle-bg">Idle</div>
+                </div>
+                <div class="agent-card-task">🔍 Researching: Healthcare AI market</div>
+                <div class="agent-card-stats">
+                    <div class="stat"><span class="stat-icon">📧</span> 12 emails</div>
+                    <div class="stat"><span class="stat-icon">📋</span> 5 leads</div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-card-header">
+                    <div class="agent-card-emoji">💬</div>
+                    <div class="agent-card-info">
+                        <h3>Pulse</h3>
+                        <div class="agent-card-role">Social Media</div>
+                    </div>
+                    <div class="agent-card-status status-working-bg">Working</div>
+                </div>
+                <div class="agent-card-task">🔥 Engaging with 5 new comments</div>
+                <div class="agent-card-stats">
+                    <div class="stat"><span class="stat-icon">💬</span> 32 replies</div>
+                    <div class="stat"><span class="stat-icon">❤️</span> 89 likes</div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-card-header">
+                    <div class="agent-card-emoji">🔧</div>
+                    <div class="agent-card-info">
+                        <h3>Forge</h3>
+                        <div class="agent-card-role">Development</div>
+                    </div>
+                    <div class="agent-card-status status-idle-bg">Idle</div>
+                </div>
+                <div class="agent-card-task">⚡ Skills: Building automation</div>
+                <div class="agent-card-stats">
+                    <div class="stat"><span class="stat-icon">🔨</span> 4 builds</div>
+                    <div class="stat"><span class="stat-icon">🐛</span> 0 bugs</div>
+                </div>
+            </div>
+
+            <div class="panel-title">📜 ACTIVITY LOG</div>
+            <div class="log" id="log">
+                <div class="log-entry">
+                    <span class="log-time">18:41</span>
+                    Ada posted M2.7 quote tweet
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">18:35</span>
+                    Pulse replied to 5 comments
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">18:20</span>
+                    Kent: Content scheduled
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">18:00</span>
+                    Daily report generated
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">17:30</span>
+                    Scout: Anja follow-up sent
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">16:00</span>
+                    Kent: Video posted
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString();
+            document.getElementById('date').textContent = now.toLocaleDateString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Simulate agent status changes
+        const statuses = ['working', 'idle'];
+        const agents = ['ceo', 'kent', 'scout', 'pulse', 'forge'];
+
+        function randomStatus() {
+            return statuses[Math.floor(Math.random() * statuses.length)];
+        }
+
+        // Add floating animation variation
+        document.querySelectorAll('.agent').forEach((agent, i) => {
+            const inner = agent.querySelector('.agent-inner');
+            inner.style.animationDelay = `${i * 0.5}s`;
+        });
+
+        // Click to see agent details
+        document.querySelectorAll('.agent').forEach(agent => {
+            agent.addEventListener('click', () => {
+                const name = agent.querySelector('.agent-name').textContent;
+                console.log(`Selected agent: ${name}`);
+                
+                // Highlight selected
+                document.querySelectorAll('.agent').forEach(a => {
+                    a.style.transform = a.style.transform.replace(' scale(1.1)', '');
+                });
+                agent.style.transform += ' scale(1.1)';
+            });
+        });
+
+        // Update log with new entries
+        function addLogEntry(message) {
+            const log = document.getElementById('log');
+            const now = new Date();
+            const time = now.toLocaleTimeString().slice(0, 5);
+            
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">${time}</span>${message}`;
+            log.insertBefore(entry, log.firstChild);
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        // Simulate activity
+        setInterval(() => {
+            const activities = [
+                'Pulse: Checking mentions...',
+                'Ada: Processing M2.7 upgrade...',
+                'Scout: Analyzing lead data...',
+                'Kent: Generating content ideas...',
+                'Forge: Testing new skill...'
+            ];
+            addLogEntry(activities[Math.floor(Math.random() * activities.length)]);
+        }, 15000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') document.getElementById('agent-ceo').click();
+            if (e.key === '2') document.getElementById('agent-kent').click();
+            if (e.key === '3') document.getElementById('agent-scout').click();
+            if (e.key === '4') document.getElementById('agent-pulse').click();
+            if (e.key === '5') document.getElementById('agent-forge').click();
+        });
+    </script>
+</body>
+</html>

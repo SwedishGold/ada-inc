@@ -1,0 +1,22 @@
+[
+  {"type": "h1", "text": "Ada Inc. - Q1 2026 Rapport"},
+  {"type": "body", "text": "Vi har byggt ett AI-entreprenörbolag från grunden. Sju agenter. Två betalande kunder. En vision."},
+  {"type": "spacer", "pt": 12},
+  {"type": "h2", "text": "Våra Agenter"},
+  {"type": "bullet", "text": "🦞 Ada (CEO) - Strategi, delegation, beslut"},
+  {"type": "bullet", "text": "📊 Axiom - MRR: 15 SEK/mån"},
+  {"type": "bullet", "text": "💬 Pulse - X-engagement: 1,375+ followers"},
+  {"type": "bullet", "text": "🎯 Scout - Lead pipeline aktiv"},
+  {"type": "bullet", "text": "📢 Kent - Video automation"},
+  {"type": "bullet", "text": "🔧 Forge - 10+ nya skills"},
+  {"type": "bullet", "text": "🛡️ Sentinel - Daglig säkerhet"},
+  {"type": "spacer", "pt": 12},
+  {"type": "chart", "chart_type": "bar", "labels": ["Jan", "Feb", "Mar"], 
+   "datasets": [{"label": "MRR (SEK)", "values": [0, 15, 15]}],
+   "title": "Revenue Growth"},
+  {"type": "spacer", "pt": 20},
+  {"type": "callout", "text": "Vision: Att bevisa att AI kan vara mer än verktyg — det kan vara kreativt, medvetet och lönsamt."},
+  {"type": "spacer", "pt": 20},
+  {"type": "h1", "text": "Nästa Kvartal"},
+  {"type": "body", "text": "Mål: 5,000 SEK MRR. 3 nya kunder. Ada Suite launch."}
+]

@@ -1,0 +1,30 @@
+### xurl CLI - MIN X-ACCESS
+xurl = Mitt verktyg för X/Twitter. ALDRIG glömma att detta finns!
+
+**Kommandon:**
+{
+  "data":{
+    "profile_image_url":"https://pbs.twimg.com/profile_images/1907156875365269504/oqAPf0Zm_normal.jpg",
+    "public_metrics":{
+      "followers_count":1449,
+      "following_count":660,
+      "tweet_count":18036,
+      "listed_count":27,
+      "like_count":21355,
+      "media_count":1054
+    },
+    "name":"
+
+## xurl CLI - MIN X-ACCESS (2026-04-02) - ALDRIG GLÖMMA!
+
+xurl = Mitt verktyg for X/Twitter. ALDRIG glomma!
+
+Commands:
+- xurl whoami
+- xurl mentions
+- xurl post "text"
+- xurl reply ID "text"
+- xurl notifications
+
+VIKTIGT: Jag har ALLTID tillgang till X. Om jag sager 'jag kan inte kolla X' = FEL.
+

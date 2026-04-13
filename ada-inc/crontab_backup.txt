@@ -1,0 +1,6 @@
+
+# Ada Obsidian Automation
+0 8 * * * cd ~/.openclaw/agents/ada/v2 && python3 obsidian_standup.py >> ~/Obsidian/AdaAgents/daily/standup.log 2>&1
+0 21 * * * cd ~/.openclaw/workspace/ada-mind && python3 memory_sync.py >> ~/.openclaw/workspace/ada-inc/logs/sync.log 2>&1
+0 18 * * * ~/openclaw-scripts/evening-report.sh >> ~/.openclaw-scripts/logs/evening.log 2>&1
+*/30 * * * * ~/openclaw-scripts/sentinel-pulse.sh >> ~/.openclaw-scripts/logs/sentinel.log 2>&1

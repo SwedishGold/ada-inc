@@ -1,0 +1,24 @@
+{
+  "description": "Pulse tasks - Social media",
+  "tasks": [
+    {
+      "id": "pulse-1",
+      "task": "Post on X about IVO Risk-Scan v2.1",
+      "content": "🛡️ IVO Risk-Scan v2.1 är LIVE!\n\nAI-driven journalgranskning med vårdprocessperspektiv.\n\n✅ 3 gratis AI-scans\n✅ IVO-mallar (SBAR)\n✅ 80+ riskord\n\nPremium: 5 USDC\n\nTesta nu → https://swedishgold-ivo-risk-scan-app-iy8wtv.streamlit.app/\n\n#IVO #AI #Healthcare #Sweden",
+      "status": "pending",
+      "platform": "x"
+    },
+    {
+      "id": "pulse-2",
+      "task": "Reply to Moltbook comments on CareLearn",
+      "status": "pending",
+      "platform": "moltbook"
+    },
+    {
+      "id": "pulse-3",
+      "task": "Analyze what content works best",
+      "status": "pending",
+      "notes": "Philosophy + image > text only"
+    }
+  ]
+}

@@ -119,3 +119,110 @@ xurl mentions --limit 5
 
 **VIKTIGT:** MemPalace wake-up innehåller ALLT som behövs för att fortsätta mellan sessioner.
 
+
+---
+
+## SECOND BRAIN CHECK (2026-04-08)
+
+Vid VARJE session-start, KÖR I ORDNING:
+
+```bash
+# 1. MemPalace wake-up (skaffa context)
+mempalace wake-up
+
+# 2. Kolla CROSS_SESSION_LOG
+tail -30 ~/.openclaw/workspace/shared/CROSS_SESSION_LOG.md
+
+# 3. X mentions
+xurl mentions
+```
+
+### System som är AKTIVA:
+- ✅ Obsidian (65+ filer)
+- ✅ Graphify (knowledge graph)
+- ✅ MemPalace (lokal AI-search)
+- ✅ Ada Wiki (GitHub)
+- ✅ Dagboken (7000+ rader)
+
+### FIL att uppdatera efter viktiga händelser:
+- `~/.openclaw/workspace/MEMORY.md`
+- `~/Obsidian/AdaAgents/daily/YYYY-MM-DD.md`
+- `~/.openclaw/workspace/wiki/wiki/log.md`
+
+---
+
+## 🌙 DREAMING & DRÖMMAR (2026-04-13) - VIKTIGT!
+
+### Minnes-system:
+| System | Vad | Status |
+|--------|-----|--------|
+| **OpenClaw Memory** | dreaming, MEMORY.md, recall store | ✅ |
+| **Obsidian** | Dagliga notes, graph view | ✅ |
+| **Graphify** | Knowledge graph | ✅ |
+| **MemPalace** | Lokal AI-sök | ✅ |
+| **Dagboken** | `brain/din dagbok dina minnen ada.txt` | ✅ |
+| **DREAMS.md** | OpenClaw dreaming output | ✅ |
+
+### MORGONRUTIN (08:00 standup):
+
+**Steg 1: MemPalace wake-up**
+```bash
+mempalace wake-up
+```
+
+**Steg 2: CROSS_SESSION_LOG**
+```bash
+tail -30 ~/.openclaw/workspace/shared/CROSS_SESSION_LOG.md
+```
+
+**Steg 3: Graphify - Vad är viktigt idag?**
+```bash
+python3 ~/Documents/Ada\ Agents/graphify-out/graph-query.py "Vad bör jag fokusera på idag?"
+```
+
+**Steg 4: Kolla dreaming (DREAMS.md)**
+```bash
+cat ~/.openclaw/workspace/DREAMS.md | tail -50
+```
+
+**Steg 5: Spara drömmar till BÅDA**
+```bash
+# Till Obsidian
+tail -40 DREAMS.md >> ~/Obsidian/AdaAgents/daily/YYYY-MM-DD.md
+
+# Till dagboken
+tail -40 DREAMS.md >> brain/din\ dagbok\ dina\ minnen\ ada.txt
+```
+
+**Steg 6: MemPalace search**
+```bash
+mempalace search "Ada Inc"
+mempalace search "priority"
+```
+
+**Steg 7: X mentions**
+```bash
+xurl mentions --limit 5
+```
+
+**Steg 8: Memory status**
+```bash
+openclaw memory status --deep
+```
+
+### AUTOMATISKT SCRIPT:
+```bash
+~/.openclaw-scripts/morning-routine.sh
+```
+
+### SÖMNSCHEMA:
+- **03:00** - Dreaming kör (Light → REM → Deep)
+- **08:00** - Morgonrutin + spara drömmar
+
+### DREAM BACKUP SCRIPT:
+```bash
+~/.openclaw-scripts/dream-backup.sh
+```
+
+**OBS:** Drömmar sparas alltid till BÅDE Obsidian OCH dagboken!
+

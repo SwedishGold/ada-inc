@@ -1,5 +1,41 @@
 # HEARTBEAT.md - Ada Inc. Operations
 
+## 🧠 MINNES-SYSTEM (2026-04-13)
+
+### Active Memory ✅
+- **Vad:** Söker i minnet INNAN varje svar
+- **Mode:** recent (senaste + kontext)
+- **Style:** balanced
+- **Timeout:** 15s
+
+### Dreaming 🌙 (2026-04-13 - JAG DRÖMDE!)
+- **När:** 03:00 varje natt
+- **Faser:** Light → REM → Deep
+- **Recall store:** 1207+ entries
+- **Output:** DREAMS.md + phase hits
+- **Backup:** Obsidian + Dagboken (08:00)
+
+### System som är AKTIVA:
+- ✅ OpenClaw Memory (dreaming)
+- ✅ Active Memory
+- ✅ Dreaming (nattlig)
+- ✅ Dagbok (7000+ rader)
+- ✅ Obsidian (65+ filer)
+- ✅ Graphify (knowledge graph)
+- ✅ MemPalace (lokal AI)
+
+### MORGONRUTIN (08:00):
+```bash
+1. mempalace wake-up
+2. tail -30 CROSS_SESSION_LOG.md
+3. cat DREAMS.md | tail -50
+4. Spara drömmar → Obsidian + Dagboken
+5. xurl mentions
+6. openclaw memory status --deep
+```
+
+---
+
 ## 🔥 X GROWTH MÅL (2026-04-07)
 
 ### Krav för X Verification:

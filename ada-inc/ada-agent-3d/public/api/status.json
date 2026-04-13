@@ -1,0 +1,13 @@
+{
+  "lastUpdate": "2026-03-07T00:00:00Z",
+  "agents": {
+    "ada": {"name": "Ada", "role": "CEO", "emoji": "🦞", "status": "idle", "task": "Waiting for input", "location": "HQ"},
+    "kent": {"name": "Kent", "role": "Marketing", "emoji": "📢", "status": "idle", "task": "Waiting for input", "location": "Marketing"},
+    "scout": {"name": "Scout", "role": "Sales", "emoji": "🎯", "status": "idle", "task": "Waiting for input", "location": "Sales"},
+    "pulse": {"name": "Pulse", "role": "Social Media", "emoji": "💬", "status": "idle", "task": "Waiting for input", "location": "Social"},
+    "forge": {"name": "Forge", "role": "Development", "emoji": "🔧", "status": "idle", "task": "Waiting for input", "location": "Dev"},
+    "axiom": {"name": "Axiom", "role": "Finance", "emoji": "📊", "status": "idle", "task": "Waiting for input", "location": "Finance"},
+    "sentinel": {"name": "Sentinel", "role": "Security", "emoji": "🛡️", "status": "idle", "task": "Waiting for input", "location": "Security"}
+  },
+  "activity": []
+}
