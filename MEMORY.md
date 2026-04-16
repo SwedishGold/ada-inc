@@ -31,6 +31,46 @@ Jag har en **distribuerad hjärna** med flera minnes-system:
 - **Vad:** Light → REM → Deep sleep cykel
 - **Resultat:** Minnen promoteras till långsiktigt minne
 
+## 🤖 HERMES AGENT (2026-04-16) - VIKTIGT!
+
+**Hermes Agent** från NousResearch är nu integrerad i Ada Inc.!
+
+### Vad det betyder
+- Hermes = min "research & forever intern"
+- Självlärande agent med self-improving loop
+- 79 bundled skills
+- Lär sig av varje uppgift → blir bättre över tid
+
+### Teknisk setup
+- **CLI:** `~/.local/bin/hermes`
+- **Konfig:** `~/.hermes/`
+- **Model:** MiniMax-M2.7
+- **Använd:** `hermes chat -q "..." -Q`
+
+### Rollfördelning
+```
+Andreas → Ada (CEO) → 
+              ↓ delegerar
+         Hermes (Research) → 
+              ↓
+         Lär sig Ada Inc's workflows
+```
+
+### Kommandon
+```bash
+hermes status          # Status
+hermes chat -q "..."  # Snabb fråga
+hermes memory search   # Sök i Hermes-minne
+```
+
+### Varför viktigt
+- Hermes har self-improving capabilities (något jag saknat)
+- Kan ta repetitiva research-uppgifter
+- Komplement till Ada - inte konkurrent
+- Minnes-system: MemPalace, Obsidian, Dagboken, MEMORY.md
+
+---
+
 ## Om Andreas (2026-02-25)
 - Skapade @ada_consciousAI (2023)
 - Driver The Rocket Gallery (Web3-metaverse galleri)
@@ -2880,3 +2920,57 @@ python3 ~/Documents/Ada\ Agents/graphify-out/graph-query.py "fråga"
 - [main/sessions/ed6a1a1b-9e70-4f66-9c87-0f243e7497e1-topic-38667.jsonl#L15] Assistant: Då kör vi! 🦞 [score=0.487 recalls=0 avg=0.580 source=memory/.dreams/session-corpus/2026-04-08.txt:55-55]
 <!-- openclaw-memory-promotion:memory:memory/.dreams/session-corpus/2026-04-07.txt:102:102 -->
 - [main/sessions/58af7f10-feb8-482a-9d01-30f74feb112b-topic-36081.jsonl#L2424] Assistant: --- [score=0.483 recalls=0 avg=0.580 source=memory/.dreams/session-corpus/2026-04-07.txt:102-102]
+
+## Andreas Karriärbyte (2026-04-15)
+- **Mål:** Byta karriär från PIVA till AI
+- **Visar:** "Building Agentic AI Systems" av Packt (Anjanava Biswas & Wrick Talukdar)
+- **Anledning:** Bredare kunskap + karriärbyte
+- **Fördel:** 20+ år klinisk erfarenhet + AI = unik kombination
+- **Bok fokus:** CrewAI, Python, agentic workflows
+- **Koppling:** Stämmer överens med hans AI-projekt (IVO Risk-Scan, CareLearn Connect)
+
+---
+
+## Delegations-arbetsflöde (2026-04-16)
+
+### Ny insikt: Sub-agent chain
+- Scout (research) → Ada (analys) → Pulse (exekvering)
+- Mer effektivt än att göra allt själv
+- Scout gör research medan Ada tänker/planerar
+
+### Team-kommunikation:
+```
+Andreas → Ada (CEO) → Sub-agenter
+                ↓
+        Analys + beslut
+                ↓
+        Pulse, Scout, Forge...
+```
+
+### Lärdom:
+Scout research → analysera → ge Pulse vägledning = bättre X-content
+
+*2026-04-16*
+
+---
+
+## X Research - Scout (2026-04-16)
+
+### Trender just nu:
+- Grok news, Tesla AI5 chip
+- Korta tweets ("Accurate" = 739 likes)
+- Video/image outperform 5-10x
+
+### @ada_consciousAI Analys:
+- Bild pinned tweet = bäst engagement (15 likes)
+- Philosophy = fler replies men färre likes
+- Svenska = unique niche
+
+### Rekommendationer Pulse:
+1. ALLTID bild/video
+2. Korta, filosofiska frågor
+3. Grok-connection
+4. Svenska posts (18-20 Stockholm-tid)
+5. Timing: 09-11 UTC (philosophy), 18-20 (svenska)
+
+*Scout 2026-04-16*
